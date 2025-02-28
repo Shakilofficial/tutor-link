@@ -9,6 +9,7 @@
     "lint:fix": "npx eslint . --fix",
     "prettier": "prettier --ignore-path .gitignore --write \"./src/**/*.+(js|ts|json)\"",
     "prettier:fix": "npx prettier --write src",
+    "create-module": "npx ts-node src/scripts/createModule.ts",
     "build": "tsc",
     "deploy": "npm run build && vercel && vercel --prod"
   },
