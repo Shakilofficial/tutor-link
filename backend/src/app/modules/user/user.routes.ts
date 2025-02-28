@@ -1,9 +1,19 @@
 import { Router } from 'express';
-import { userController } from './user.controller';
+import { multerUpload } from '../../config/multer.config';
+import { parseBody } from '../../middleware/bodyParser';
+import validateRequest from '../../middleware/validateRequest';
+import { studentValidations } from '../student/student.validation';
+import { userControllers } from './user.controller';
 
 const router = Router();
 
 // Define routes
-router.get('/', userController.getAll);
+router.post(
+  '/create-student',
+  multerUpload.single('profileImage'),
+  parseBody,
+  validateRequest(studentValidations.create),
+  userControllers.createStudent,
+);
 
-export const UserRoutes = router;
+export const userRoutes = router;

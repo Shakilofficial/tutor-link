@@ -1,9 +1,27 @@
-import { Request, Response } from 'express';
-import { userService } from './user.service';
+import { StatusCodes } from 'http-status-codes';
+import { IImageFile } from '../../interface/IImageFile';
+import catchAsync from '../../utils/catchAsync';
+import sendResponse from '../../utils/sendResponse';
+import { userServices } from './user.service';
 
-export const userController = {
-  async getAll(req: Request, res: Response) {
-    const data = await userService.getAll();
-    res.json(data);
-  },
+const createStudent = catchAsync(async (req, res) => {
+  const { student, ...userData } = req.body;
+  const profileImage = req.file as IImageFile;
+
+  const result = await userServices.createStudent(
+    userData,
+    student,
+    profileImage,
+  );
+
+  sendResponse(res, {
+    statusCode: StatusCodes.CREATED,
+    success: true,
+    message: 'Student created successfully',
+    data: result,
+  });
+});
+
+export const userControllers = {
+  createStudent,
 };

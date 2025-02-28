@@ -5,6 +5,9 @@ import cors from 'cors';
 import express, { Application, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import os from 'os';
+import globalErrorHandler from './middleware/globalErrorHandler';
+import notFound from './middleware/notFound';
+import router from './routes';
 
 const app: Application = express();
 
@@ -13,6 +16,9 @@ app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// 📌 API Routes
+app.use('/api/v1', router);
 
 // 📌 API Metadata
 const API_METADATA = {
@@ -52,5 +58,11 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
     },
   });
 });
+
+// Global Error Handler Middleware
+app.use(globalErrorHandler);
+
+//Not Found route handler
+app.use(notFound);
 
 export default app;
