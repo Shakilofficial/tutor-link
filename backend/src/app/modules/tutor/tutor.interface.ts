@@ -1,18 +1,17 @@
 import { Types } from 'mongoose';
 
 export interface ITutor {
-  userId: Types.ObjectId;
+  user: Types.ObjectId;
   bio: string;
-  subjects: Types.ObjectId[]; 
+  subjects: Types.ObjectId[];
   hourlyRate: number;
-  availability: {
+  availability: Array<{
     day: string;
     timeSlots: string[];
-  }[];
-  ratings: {
-    rating: number;
-    student: Types.ObjectId;
-  }[];
+  }>;
+  ratings: number[];
   reviews: Types.ObjectId[];
   earnings: number;
+  createdAt: Date;
+  updatedAt: Date;
 }

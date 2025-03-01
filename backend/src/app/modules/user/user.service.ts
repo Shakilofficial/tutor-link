@@ -23,7 +23,7 @@ const createStudent = async (
     const user = new User(userData);
     await user.save({ session });
 
-    const student = new Student({ ...studentData, userId: user._id });
+    const student = new Student({ ...studentData, user: user._id });
     await student.save({ session });
 
     await session.commitTransaction();
@@ -59,7 +59,7 @@ const createTutor = async (
     await user.save({ session });
 
     const tutor = new Tutor({
-      userId: user._id,
+      user: user._id,
       bio: tutorData.bio,
       subjects: tutorData.subjects,
       hourlyRate: tutorData.hourlyRate,

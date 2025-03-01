@@ -3,7 +3,7 @@ import { ITutor } from './tutor.interface';
 
 const tutorSchema = new Schema<ITutor>(
   {
-    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     bio: { type: String, required: true },
     subjects: [{ type: Schema.Types.ObjectId, ref: 'Subject' }],
     hourlyRate: { type: Number, required: true },

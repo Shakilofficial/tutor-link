@@ -19,6 +19,7 @@ export const tutorValidations = {
       ),
     }),
   }),
+  
   update: z.object({
     body: z.object({
       name: z.string().min(1).optional(),
