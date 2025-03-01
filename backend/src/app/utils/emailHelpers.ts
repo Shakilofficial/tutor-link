@@ -48,11 +48,10 @@ const sendEmail = async (
 
     // Sending the email
     const info = await transporter.sendMail(mailOptions);
-    console.log('Email sent:', info.messageId);
+
     return info;
-  } catch (error) {
-    console.error('Error sending email:', error);
-    throw new Error('Failed to send email');
+  } catch (error: any) {
+    throw new Error(`Failed to send email: ${error.message}`);
   }
 };
 
@@ -67,9 +66,8 @@ const createEmailContent = async (data: object, templateType: string) => {
     const template = Handlebars.compile(content);
 
     return template(data);
-  } catch (error) {
-    console.error('Error generating email content:', error);
-    throw new Error('Failed to create email content');
+  } catch (error: any) {
+    throw new Error(`Failed to create email content: ${error.message}`);
   }
 };
 
