@@ -2,6 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 import { JwtPayload } from 'jsonwebtoken';
 import AppError from '../../errors/appError';
 import { UserRole } from '../user/user.interface';
+import { User } from '../user/user.model';
 import { ITutor } from './tutor.interface';
 import { Tutor } from './tutor.model';
 
@@ -91,9 +92,8 @@ const deleteTutor = async (id: string, user: JwtPayload) => {
   session.startTransaction();
 
   try {
-   
     await Tutor.findByIdAndDelete(id).session(session);
-    
+    await User.findByIdAndDelete(tutor.user).session(session);
     await session.commitTransaction();
     return { message: 'Tutor profile deleted successfully' };
   } catch (error) {
