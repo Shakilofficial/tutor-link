@@ -40,5 +40,5 @@ userSchema.statics.isUserExistsByEmail = async function (email: string) {
   return await User.findOne({ email }).select('+password');
 };
 
-const User = model<IUser, UserModel>('User', userSchema);
-export default User;
+export const User = model<IUser, UserModel>('User', userSchema);
+

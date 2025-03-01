@@ -59,6 +59,7 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
   });
 });
 
+
 // Global Error Handler Middleware
 app.use(globalErrorHandler);
 

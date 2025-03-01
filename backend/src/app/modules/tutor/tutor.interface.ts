@@ -1,13 +1,18 @@
 import { Types } from 'mongoose';
-import { IUser } from '../user/user.interface';
 
-export interface ITutor extends IUser {
+export interface ITutor {
+  userId: Types.ObjectId;
   bio: string;
-  subjects: string[];
+  subjects: Types.ObjectId[]; 
   hourlyRate: number;
-  availability: string[];
+  availability: {
+    day: string;
+    timeSlots: string[];
+  }[];
   ratings: {
     rating: number;
     student: Types.ObjectId;
   }[];
+  reviews: Types.ObjectId[];
+  earnings: number;
 }

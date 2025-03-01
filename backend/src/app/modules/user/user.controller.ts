@@ -5,15 +5,12 @@ import sendResponse from '../../utils/sendResponse';
 import { userServices } from './user.service';
 
 const createStudent = catchAsync(async (req, res) => {
-  const { student, ...userData } = req.body;
   const profileImage = req.file as IImageFile;
-
   const result = await userServices.createStudent(
-    userData,
-    student,
+    req.body,
+    req.body.student,
     profileImage,
   );
-
   sendResponse(res, {
     statusCode: StatusCodes.CREATED,
     success: true,
@@ -22,6 +19,22 @@ const createStudent = catchAsync(async (req, res) => {
   });
 });
 
-export const userControllers = {
-  createStudent,
-};
+const createTutor = catchAsync(async (req, res) => {
+  const { name, email, password, ...tutorData } = req.body;
+  const profileImage = req.file as IImageFile;
+
+  const result = await userServices.createTutor(
+    { name, email, password },
+    tutorData,
+    profileImage,
+  );
+
+  sendResponse(res, {
+    statusCode: StatusCodes.CREATED,
+    success: true,
+    message: 'Tutor created successfully',
+    data: result,
+  });
+});
+
+export const userControllers = { createStudent, createTutor };
