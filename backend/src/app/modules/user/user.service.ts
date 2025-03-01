@@ -42,6 +42,7 @@ const createTutor = async (
   tutorData: Partial<ITutor> | undefined,
   profileImage: IImageFile | null,
 ) => {
+  
   if (!tutorData) {
     throw new Error('Tutor data is missing from the request.');
   }

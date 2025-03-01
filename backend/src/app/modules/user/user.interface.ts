@@ -15,6 +15,7 @@ export interface IUser extends Document {
   role: UserRole;
   profileImage?: string;
   isDeleted?: boolean;
+  otpToken?: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -25,5 +26,6 @@ export interface UserModel extends Model<IUser> {
     plainTextPassword: string,
     hashedPassword: string,
   ): Promise<boolean>;
-  isUserExistsByEmail(email: string): Promise<IUser | null>;
+  isUserExistsByEmail(email: string): Promise<IUser>;
+  checkUserExist(userId: string): Promise<IUser>;
 }

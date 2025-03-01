@@ -2,15 +2,19 @@ import { StatusCodes } from 'http-status-codes';
 import { IImageFile } from '../../interface/IImageFile';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
+
 import { userServices } from './user.service';
 
 const createStudent = catchAsync(async (req, res) => {
+  const { student, ...userData } = req.body;
   const profileImage = req.file as IImageFile;
+
   const result = await userServices.createStudent(
-    req.body,
-    req.body.student,
+    userData,
+    student,
     profileImage,
   );
+
   sendResponse(res, {
     statusCode: StatusCodes.CREATED,
     success: true,
@@ -37,4 +41,7 @@ const createTutor = catchAsync(async (req, res) => {
   });
 });
 
-export const userControllers = { createStudent, createTutor };
+export const userControllers = {
+  createStudent,
+  createTutor,
+};
