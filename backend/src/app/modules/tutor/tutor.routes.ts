@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { tutorControllers } from './tutor.controller';
 import auth from '../../middleware/auth';
-import { UserRole } from '../user/user.interface';
 import validateRequest from '../../middleware/validateRequest';
+import { UserRole } from '../user/user.interface';
+import { tutorControllers } from './tutor.controller';
 import { tutorValidations } from './tutor.validation';
 
 const router = Router();
@@ -12,8 +12,17 @@ router.get('/', tutorControllers.getAllTutors);
 
 router.get('/:id', tutorControllers.getSingleTutor);
 
-router.patch('/:id', auth(UserRole.TUTOR), validateRequest(tutorValidations.update), tutorControllers.updateTutor);
+router.patch(
+  '/:id',
+  auth(UserRole.TUTOR, UserRole.ADMIN),
+  validateRequest(tutorValidations.update),
+  tutorControllers.updateTutor,
+);
 
-router.delete('/:id', auth(UserRole.TUTOR), tutorControllers.deleteTutor);
+router.delete(
+  '/:id',
+  auth(UserRole.TUTOR, UserRole.ADMIN),
+  tutorControllers.deleteTutor,
+);
 
 export const tutorRoutes = router;
