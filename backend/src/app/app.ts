@@ -5,6 +5,7 @@ import cors from 'cors';
 import express, { Application, NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import os from 'os';
+import seedAdmin from './db/seed';
 import globalErrorHandler from './middleware/globalErrorHandler';
 import notFound from './middleware/notFound';
 import router from './routes';
@@ -19,6 +20,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // 📌 API Routes
 app.use('/api/v1', router);
+
+seedAdmin();
 
 // 📌 API Metadata
 const API_METADATA = {
@@ -58,7 +61,6 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
     },
   });
 });
-
 
 // Global Error Handler Middleware
 app.use(globalErrorHandler);
