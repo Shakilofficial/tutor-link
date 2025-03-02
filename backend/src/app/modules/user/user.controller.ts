@@ -1,4 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
+import { JwtPayload } from 'jsonwebtoken';
 import config from '../../config';
 import { IImageFile } from '../../interface/IImageFile';
 import catchAsync from '../../utils/catchAsync';
@@ -44,11 +45,11 @@ const createStudent = catchAsync(async (req, res) => {
 
 // Tutor controller
 const createTutor = catchAsync(async (req, res) => {
-  const { name, email, password, ...tutorData } = req.body;
+  const { name, email, password, location, ...tutorData } = req.body;
   const profileImage = req.file as IImageFile;
 
   const result = await userServices.createTutor(
-    { name, email, password },
+    { name, email, password, location },
     tutorData,
     profileImage,
   );
@@ -79,7 +80,47 @@ const createTutor = catchAsync(async (req, res) => {
   });
 });
 
+const myProfile = catchAsync(async (req, res) => {
+  const user = await userServices.myProfile(req.user as JwtPayload);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'My profile fetched successfully',
+    data: user,
+  });
+});
+
+const updateProfile = catchAsync(async (req, res) => {
+  const updatedUser = await userServices.updateProfile(
+    req.user as JwtPayload,
+    req.file as IImageFile,
+    req.body,
+  );
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Profile updated successfully',
+    data: updatedUser,
+  });
+});
+
+const updateStatus = catchAsync(async (req, res) => {
+  const userId = req.params.id;
+  const user = await userServices.updateStatus(userId, req.user as JwtPayload);
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: `User is now ${user.isDeleted ? 'deleted' : 'active'}`,
+    data: user,
+  });
+});
+
 export const userControllers = {
   createStudent,
   createTutor,
+  myProfile,
+  updateProfile,
+  updateStatus,
 };

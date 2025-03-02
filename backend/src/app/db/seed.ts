@@ -8,6 +8,7 @@ const adminUser = {
   role: UserRole.ADMIN,
   profileImage:
     'https://res.cloudinary.com/dcyupktj6/image/upload/v1739528178/67af17716f52456e99272889-profile.PNG.png',
+  location: 'Dhaka',
 };
 
 const seedAdmin = async () => {

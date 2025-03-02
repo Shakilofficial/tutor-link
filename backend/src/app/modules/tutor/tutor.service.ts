@@ -16,10 +16,10 @@ const getAllTutors = async () => {
       path: 'subjects',
       select: 'name gradeLevel -_id',
     })
-    .populate({
+    /* .populate({
       path: 'reviews',
       select: 'rating comment -_id',
-    })
+    }) */
     .lean();
 };
 

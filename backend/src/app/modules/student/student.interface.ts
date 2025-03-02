@@ -1,8 +1,7 @@
-import { Document, Schema } from 'mongoose';
+import { Schema } from 'mongoose';
 
-export interface IStudent extends Document {
+export interface IStudent {
   user: Schema.Types.ObjectId;
-  enrolledTutors: Schema.Types.ObjectId[];
-  bookingHistory: Schema.Types.ObjectId[];
-  paymentHistory: Schema.Types.ObjectId[];
+  enrolledSubjects: Schema.Types.ObjectId[];
+  tutors: Schema.Types.ObjectId[];
 }

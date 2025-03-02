@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-this-alias */
 import bcrypt from 'bcrypt';
 import { StatusCodes } from 'http-status-codes';
 import { model, Schema } from 'mongoose';
@@ -17,31 +16,26 @@ const userSchema = new Schema<IUser, UserModel>(
       default: UserRole.STUDENT,
     },
     profileImage: { type: String },
+    location: { type: String, required: true },
+    isVerified: { type: Boolean, default: false },
     isDeleted: { type: Boolean, default: false },
-    otpToken: {
-      type: String,
-      default: null,
-    },
+    otpToken: { type: String, default: null },
   },
   { timestamps: true },
 );
 
+// Hash password before saving
 userSchema.pre('save', async function (next) {
-  const user = this;
-
-  user.password = await bcrypt.hash(
-    user.password,
-    Number(config.bcrypt_salt_rounds),
-  );
-
+  if (this.isModified('password')) {
+    this.password = await bcrypt.hash(
+      this.password,
+      Number(config.bcrypt_salt_rounds),
+    );
+  }
   next();
 });
 
-userSchema.post('save', function (doc, next) {
-  doc.password = '';
-  next();
-});
-
+// Exclude password from JSON responses
 userSchema.set('toJSON', {
   transform: (_doc, ret) => {
     delete ret.password;
@@ -49,6 +43,7 @@ userSchema.set('toJSON', {
   },
 });
 
+// Static method for password matching
 userSchema.statics.isPasswordMatched = async function (
   plainTextPassword,
   hashedPassword,
@@ -56,10 +51,12 @@ userSchema.statics.isPasswordMatched = async function (
   return await bcrypt.compare(plainTextPassword, hashedPassword);
 };
 
+// Static method to check if user exists by email
 userSchema.statics.isUserExistsByEmail = async function (email: string) {
   return await User.findOne({ email }).select('+password');
 };
 
+// Check if user exists and is not deleted
 userSchema.statics.checkUserExist = async function (userId: string) {
   const existingUser = await this.findById(userId);
 

@@ -3,27 +3,24 @@ import { z } from 'zod';
 export const tutorValidations = {
   create: z.object({
     body: z.object({
-      name: z.string().min(1, 'Name is required'),
-      email: z.string().email('Invalid email format'),
-      password: z.string().min(6, 'Password must be at least 6 characters'),
-      role: z.string().optional(),
-      profileImage: z.string().optional(),
       bio: z.string().min(1, 'Bio is required'),
       subjects: z.array(z.string()).min(1, 'Subjects are required'),
-      hourlyRate: z.number().min(1, 'Hourly rate is required'),
+      hourlyRate: z.number().min(1, 'Hourly rate must be at least 1'),
       availability: z.array(
         z.object({
           day: z.string().min(1, 'Day is required'),
           timeSlots: z.array(z.string()).min(1, 'Time slots are required'),
         }),
       ),
+      teachingExperience: z
+        .number()
+        .min(0, 'Teaching experience must be positive'),
+      education: z.string().min(1, 'Education is required'),
     }),
   }),
-  
+
   update: z.object({
     body: z.object({
-      name: z.string().min(1).optional(),
-      profileImage: z.string().optional(),
       bio: z.string().min(1).optional(),
       subjects: z.array(z.string()).min(1).optional(),
       hourlyRate: z.number().min(1).optional(),
@@ -35,6 +32,8 @@ export const tutorValidations = {
           }),
         )
         .optional(),
+      teachingExperience: z.number().min(0).optional(),
+      education: z.string().min(1).optional(),
     }),
   }),
 };

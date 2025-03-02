@@ -12,6 +12,8 @@ export interface ITutor {
   ratings: number[];
   reviews: Types.ObjectId[];
   earnings: number;
-  createdAt: Date;
-  updatedAt: Date;
+  teachingExperience: number;
+  education: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

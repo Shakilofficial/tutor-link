@@ -5,17 +5,19 @@ const tutorSchema = new Schema<ITutor>(
   {
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     bio: { type: String, required: true },
-    subjects: [{ type: Schema.Types.ObjectId, ref: 'Subject' }],
+    subjects: [{ type: Schema.Types.ObjectId, ref: 'Subject', default: [] }],
     hourlyRate: { type: Number, required: true },
     availability: [
       {
         day: { type: String, required: true },
-        timeSlots: [{ type: String }],
+        timeSlots: [{ type: String, required: true }],
       },
     ],
-    ratings: [{ type: Number, default: 0 }],
-    reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
+    ratings: { type: [Number], default: [] },
+    reviews: [{ type: Schema.Types.ObjectId, ref: 'Review', default: [] }],
     earnings: { type: Number, default: 0 },
+    teachingExperience: { type: Number, required: true },
+    education: { type: String, required: true },
   },
   { timestamps: true },
 );

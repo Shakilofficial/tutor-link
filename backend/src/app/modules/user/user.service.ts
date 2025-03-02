@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { StatusCodes } from 'http-status-codes';
+import { JwtPayload } from 'jsonwebtoken';
 import mongoose from 'mongoose';
+import AppError from '../../errors/appError';
 import { IImageFile } from '../../interface/IImageFile';
 import { IStudent } from '../student/student.interface';
 import { Student } from '../student/student.model';
@@ -42,7 +45,6 @@ const createTutor = async (
   tutorData: Partial<ITutor> | undefined,
   profileImage: IImageFile | null,
 ) => {
-  
   if (!tutorData) {
     throw new Error('Tutor data is missing from the request.');
   }
@@ -61,6 +63,8 @@ const createTutor = async (
     const tutor = new Tutor({
       user: user._id,
       bio: tutorData.bio,
+      education: tutorData.education,
+      teachingExperience: tutorData.teachingExperience,
       subjects: tutorData.subjects,
       hourlyRate: tutorData.hourlyRate,
       availability: tutorData.availability,
@@ -79,4 +83,70 @@ const createTutor = async (
   }
 };
 
-export const userServices = { createStudent, createTutor };
+const myProfile = async (user: JwtPayload) => {
+  const isUserExist = await User.findById(user.userId);
+  if (!isUserExist) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'User not found');
+  }
+  if (isUserExist.isDeleted) {
+    throw new AppError(StatusCodes.GONE, 'User is deleted');
+  }
+
+  const profile = await User.findById(user.userId);
+  return profile;
+};
+
+const updateProfile = async (
+  user: JwtPayload,
+  profileImage: IImageFile | null,
+  payload: Partial<IUser>,
+) => {
+  const existingUser = await User.findById(user.userId);
+  if (!existingUser) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'User not found');
+  }
+
+  if (existingUser.isDeleted) {
+    throw new AppError(StatusCodes.GONE, 'User is deleted');
+  }
+
+  if (profileImage) {
+    payload.profileImage = profileImage.path;
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(
+    user.userId,
+    { $set: payload },
+    { new: true, runValidators: true },
+  );
+
+  if (!updatedUser) {
+    throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to update profile');
+  }
+
+  return updatedUser;
+};
+
+const updateStatus = async (userId: string, user: JwtPayload) => {
+  const existingUser = await User.findById(userId);
+  if (!existingUser) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'User not found');
+  }
+
+  if (user.role !== UserRole.ADMIN) {
+    throw new AppError(StatusCodes.FORBIDDEN, 'Unauthorized to update status');
+  }
+
+  existingUser.isDeleted = !existingUser.isDeleted;
+  await existingUser.save();
+
+  return existingUser;
+};
+
+export const userServices = {
+  createStudent,
+  createTutor,
+  myProfile,
+  updateProfile,
+  updateStatus,
+};

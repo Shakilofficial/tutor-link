@@ -14,6 +14,8 @@ export interface IUser extends Document {
   password: string;
   role: UserRole;
   profileImage?: string;
+  location?: string;
+  isVerified?: boolean;
   isDeleted?: boolean;
   otpToken?: string | null;
   createdAt: Date;
@@ -21,11 +23,11 @@ export interface IUser extends Document {
 }
 
 export interface UserModel extends Model<IUser> {
-  //instance methods for checking if passwords are matched and user exists
+  // Instance methods for checking password match and user existence
   isPasswordMatched(
     plainTextPassword: string,
     hashedPassword: string,
   ): Promise<boolean>;
-  isUserExistsByEmail(email: string): Promise<IUser>;
+  isUserExistsByEmail(email: string): Promise<IUser | null>;
   checkUserExist(userId: string): Promise<IUser>;
 }

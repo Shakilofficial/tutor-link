@@ -1,11 +1,13 @@
 import { Router } from 'express';
 import { multerUpload } from '../../config/multer.config';
+import auth from '../../middleware/auth';
 import { parseBody } from '../../middleware/bodyParser';
 import validateRequest from '../../middleware/validateRequest';
 import { studentValidations } from '../student/student.validation';
 import { tutorValidations } from '../tutor/tutor.validation';
 import { userControllers } from './user.controller';
-
+import { UserRole } from './user.interface';
+import { userValidations } from './user.validation';
 
 const router = Router();
 
@@ -23,7 +25,28 @@ router.post(
   multerUpload.single('profileImage'),
   parseBody,
   validateRequest(tutorValidations.create),
-  userControllers.createTutor
+  userControllers.createTutor,
+);
+
+router.get(
+  '/my-profile',
+  auth(UserRole.ADMIN, UserRole.STUDENT, UserRole.TUTOR),
+  userControllers.myProfile,
+);
+
+router.patch(
+  '/update-profile',
+  auth(UserRole.ADMIN, UserRole.STUDENT, UserRole.TUTOR),
+  multerUpload.single('profileImage'),
+  parseBody,
+  validateRequest(userValidations.update),
+  userControllers.updateProfile,
+);
+
+router.patch(
+  '/update-status',
+  auth(UserRole.ADMIN),
+  userControllers.updateStatus,
 );
 
 export const userRoutes = router;
