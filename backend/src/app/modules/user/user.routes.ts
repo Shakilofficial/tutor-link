@@ -49,4 +49,8 @@ router.patch(
   userControllers.updateStatus,
 );
 
+router.get('/:id', userControllers.getSingleUser);
+
+router.get('/', userControllers.getAllUsers);
+
 export const userRoutes = router;

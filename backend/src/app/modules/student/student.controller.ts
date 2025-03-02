@@ -5,12 +5,13 @@ import { JwtPayload } from "jsonwebtoken";
 import { studentServices } from "./student.service";
 
 const getAllStudents = catchAsync(async (req, res) => {
-  const result = await studentServices.getAllStudents();
+  const result = await studentServices.getAllStudents(req.query);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
     message: 'All students fetched successfully',
-    data: result,
+    meta: result.meta,
+    data: result.students,
   });
 });
 

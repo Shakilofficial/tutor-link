@@ -17,3 +17,5 @@ export const gradeLevels: TGradeLevel[] = [
   'HSC',
   'Undergrade',
 ];
+
+export const subjectSearchableFields = ['name'];

@@ -1,13 +1,23 @@
 import { StatusCodes } from 'http-status-codes';
 import { JwtPayload } from 'jsonwebtoken';
+import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../errors/appError';
 import { UserRole } from '../user/user.interface';
 import { User } from '../user/user.model';
+import { studentSearchableFields } from './student.const';
 import { IStudent } from './student.interface';
 import { Student } from './student.model';
 
-const getAllStudents = async () => {
-  return await Student.find().populate('user').lean();
+const getAllStudents = async (query: Record<string, unknown>) => {
+  const studentQuery = new QueryBuilder(Student.find().populate('user'), query)
+    .search(studentSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+  const students = await studentQuery.modelQuery;
+  const meta = await studentQuery.countTotal();
+  return { students, meta };
 };
 
 const getSingleStudent = async (id: string) => {

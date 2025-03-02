@@ -1,7 +1,9 @@
 import { StatusCodes } from 'http-status-codes';
 import { JwtPayload } from 'jsonwebtoken';
+import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../errors/appError';
 import { UserRole } from '../user/user.interface';
+import { subjectSearchableFields } from './subject.const';
 import { ISubject } from './subject.interface';
 import { Subject } from './subject.model';
 
@@ -18,8 +20,16 @@ const createSubject = async (payload: ISubject, user: JwtPayload) => {
   return await subject.save();
 };
 
-const getAllSubjects = async () => {
-  return await Subject.find();
+const getAllSubjects = async (query: Record<string, unknown>) => {
+  const subjectQuery = new QueryBuilder(Subject.find(), query)
+    .search(subjectSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+  const subjects = await subjectQuery.modelQuery;
+  const meta = await subjectQuery.countTotal();
+  return { subjects, meta };
 };
 
 const getSingleSubject = async (id: string) => {

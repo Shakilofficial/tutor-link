@@ -5,12 +5,13 @@ import sendResponse from '../../utils/sendResponse';
 import { subjectServices } from './subject.service';
 
 const getAllSubjects = catchAsync(async (req, res) => {
-  const result = await subjectServices.getAllSubjects();
+  const result = await subjectServices.getAllSubjects(req.query);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
     message: 'All subjects fetched successfully',
-    data: result,
+    meta: result.meta,
+    data: result.subjects,
   });
 });
 

@@ -2,12 +2,14 @@
 import { StatusCodes } from 'http-status-codes';
 import { JwtPayload } from 'jsonwebtoken';
 import mongoose from 'mongoose';
+import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../errors/appError';
 import { IImageFile } from '../../interface/IImageFile';
 import { IStudent } from '../student/student.interface';
 import { Student } from '../student/student.model';
 import { ITutor } from '../tutor/tutor.interface';
 import { Tutor } from '../tutor/tutor.model';
+import { userSearchableFields } from './user.const';
 import { IUser, UserRole } from './user.interface';
 import { User } from './user.model';
 
@@ -143,10 +145,32 @@ const updateStatus = async (userId: string, user: JwtPayload) => {
   return existingUser;
 };
 
+const getAllUsers = async (query: Record<string, unknown>) => {
+  const userQuery = new QueryBuilder(User.find(), query)
+    .search(userSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+  const users = await userQuery.modelQuery;
+  const meta = await userQuery.countTotal();
+  return { users, meta };
+};
+
+const getSingleUser = async (id: string) => {
+  const user = await User.findById(id);
+  if (!user) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'User not found');
+  }
+  return user;
+};
+
 export const userServices = {
   createStudent,
   createTutor,
   myProfile,
   updateProfile,
   updateStatus,
+  getAllUsers,
+  getSingleUser,
 };

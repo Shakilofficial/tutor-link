@@ -117,10 +117,33 @@ const updateStatus = catchAsync(async (req, res) => {
   });
 });
 
+const getAllUsers = catchAsync(async (req, res) => {
+  const result = await userServices.getAllUsers(req.query);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'All users fetched successfully',
+    meta: result.meta,
+    data: result.users,
+  });
+});
+
+const getSingleUser = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await userServices.getSingleUser(id);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Single user fetched successfully',
+    data: result,
+  });
+});
 export const userControllers = {
   createStudent,
   createTutor,
   myProfile,
   updateProfile,
   updateStatus,
+  getAllUsers,
+  getSingleUser,
 };
