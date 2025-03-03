@@ -7,6 +7,7 @@ import AppError from '../../errors/appError';
 import { IImageFile } from '../../interface/IImageFile';
 import { IStudent } from '../student/student.interface';
 import { Student } from '../student/student.model';
+import { Subject } from '../subject/subject.model';
 import { ITutor } from '../tutor/tutor.interface';
 import { Tutor } from '../tutor/tutor.model';
 import { userSearchableFields } from './user.const';
@@ -50,38 +51,62 @@ const createStudent = async (
 
 const createTutor = async (
   userData: Partial<IUser>,
-  tutorData: Partial<ITutor> | undefined,
-  profileImage: IImageFile | null,
+  tutorData: Partial<ITutor>,
+  profileImage?: IImageFile,
 ) => {
-  if (!tutorData) {
-    throw new Error('Tutor data is missing from the request.');
-  }
-
   const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
-    if (profileImage) userData.profileImage = profileImage.path;
+    // 1. Validate Subjects
+    if (tutorData.subjects && tutorData.subjects.length > 0) {
+      const existingSubjects = await Subject.countDocuments({
+        _id: { $in: tutorData.subjects },
+      }).session(session);
+
+      if (existingSubjects !== tutorData.subjects.length) {
+        throw new AppError(
+          StatusCodes.BAD_REQUEST,
+          'One or more subjects are invalid',
+        );
+      }
+    }
+
+    // 2. Handle Profile Image
+    if (profileImage && profileImage.path) {
+      userData.profileImage = profileImage.path;
+    }
+
+    // 3. Create User
     userData.role = UserRole.TUTOR;
-
     const user = new User(userData);
-
     await user.save({ session });
 
+    // 4. Validate Availability Slots
+    if (tutorData.availability) {
+      tutorData.availability.forEach((day) => {
+        day.slots.forEach((slot) => {
+          const start = parseInt(slot.start.replace(':', ''), 10);
+          const end = parseInt(slot.end.replace(':', ''), 10);
+          if (start >= end) {
+            throw new AppError(
+              StatusCodes.BAD_REQUEST,
+              'End time must be after start time',
+            );
+          }
+        });
+      });
+    }
+
+    // 5. Create Tutor Profile
     const tutor = new Tutor({
       user: user._id,
-      bio: tutorData.bio,
-      location: tutorData.location,
-      education: tutorData.education,
-      teachingExperience: tutorData.teachingExperience,
-      subjects: tutorData.subjects,
-      hourlyRate: tutorData.hourlyRate,
-      availability: tutorData.availability,
-      ratings: tutorData.ratings,
+      ...tutorData,
+      hourlyRate: Math.round((tutorData.hourlyRate || 0) * 100) / 100,
+      totalEarnings: 0,
     });
 
     await tutor.save({ session });
-
     await session.commitTransaction();
     session.endSession();
 
@@ -89,7 +114,18 @@ const createTutor = async (
   } catch (error: any) {
     await session.abortTransaction();
     session.endSession();
-    throw new Error(`Tutor creation failed: ${error.message}`);
+
+    if (error.code === 11000) {
+      throw new AppError(
+        StatusCodes.CONFLICT,
+        'Tutor profile already exists for this user',
+      );
+    }
+
+    throw new AppError(
+      error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
+      error.message || 'Tutor creation failed',
+    );
   }
 };
 

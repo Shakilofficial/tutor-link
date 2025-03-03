@@ -7,14 +7,21 @@ export interface ITutor {
   subjects: Types.ObjectId[];
   hourlyRate: number;
   availability: Array<{
-    day: string;
-    timeSlots: string[];
+    day:
+      | 'Monday'
+      | 'Tuesday'
+      | 'Wednesday'
+      | 'Thursday'
+      | 'Friday'
+      | 'Saturday'
+      | 'Sunday';
+    slots: Array<{ start: string; end: string }>;
   }>;
-  averageRating?: number;
-  totalReviews?: number;
-  earnings: number;
+  averageRating: number;
+  totalReviews: number;
+  totalEarnings: number;
   teachingExperience: number;
   education: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }

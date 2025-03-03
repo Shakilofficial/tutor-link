@@ -7,20 +7,58 @@ import { IUser, UserModel, UserRole } from './user.interface';
 
 const userSchema = new Schema<IUser, UserModel>(
   {
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true, lowercase: true },
-    password: { type: String, required: true, select: false },
+    name: {
+      type: String,
+      required: [true, 'Name is required'],
+      trim: true,
+      maxlength: [50, 'Name cannot exceed 50 characters'],
+    },
+    email: {
+      type: String,
+      required: [true, 'Email is required'],
+      unique: true,
+      lowercase: true,
+      match: [
+        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+        'Invalid email format',
+      ],
+    },
+    password: {
+      type: String,
+      required: [true, 'Password is required'],
+      select: false,
+      minlength: [6, 'Password must be at least 6 characters'],
+    },
     role: {
       type: String,
-      enum: Object.values(UserRole),
+      enum: {
+        values: Object.values(UserRole),
+        message: 'Invalid user role',
+      },
       default: UserRole.STUDENT,
     },
-    profileImage: { type: String },
-    isVerified: { type: Boolean, default: false },
-    isDeleted: { type: Boolean, default: false },
-    otpToken: { type: String, default: null },
+    profileImage: {
+      type: String,
+      default: 'https://res.cloudinary.com/dcyupktj6/image/upload/v1728502154/avatars/xsivocyzizacduhmna88.webp',
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+    otpToken: {
+      type: String,
+      select: false,
+    },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  },
 );
 
 // Hash password before saving
@@ -63,7 +101,7 @@ userSchema.statics.checkUserExist = async function (userId: string) {
     throw new AppError(StatusCodes.NOT_ACCEPTABLE, 'User does not exist!');
   }
 
-  if(!existingUser.isVerified) {
+  if (!existingUser.isVerified) {
     throw new AppError(StatusCodes.FORBIDDEN, 'User is not verified!');
   }
 

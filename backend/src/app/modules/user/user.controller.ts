@@ -43,10 +43,9 @@ const createStudent = catchAsync(async (req, res) => {
   });
 });
 
-// Tutor controller
 const createTutor = catchAsync(async (req, res) => {
   const { name, email, password, ...tutorData } = req.body;
-  const profileImage = req.file as IImageFile;
+  const profileImage = req.file || undefined;
 
   const result = await userServices.createTutor(
     { name, email, password },
@@ -54,7 +53,7 @@ const createTutor = catchAsync(async (req, res) => {
     profileImage,
   );
 
-  // Generate tokens after successful creation
+  // Generate tokens
   const { accessToken, refreshToken } = await authServices.loginUser({
     email,
     password,
@@ -75,7 +74,10 @@ const createTutor = catchAsync(async (req, res) => {
     data: {
       accessToken,
       user: result.user,
-      tutor: result.tutor,
+      tutor: {
+        ...result.tutor.toObject(),
+        totalEarnings: result.tutor?.totalEarnings,
+      },
     },
   });
 });

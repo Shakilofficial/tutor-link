@@ -13,9 +13,9 @@ export interface IUser extends Document {
   email: string;
   password: string;
   role: UserRole;
-  profileImage?: string;
-  isVerified?: boolean;
-  isDeleted?: boolean;
+  profileImage: string;
+  isVerified: boolean;
+  isDeleted: boolean;
   otpToken?: string | null;
   createdAt: Date;
   updatedAt: Date;
