@@ -5,12 +5,13 @@ import sendResponse from '../../utils/sendResponse';
 import { tutorServices } from './tutor.service';
 
 const getAllTutors = catchAsync(async (req, res) => {
-  const result = await tutorServices.getAllTutors();
+  const result = await tutorServices.getAllTutors(req.query);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
     message: 'All tutors fetched successfully',
-    data: result,
+    meta: result.meta,
+    data: result.tutors,
   });
 });
 

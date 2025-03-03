@@ -5,6 +5,7 @@ const tutorSchema = new Schema<ITutor>(
   {
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     bio: { type: String, required: true },
+    location: { type: String, required: true },
     subjects: [{ type: Schema.Types.ObjectId, ref: 'Subject', default: [] }],
     hourlyRate: { type: Number, required: true },
     availability: [

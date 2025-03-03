@@ -3,7 +3,12 @@ import { IStudent } from './student.interface';
 
 const studentSchema = new Schema<IStudent>(
   {
-    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: [true, 'Please enter your user id'],
+    },
+    location: { type: String, required: true },
     enrolledSubjects: [
       { type: Schema.Types.ObjectId, ref: 'Subject', default: [] },
     ],

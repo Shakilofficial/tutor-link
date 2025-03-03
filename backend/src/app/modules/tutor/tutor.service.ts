@@ -1,26 +1,24 @@
 import { StatusCodes } from 'http-status-codes';
 import { JwtPayload } from 'jsonwebtoken';
+import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../errors/appError';
 import { UserRole } from '../user/user.interface';
 import { User } from '../user/user.model';
+import { tutorSearchableFields } from './tutor.const';
 import { ITutor } from './tutor.interface';
 import { Tutor } from './tutor.model';
 
-const getAllTutors = async () => {
-  return await Tutor.find()
-    .populate({
-      path: 'user',
-      select: 'name email profileImage -_id',
-    })
-    .populate({
-      path: 'subjects',
-      select: 'name gradeLevel -_id',
-    })
-    /* .populate({
-      path: 'reviews',
-      select: 'rating comment -_id',
-    }) */
-    .lean();
+const getAllTutors = async (query: Record<string, unknown>) => {
+  const tutorQuery = new QueryBuilder(Tutor.find().populate('user'), query)
+    .search(tutorSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const tutors = await tutorQuery.modelQuery;
+  const meta = await tutorQuery.countTotal();
+  return { tutors, meta };
 };
 
 const getSingleTutor = async (id: string) => {

@@ -3,6 +3,7 @@ import { Types } from 'mongoose';
 export interface ITutor {
   user: Types.ObjectId;
   bio: string;
+  location: string;
   subjects: Types.ObjectId[];
   hourlyRate: number;
   availability: Array<{

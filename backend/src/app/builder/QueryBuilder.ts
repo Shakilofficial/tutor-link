@@ -9,40 +9,30 @@ class QueryBuilder<T> {
     this.query = query;
   }
 
-  // Search across multiple fields, including nested fields
   search(searchableFields: string[]) {
     const searchTerm = this?.query?.searchTerm;
     if (searchTerm) {
-      const searchQuery = searchableFields.map((field) => ({
-        [field]: { $regex: searchTerm, $options: 'i' },
-      }));
-
       this.modelQuery = this.modelQuery.find({
-        $or: searchQuery,
+        $or: searchableFields.map(
+          (field) =>
+            ({
+              [field]: { $regex: searchTerm, $options: 'i' },
+            }) as FilterQuery<T>,
+        ),
       });
     }
 
     return this;
   }
 
-  // Filter the query based on the provided filters in query object
   filter() {
     const queryObj = { ...this.query };
 
-    // Exclude non-filterable fields like searchTerm, sort, limit, etc.
+    // Filtering
     const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
 
     excludeFields.forEach((el) => delete queryObj[el]);
 
-    // Apply filters for any field, including nested fields
-    Object.keys(queryObj).forEach((key) => {
-      // If the key is a nested field (e.g., 'user.name'), apply regex search
-      if (queryObj[key] && typeof queryObj[key] === 'string') {
-        queryObj[key] = { $regex: queryObj[key], $options: 'i' };
-      }
-    });
-
-    // Apply the filtering to the model query
     this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);
 
     return this;

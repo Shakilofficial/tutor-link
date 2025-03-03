@@ -16,7 +16,6 @@ const userSchema = new Schema<IUser, UserModel>(
       default: UserRole.STUDENT,
     },
     profileImage: { type: String },
-    location: { type: String, required: true },
     isVerified: { type: Boolean, default: false },
     isDeleted: { type: Boolean, default: false },
     otpToken: { type: String, default: null },
@@ -62,6 +61,10 @@ userSchema.statics.checkUserExist = async function (userId: string) {
 
   if (!existingUser) {
     throw new AppError(StatusCodes.NOT_ACCEPTABLE, 'User does not exist!');
+  }
+
+  if(!existingUser.isVerified) {
+    throw new AppError(StatusCodes.FORBIDDEN, 'User is not verified!');
   }
 
   if (existingUser.isDeleted) {

@@ -8,12 +8,12 @@ import { authServices } from '../auth/auth.service';
 import { userServices } from './user.service';
 
 const createStudent = catchAsync(async (req, res) => {
-  const { student, ...userData } = req.body;
+  const { location, ...userData } = req.body;
   const profileImage = req.file as IImageFile;
 
   const result = await userServices.createStudent(
     userData,
-    student,
+    { location },
     profileImage,
   );
 
@@ -45,11 +45,11 @@ const createStudent = catchAsync(async (req, res) => {
 
 // Tutor controller
 const createTutor = catchAsync(async (req, res) => {
-  const { name, email, password, location, ...tutorData } = req.body;
+  const { name, email, password, ...tutorData } = req.body;
   const profileImage = req.file as IImageFile;
 
   const result = await userServices.createTutor(
-    { name, email, password, location },
+    { name, email, password },
     tutorData,
     profileImage,
   );

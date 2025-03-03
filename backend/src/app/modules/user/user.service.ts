@@ -15,9 +15,12 @@ import { User } from './user.model';
 
 const createStudent = async (
   userData: Partial<IUser>,
-  studentData: Partial<IStudent>,
+  studentData: Partial<IStudent> | undefined,
   profileImage: IImageFile | null,
 ) => {
+  if (!studentData) {
+    throw new Error('Student data is missing from the request.');
+  }
   const session = await mongoose.startSession();
   session.startTransaction();
 
@@ -28,7 +31,10 @@ const createStudent = async (
     const user = new User(userData);
     await user.save({ session });
 
-    const student = new Student({ ...studentData, user: user._id });
+    const student = new Student({
+      user: user._id,
+      location: studentData.location,
+    });
     await student.save({ session });
 
     await session.commitTransaction();
@@ -65,11 +71,13 @@ const createTutor = async (
     const tutor = new Tutor({
       user: user._id,
       bio: tutorData.bio,
+      location: tutorData.location,
       education: tutorData.education,
       teachingExperience: tutorData.teachingExperience,
       subjects: tutorData.subjects,
       hourlyRate: tutorData.hourlyRate,
       availability: tutorData.availability,
+      ratings: tutorData.ratings,
     });
 
     await tutor.save({ session });

@@ -4,6 +4,7 @@ export const tutorValidations = {
   create: z.object({
     body: z.object({
       bio: z.string().min(1, 'Bio is required'),
+      location: z.string().min(1, 'Location is required'),
       subjects: z.array(z.string()).min(1, 'Subjects are required'),
       hourlyRate: z.number().min(1, 'Hourly rate must be at least 1'),
       availability: z.array(
@@ -22,6 +23,7 @@ export const tutorValidations = {
   update: z.object({
     body: z.object({
       bio: z.string().min(1).optional(),
+      location: z.string().min(1).optional(),
       subjects: z.array(z.string()).min(1).optional(),
       hourlyRate: z.number().min(1).optional(),
       availability: z
