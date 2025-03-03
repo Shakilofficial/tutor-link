@@ -14,8 +14,16 @@ const tutorSchema = new Schema<ITutor>(
         timeSlots: [{ type: String, required: true }],
       },
     ],
-    ratings: { type: [Number], default: [] },
-    reviews: [{ type: Schema.Types.ObjectId, ref: 'Review', default: [] }],
+    averageRating: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 5,
+    },
+    totalReviews: {
+      type: Number,
+      default: 0,
+    },
     earnings: { type: Number, default: 0 },
     teachingExperience: { type: Number, required: true },
     education: { type: String, required: true },

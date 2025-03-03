@@ -10,8 +10,8 @@ export interface ITutor {
     day: string;
     timeSlots: string[];
   }>;
-  ratings: number[];
-  reviews: Types.ObjectId[];
+  averageRating?: number;
+  totalReviews?: number;
   earnings: number;
   teachingExperience: number;
   education: string;
