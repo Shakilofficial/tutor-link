@@ -1,9 +1,7 @@
 export const generateTransactionId = (): string => {
-  const timestamp = Date.now().toString();
-  const random = Math.floor(Math.random() * 1000000)
-    .toString()
-    .padStart(6, '0');
-  return `TXN-${timestamp}-${random}`;
+  const timestamp = Date.now().toString().slice(-6);
+  const randomString = Math.random().toString(36).substring(2, 8);
+  return `${timestamp}${randomString}`;
 };
 
 export const validateTimeSlot = (start: Date, end: Date): boolean => {

@@ -55,9 +55,21 @@ const bookingSchema = new Schema<IBooking>(
       min: [0, 'Amount cannot be negative'],
     },
     paymentMethod: { type: String, enum: Object.values(PaymentMethod) },
-    status: { type: String, enum: Object.values(BookingStatus) },
-    paymentStatus: { type: String, enum: Object.values(PaymentStatus) },
-    transactionId: { type: String, unique: true, sparse: true },
+    status: {
+      type: String,
+      enum: Object.values(BookingStatus),
+      default: BookingStatus.PENDING,
+    },
+    paymentStatus: {
+      type: String,
+      enum: Object.values(PaymentStatus),
+      default: PaymentStatus.PENDING,
+    },
+    tran_id: { type: String, unique: true },
+    gatewayResponse: {
+      type: Schema.Types.Mixed,
+      default: null,
+    },
   },
   {
     timestamps: true,

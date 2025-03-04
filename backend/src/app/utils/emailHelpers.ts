@@ -55,7 +55,10 @@ const sendEmail = async (
   }
 };
 
-const createEmailContent = async (data: object, templateType: string) => {
+const createEmailContent = async (
+  data: { studentName: string; tutorName: string; bookingDate: string },
+  templateType: string,
+) => {
   try {
     const templatePath = path.join(
       process.cwd(),

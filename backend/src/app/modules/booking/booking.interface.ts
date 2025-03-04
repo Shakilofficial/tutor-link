@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Types } from 'mongoose';
 
 /* eslint-disable no-unused-vars */
@@ -5,6 +6,7 @@ export enum BookingStatus {
   PENDING = 'pending',
   CONFIRMED = 'confirmed',
   CANCELLED = 'cancelled',
+  ACCEPTED = 'accepted',
 }
 
 export enum PaymentMethod {
@@ -34,5 +36,8 @@ export interface IBooking {
   paymentMethod: TPaymentMethod;
   status: TBookingStatus;
   paymentStatus: TPaymentStatus;
-  transactionId: string;
+  tran_id?: string;
+  gatewayResponse?: Record<string, any>;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

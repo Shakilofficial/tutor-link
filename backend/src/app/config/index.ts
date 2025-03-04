@@ -30,8 +30,5 @@ export default {
     success_url: process.env.SUCCESS_URL,
     failed_url: process.env.FAILED_URL,
     cancel_url: process.env.CANCEL_URL,
-    is_live: process.env.IS_LIVE,
-    ipn_url: process.env.IPN_URL,
-    clinet_rl: process.env.CLIENT_URL,
   },
 };

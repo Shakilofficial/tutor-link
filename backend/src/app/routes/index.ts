@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { authRoutes } from '../modules/auth/auth.routes';
 import { bookingRoutes } from '../modules/booking/booking.routes';
 import { reviewRoutes } from '../modules/review/review.routes';
+import { sslRoutes } from '../modules/sslcommerz/sslcommerz.route';
 import { studentRoutes } from '../modules/student/student.routes';
 import { subjectRoutes } from '../modules/subject/subject.routes';
 import { tutorRoutes } from '../modules/tutor/tutor.routes';
@@ -38,10 +39,10 @@ const moduleRoutes = [
     path: '/booking',
     route: bookingRoutes,
   },
-  /*  {
+  {
     path: '/ssl',
-    route: SSLRoutes,
-  }, */
+    route: sslRoutes,
+  },
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

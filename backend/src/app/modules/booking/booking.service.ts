@@ -1,14 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { StatusCodes } from 'http-status-codes';
 import { JwtPayload } from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import AppError from '../../errors/appError';
-import { EmailHelper } from '../../utils/emailHelpers';
 import { generateTransactionId } from '../payment/payment.utils';
-import { sslService } from '../sslcommerz/sslcommerz.service';
+import { PaymentInitData, sslService } from '../sslcommerz/sslcommerz.service';
 import { Student } from '../student/student.model';
 import { Tutor } from '../tutor/tutor.model';
-import { IBooking } from './booking.interface';
+import { UserRole } from '../user/user.interface';
+import { BookingStatus, IBooking, PaymentStatus } from './booking.interface';
 import { Booking } from './booking.model';
 
 const createBooking = async (
@@ -116,135 +115,121 @@ const createBooking = async (
   }
 };
 
-const acceptBooking = async (user: JwtPayload, bookingId: string) => {
-  const MAX_RETRIES = 3; 
-  let attempt = 0;
+const acceptBooking = async (
+  user: JwtPayload,
+  bookingId: string,
+): Promise<IBooking> => {
+  const tutor = await Tutor.findOne({ user: user.userId });
+  if (!tutor)
+    throw new AppError(StatusCodes.NOT_FOUND, 'Tutor profile not found');
 
-  while (attempt < MAX_RETRIES) {
-    const session = await mongoose.startSession();
-    session.startTransaction();
+  const booking = await Booking.findOneAndUpdate(
+    { _id: bookingId, tutor: tutor._id },
+    {
+      status: 'accepted',
+    },
+    { new: true },
+  );
+  if (!booking) throw new AppError(StatusCodes.NOT_FOUND, 'Booking not found');
 
-    try {
-  
-      const tutor = await Tutor.findOne({ user: user.userId }).session(session);
-      if (!tutor) {
-        throw new AppError(StatusCodes.NOT_FOUND, 'Tutor profile not found');
-      }
+  return booking;
+};
 
-      const booking = await Booking.findOneAndUpdate(
-        { _id: bookingId, tutor: tutor._id },
-        { status: 'accepted' },
-        { new: true, session },
-      ).populate(['student', 'tutor', 'subject']);
+const cancelBooking = async (user: JwtPayload, bookingId: string) => {
+  const student = await Student.findOne({ user: user.userId });
+  if (!student) throw new AppError(StatusCodes.NOT_FOUND, 'Student not found');
 
-      if (!booking) {
-        throw new AppError(StatusCodes.NOT_FOUND, 'Booking not found');
-      }
+  const booking = await Booking.findOne({
+    _id: bookingId,
+    student: student._id,
+  });
 
+  if (!booking) throw new AppError(StatusCodes.NOT_FOUND, 'Booking not found');
 
-      const student = await Student.findById(booking.student)
-        .populate('user')
-        .session(session);
+  booking.status = BookingStatus.CANCELLED;
+  booking.paymentStatus = PaymentStatus.REFUNDED;
 
-      if (!student) {
-        throw new AppError(StatusCodes.NOT_FOUND, 'Student profile not found');
-      }
+  await booking.save();
+};
 
-      const studentId = student._id.toString();
-      const transactionId = generateTransactionId();
+const getMyBookings = async (user: JwtPayload) => {
+  const student = await Student.findOne({ user: user.userId });
+  if (!student) throw new AppError(StatusCodes.NOT_FOUND, 'Student not found');
+  const booking = await Booking.find({
+    student: student._id,
+  });
+  return booking;
+};
 
-      let paymentUrl = null;
+const getAllBookings = async () => {
+  const bookings = await Booking.find();
+  return bookings;
+};
 
-      if (booking.paymentMethod === 'online') {
+const makePayment = async (bookingId: string, user: JwtPayload) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
 
-        await Booking.findByIdAndUpdate(
-          bookingId,
-          { transactionId, paymentStatus: 'pending' },
-          { new: true, session },
-        );
+  try {
+    const student = await Student.findOne({ user: user.userId })
+      .populate('user')
+      .session(session);
 
-        await session.commitTransaction();
-        session.endSession();
-
-
-        paymentUrl = await sslService.initPayment({
-          amount: booking.amount,
-          bookingId: booking._id.toString(),
-          studentId,
-          transactionId,
-        });
-
-
-        if ((student as any)?.user?.email) {
-          const emailContent = await EmailHelper.createEmailContent(
-            {
-              userName: (student as any).user.name,
-              amount: booking.amount,
-              tutorName: (booking.tutor as any).user.name,
-              paymentUrl,
-            },
-            'paymentRequest',
-          );
-
-          await EmailHelper.sendEmail(
-            (student as any).user.email,
-            emailContent,
-            'Payment Request for Tutoring Session',
-          );
-        }
-      } else {
-
-        await Booking.findByIdAndUpdate(
-          bookingId,
-          { status: 'confirmed', paymentStatus: 'paid' },
-          { new: true, session },
-        );
-
-        const earnings = booking.amount * 0.8; 
-        await Tutor.findByIdAndUpdate(
-          tutor._id,
-          { $inc: { earnings } },
-          { new: true, session },
-        );
-
-        if ((student as any)?.user?.email) {
-          const emailContent = await EmailHelper.createEmailContent(
-            {
-              userName: (student as any).user.name,
-              tutorName: (booking.tutor as any).user.name,
-              bookingDate: new Date(booking.startTime).toLocaleDateString(),
-            },
-            'bookingConfirmation',
-          );
-
-          await EmailHelper.sendEmail(
-            (student as any).user.email,
-            emailContent,
-            'Booking Confirmation',
-          );
-        }
-
-        await session.commitTransaction();
-        session.endSession();
-      }
-
-      return booking;
-    } catch (error: any) {
-      await session.abortTransaction();
-      session.endSession();
-
-      if (error.message.includes('Write conflict')) {
-        attempt++;
-        console.log(`Retrying transaction... Attempt ${attempt}`);
-        if (attempt >= MAX_RETRIES) throw error;
-      } else {
-        throw error;
-      }
+    if (!student || user.role !== UserRole.STUDENT) {
+      throw new AppError(StatusCodes.NOT_FOUND, 'Student profile not found');
     }
+
+    const booking = await Booking.findById(bookingId).session(session);
+
+    if (!booking) {
+      throw new Error('Booking not found');
+    }
+
+    if (booking.status !== BookingStatus.ACCEPTED) {
+      throw new AppError(
+        StatusCodes.BAD_REQUEST,
+        'Booking must be accepted by the tutor before payment',
+      );
+    }
+
+    // Generate a transaction ID
+    const tran_id = generateTransactionId();
+    // Update the Booking document with tran_id
+    booking.tran_id = tran_id;
+    await booking.save({ session });
+
+    const paymentData: PaymentInitData = {
+      amount: booking.amount,
+      bookingId,
+      studentId: student._id.toString(),
+      transactionId: tran_id,
+    };
+
+    let result;
+
+    if (booking.paymentMethod === 'online') {
+      result = await sslService.initPayment(paymentData);
+      result = { paymentUrl: result };
+    } else {
+      result = { message: 'Payment will be made in person' };
+    }
+
+    await session.commitTransaction();
+
+    return result;
+  } catch (error) {
+    await session.abortTransaction();
+    throw new Error(`Payment initiation failed: ${(error as Error).message}`);
+  } finally {
+    session.endSession();
   }
 };
 
 export const bookingServices = {
   createBooking,
   acceptBooking,
+  cancelBooking,
+  getMyBookings,
+  getAllBookings,
+  makePayment,
 };

@@ -2,14 +2,18 @@
   <head>
     <meta charset='UTF-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <link
+      href='https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap'
+      rel='stylesheet'
+    />
     <style>
       body {
-        font-family: Arial, sans-serif;
+        font-family: 'Poppins', sans-serif;
         line-height: 1.6;
         color: #333;
         background-color: #f9f9f9;
-        margin: 0;
-        padding: 0;
+        margin: auto;
+        padding: auto;
       }
 
       .container {
@@ -30,8 +34,15 @@
 
       .header h1 {
         margin: 0;
-        font-size: 24px;
+        font-size: 28px;
+        font-weight: 600;
         color: #7923c9;
+      }
+
+      .header h2 {
+        margin: 10px 0 0;
+        font-size: 18px;
+        color: #934caf;
       }
 
       .content {
@@ -40,11 +51,13 @@
 
       .content p {
         margin: 10px 0;
+        font-size: 16px;
+        color: #555;
       }
 
       .content .order-details {
         background: #f4f4f4;
-        padding: 10px;
+        padding: 15px;
         border-radius: 5px;
         margin-top: 15px;
       }
@@ -56,6 +69,10 @@
         color: #888;
       }
 
+      .footer p {
+        margin: 5px 0;
+      }
+
       .button {
         display: inline-block;
         padding: 10px 20px;
@@ -65,22 +82,34 @@
         text-decoration: none;
         font-size: 16px;
         font-weight: bold;
+        margin-top: 15px;
+      }
+
+      .button:hover {
+        background-color: #7923c9;
       }
     </style>
   </head>
   <body>
     <div class='container'>
       <div class='header'>
-        <h1>Payment Request</h1>
-        <h1>TutorLink</h1>
+        <h1>Payment Success</h1>
+        <h2>TutorLink</h2>
       </div>
       <div class='content'>
-        <p>Hi ${studentName},</p>
-        <p>Your tutor has accepted your booking request.</p>
-        <p>Total Amount: ${booking.amount} BDT</p>
-        <p>Please complete your payment to confirm the booking:</p>
-        <a href='${paymentUrl}' class='button'>Complete Payment</a>
-        <p>This link will expire in 24 hours.</p>
+        <p>Hi {{studentName}},</p>
+        <p>We are happy to inform you that your payment has been successfully
+          completed.</p>
+        <p>Total Amount: <strong>{{bookingAmount}} BDT</strong></p>
+        <p>Your booking has been confirmed, and your tutor will be ready to
+          start soon.</p>
+        <p>If you have any questions, feel free to contact us.</p>
+        <p>Thank you for using TutorLink!</p>
+      </div>
+      <div class='footer'>
+        <p>If you have any questions, feel free to contact us.</p>
+        <p>Best regards, <br /> TutorLink Team</p>
+        <p> &copy; 2025 TutorLink. All rights reserved.</p>
       </div>
     </div>
   </body>

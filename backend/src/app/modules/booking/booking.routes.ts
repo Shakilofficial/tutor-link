@@ -20,4 +20,24 @@ router.patch(
   bookingControllers.acceptBooking,
 );
 
+router.patch(
+  '/:bookingId/cancel',
+  auth(UserRole.STUDENT),
+  bookingControllers.cancelBooking,
+);
+
+router.get(
+  '/mybookings',
+  auth(UserRole.STUDENT),
+  bookingControllers.getMyBookings,
+);
+
+router.get('/', bookingControllers.getAllBookings);
+
+router.post(
+  '/:bookingId/make-payment',
+  auth(UserRole.STUDENT),
+  bookingControllers.makePayment,
+);
+
 export const bookingRoutes = router;
