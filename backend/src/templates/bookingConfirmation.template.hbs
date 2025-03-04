@@ -1,0 +1,77 @@
+<html lang='en'>
+
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .header {
+        text-align: center;
+        border-bottom: 2px solid #934caf;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+      }
+
+      .header h1 {
+        margin: 0;
+        font-size: 24px;
+        color: #7923c9;
+      }
+
+      .content {
+        padding: 10px 0;
+      }
+
+      .content p {
+        margin: 10px 0;
+      }
+
+      .content .order-details {
+        background: #f4f4f4;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 15px;
+      }
+
+      .footer {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 12px;
+        color: #888;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class='container'>
+      <div class='header'>
+        <h1>Booking Confirmed</h1>
+        <h1>TutorLink</h1>
+      </div>
+      <div class='content'>
+        <p>Hi {{userName}},</p>
+        <p>Your session with {{tutorName}} on {{bookingDate}} is confirmed!</p>
+        <p>We've attached your booking invoice for reference.</p>
+        <p>Contact your tutor for session details.</p>
+      </div>
+    </div>
+  </body>
+
+</html>

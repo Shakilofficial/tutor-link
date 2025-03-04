@@ -7,11 +7,11 @@ export enum UserRole {
   TUTOR = 'tutor',
 }
 
-// Common User Interface
 export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
+  phone: string;
   role: UserRole;
   profileImage: string;
   isVerified: boolean;

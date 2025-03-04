@@ -27,6 +27,7 @@
   "type": "commonjs",
   "description": "An Express backend for the tutorial-link web application",
   "dependencies": {
+    "@types/nodemailer": "^6.4.17",
     "axios": "^1.8.1",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",
@@ -40,6 +41,8 @@
     "multer": "^1.4.5-lts.1",
     "multer-storage-cloudinary": "^4.0.0",
     "nodemailer": "^6.10.0",
+    "pdfkit": "^0.16.0",
+    "sslcommerz-lts": "^1.1.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {
@@ -55,6 +58,7 @@
     "@types/nodemailer": "^6.4.17",
     "eslint": "^9.21.0",
     "globals": "^16.0.0",
+    "@types/pdfkit": "^0.13.8",
     "prettier": "^3.5.2",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",

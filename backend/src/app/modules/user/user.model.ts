@@ -26,8 +26,12 @@ const userSchema = new Schema<IUser, UserModel>(
     password: {
       type: String,
       required: [true, 'Password is required'],
-      select: false,
       minlength: [6, 'Password must be at least 6 characters'],
+    },
+    phone: {
+      type: String,
+      required: [true, 'Phone number is required'],
+      default: '+880123456789',
     },
     role: {
       type: String,
@@ -39,7 +43,8 @@ const userSchema = new Schema<IUser, UserModel>(
     },
     profileImage: {
       type: String,
-      default: 'https://res.cloudinary.com/dcyupktj6/image/upload/v1728502154/avatars/xsivocyzizacduhmna88.webp',
+      default:
+        'https://res.cloudinary.com/dcyupktj6/image/upload/v1728502154/avatars/xsivocyzizacduhmna88.webp',
     },
     isVerified: {
       type: Boolean,
