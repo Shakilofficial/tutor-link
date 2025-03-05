@@ -1,3 +1,10 @@
+import AppSidebar from "@/components/layout/dashboard/sidebar/AppSidebar";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import Providers from "@/providers";
 import { ReactNode } from "react";
 
 interface DashboardLayoutProps {
@@ -6,18 +13,19 @@ interface DashboardLayoutProps {
 
 const AdminDashboardLayout = ({ children }: DashboardLayoutProps) => {
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar */}
-      {/* <Sidebar className="w-[280px] hidden md:flex flex-col bg-gray-900 text-white" /> */}
-
-      {/* Main Content */}
-      <div className="flex flex-col flex-grow">
-        {/*  <Navbar /> */}
-        <main className="flex-grow w-full max-w-[1440px] mx-auto px-4 md:px-8">
-          {children}
-        </main>
-      </div>
-    </div>
+    <SidebarProvider>
+      <Providers>
+        <AppSidebar />
+        <SidebarInset>
+          <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+            <div className="flex items-center gap-2 px-4">
+              <SidebarTrigger className="-ml-1" />
+            </div>
+          </header>
+          <div className="p-4 pt-0 min-h-screen">{children}</div>
+        </SidebarInset>
+      </Providers>
+    </SidebarProvider>
   );
 };
 
