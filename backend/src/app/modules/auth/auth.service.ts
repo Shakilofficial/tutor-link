@@ -37,6 +37,7 @@ const loginUser = async (payload: IAuth) => {
       userId: user._id as string,
       name: user.name as string,
       email: user.email as string,
+      profileImage:user.profileImage as string,
       isDeleted: user.isDeleted ?? false,
       role: user.role,
     };
@@ -90,6 +91,7 @@ const refreshToken = async (token: string) => {
     userId: isUserExist._id as string,
     name: isUserExist.name as string,
     email: isUserExist.email as string,
+    profileImage: isUserExist.profileImage as string,
     isDeleted: isUserExist.isDeleted ?? false,
     role: isUserExist.role as UserRole,
   };

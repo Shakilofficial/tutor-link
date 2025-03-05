@@ -9,6 +9,7 @@ export interface IJwtPayload {
   userId: string;
   name: string;
   email: string;
+  profileImage: string;
   role: UserRole;
   isDeleted: false;
 }
