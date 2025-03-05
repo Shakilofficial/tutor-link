@@ -1,8 +1,8 @@
-import { StatusCodes } from "http-status-codes";
-import catchAsync from "../../utils/catchAsync";
-import sendResponse from "../../utils/sendResponse";
-import { JwtPayload } from "jsonwebtoken";
-import { studentServices } from "./student.service";
+import { StatusCodes } from 'http-status-codes';
+import catchAsync from '../../utils/catchAsync';
+import sendResponse from '../../utils/sendResponse';
+import { JwtPayload } from 'jsonwebtoken';
+import { studentServices } from './student.service';
 
 const getAllStudents = catchAsync(async (req, res) => {
   const result = await studentServices.getAllStudents(req.query);

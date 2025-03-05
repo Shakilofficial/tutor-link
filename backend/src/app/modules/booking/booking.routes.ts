@@ -32,8 +32,6 @@ router.get(
   bookingControllers.getMyBookings,
 );
 
-
-
 router.get('/', bookingControllers.getAllBookings);
 
 router.post(

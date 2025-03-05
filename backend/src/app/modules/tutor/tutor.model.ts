@@ -73,5 +73,4 @@ const tutorSchema = new Schema<ITutor>(
   },
 );
 
-
 export const Tutor = model<ITutor>('Tutor', tutorSchema);

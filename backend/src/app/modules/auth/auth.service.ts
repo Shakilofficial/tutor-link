@@ -288,8 +288,6 @@ const resetPassword = async ({
   }
 };
 
-
-
 export const authServices = {
   loginUser,
   refreshToken,

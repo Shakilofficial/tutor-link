@@ -1,3 +1,4 @@
+/* eslint-disable no-async-promise-executor */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import axios from 'axios';
 import PDFDocument from 'pdfkit';
@@ -39,9 +40,7 @@ export const generateBookingInvoicePDF = async (
         .font('Helvetica-Bold')
         .fillColor('#000000')
         .text('Tutor Link', { align: 'center' });
-      doc
-        .fontSize(10)
-        .text('Tanagil, Dahaka, Bangladesh', { align: 'center' });
+      doc.fontSize(10).text('Tanagil, Dahaka, Bangladesh', { align: 'center' });
       doc
         .fontSize(10)
         .text('Email: support@tutor-link.com', { align: 'center' });

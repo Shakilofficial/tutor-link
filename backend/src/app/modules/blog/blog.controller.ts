@@ -31,7 +31,7 @@ const updateBlog = catchAsync(async (req, res) => {
   });
 });
 
-const togglePublishBlog= catchAsync(async (req, res) => {
+const togglePublishBlog = catchAsync(async (req, res) => {
   const result = await blogServices.togglePublishBlog(req.params.id, req.user);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
