@@ -5,7 +5,7 @@ import { logoutUser } from "@/services/authService";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Button } from "../ui/button";
+import TButton from "../ui/core/TButton";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -45,7 +45,7 @@ const UserProfile = () => {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          className="bg-orange-500/50 cursor-pointer flex items-center gap-2"
+          className="bg-orange-500/70 cursor-pointer flex items-center gap-2"
           onClick={handleLogOut}
         >
           <LogOut size={16} />
@@ -55,7 +55,7 @@ const UserProfile = () => {
     </DropdownMenu>
   ) : (
     <Link href="/login">
-      <Button className="border-2 bg-orange-500 text-white">LOG IN</Button>
+      <TButton>LOG IN</TButton>
     </Link>
   );
 };
