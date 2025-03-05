@@ -1,9 +1,11 @@
 "use client";
 
+import { protectedRoutes } from "@/constants/protectedRoutes";
 import { useUser } from "@/context/UserContext";
 import { logoutUser } from "@/services/authService";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import TButton from "../ui/core/TButton";
 import {
@@ -17,10 +19,15 @@ import {
 
 const UserProfile = () => {
   const { setIsLoading, user } = useUser();
+  const pathname = usePathname();
+  const router = useRouter();
 
   const handleLogOut = () => {
     logoutUser();
     setIsLoading(true);
+    if (protectedRoutes.some((route) => pathname.match(route))) {
+      router.push("/");
+    }
   };
 
   return user ? (
@@ -38,10 +45,10 @@ const UserProfile = () => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <Link href="/user/profile">Profile</Link>
+          <Link href="/profile">Profile</Link>
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <Link href="/user/dashboard">Dashboard</Link>
+          <Link href={`/${user.role}`}>Dashboard</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
