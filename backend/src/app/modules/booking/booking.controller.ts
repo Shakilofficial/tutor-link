@@ -41,22 +41,23 @@ const cancelBooking = catchAsync(async (req, res) => {
 });
 
 const getMyBookings = catchAsync(async (req, res) => {
-  const bookings = await bookingServices.getMyBookings(req.user);
+  const result = await bookingServices.getMyBookings(req.user);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
     message: 'Fetched bookings successfully',
-    data: bookings,
+    data: result,
   });
 });
 
 const getAllBookings = catchAsync(async (req, res) => {
-  const bookings = await bookingServices.getAllBookings();
+  const result = await bookingServices.getAllBookings(req.query);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
     message: 'Fetched bookings successfully',
-    data: bookings,
+    meta: result.meta,
+    data: result.bookings,
   });
 });
 
@@ -79,5 +80,5 @@ export const bookingControllers = {
   cancelBooking,
   getMyBookings,
   getAllBookings,
-  makePayment
+  makePayment,
 };

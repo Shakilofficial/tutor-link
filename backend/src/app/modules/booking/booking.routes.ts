@@ -28,9 +28,11 @@ router.patch(
 
 router.get(
   '/mybookings',
-  auth(UserRole.STUDENT),
+  auth(UserRole.STUDENT, UserRole.TUTOR),
   bookingControllers.getMyBookings,
 );
+
+
 
 router.get('/', bookingControllers.getAllBookings);
 

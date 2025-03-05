@@ -189,6 +189,22 @@ const updateStatus = async (userId: string, user: JwtPayload) => {
   return existingUser;
 };
 
+const toggleUserVerify = async (userId: string, user: JwtPayload) => {
+  const existingUser = await User.checkUserExist(userId);
+  if (!existingUser) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'User not found');
+  }
+
+  if (user.role !== UserRole.ADMIN) {
+    throw new AppError(StatusCodes.FORBIDDEN, 'Unauthorized to verify user');
+  }
+
+  existingUser.isVerified = !existingUser.isVerified;
+  await existingUser.save();
+
+  return existingUser;
+};
+
 const getAllUsers = async (query: Record<string, unknown>) => {
   const userQuery = new QueryBuilder(User.find(), query)
     .search(userSearchableFields)
@@ -217,4 +233,5 @@ export const userServices = {
   updateStatus,
   getAllUsers,
   getSingleUser,
+  toggleUserVerify,
 };

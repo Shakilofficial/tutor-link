@@ -7,7 +7,13 @@ import { promisify } from 'util';
 import config from '../config';
 
 const readFile = promisify(fs.readFile);
-
+type EmailContentParams = {
+  otpCode?: string;
+  userName?: string;
+  studentName?: string;
+  tutorName?: string;
+  bookingDate?: string;
+};
 const sendEmail = async (
   email: string,
   html: string,
@@ -56,7 +62,7 @@ const sendEmail = async (
 };
 
 const createEmailContent = async (
-  data: { studentName: string; tutorName: string; bookingDate: string },
+  data: EmailContentParams,
   templateType: string,
 ) => {
   try {

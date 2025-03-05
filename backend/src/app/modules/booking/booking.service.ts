@@ -1,6 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import { JwtPayload } from 'jsonwebtoken';
 import mongoose from 'mongoose';
+import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../errors/appError';
 import { generateTransactionId } from '../payment/payment.utils';
 import { PaymentInitData, sslService } from '../sslcommerz/sslcommerz.service';
@@ -153,17 +154,38 @@ const cancelBooking = async (user: JwtPayload, bookingId: string) => {
 };
 
 const getMyBookings = async (user: JwtPayload) => {
+  let bookings;
+
+  // Check if the user is a student
   const student = await Student.findOne({ user: user.userId });
-  if (!student) throw new AppError(StatusCodes.NOT_FOUND, 'Student not found');
-  const booking = await Booking.find({
-    student: student._id,
-  });
-  return booking;
+  if (student) {
+    bookings = await Booking.find({ student: student._id });
+    return bookings;
+  }
+
+  // Check if the user is a tutor
+  const tutor = await Tutor.findOne({ user: user.userId });
+  if (tutor) {
+    bookings = await Booking.find({ tutor: tutor._id });
+    return bookings;
+  }
+
+  throw new AppError(
+    StatusCodes.NOT_FOUND,
+    'User not found as Student or Tutor',
+  );
 };
 
-const getAllBookings = async () => {
-  const bookings = await Booking.find();
-  return bookings;
+const getAllBookings = async (query: Record<string, unknown>) => {
+  const bookingQuery = new QueryBuilder(Booking.find(), query)
+    .search(['tran_id'])
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+  const bookings = await bookingQuery.modelQuery;
+  const meta = await bookingQuery.countTotal();
+  return { bookings, meta };
 };
 
 const makePayment = async (bookingId: string, user: JwtPayload) => {

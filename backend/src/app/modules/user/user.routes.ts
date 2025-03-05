@@ -49,6 +49,12 @@ router.patch(
   userControllers.updateStatus,
 );
 
+router.patch(
+  '/verify-user',
+  auth(UserRole.ADMIN),
+  userControllers.toggleUserVerify,
+);
+
 router.get('/:id', userControllers.getSingleUser);
 
 router.get('/', userControllers.getAllUsers);

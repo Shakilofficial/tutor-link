@@ -119,6 +119,20 @@ const updateStatus = catchAsync(async (req, res) => {
   });
 });
 
+const toggleUserVerify = catchAsync(async (req, res) => {
+  const user = await userServices.toggleUserVerify(
+    req.params.id,
+    req.user as JwtPayload,
+  );
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: `User is now ${user.isVerified ? 'verified' : 'unverified'}`,
+    data: user,
+  });
+});
+
 const getAllUsers = catchAsync(async (req, res) => {
   const result = await userServices.getAllUsers(req.query);
   sendResponse(res, {
@@ -148,4 +162,5 @@ export const userControllers = {
   updateStatus,
   getAllUsers,
   getSingleUser,
+  toggleUserVerify,
 };
