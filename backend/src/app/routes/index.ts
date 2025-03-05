@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { authRoutes } from '../modules/auth/auth.routes';
+import { blogRoutes } from '../modules/blog/blog.routes';
 import { bookingRoutes } from '../modules/booking/booking.routes';
 import { reviewRoutes } from '../modules/review/review.routes';
 import { sslRoutes } from '../modules/sslcommerz/sslcommerz.route';
@@ -42,6 +43,10 @@ const moduleRoutes = [
   {
     path: '/ssl',
     route: sslRoutes,
+  },
+  {
+    path: '/blog',
+    route: blogRoutes,
   },
 ];
 
