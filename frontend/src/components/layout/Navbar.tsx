@@ -1,8 +1,8 @@
 "use client";
-import { MoonIcon } from "lucide-react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Button } from "../ui/button";
+import Logo from "../shared/Logo";
+import ThemeToggle from "../shared/ThemeToggle";
+import UserProfile from "../shared/UserProfile";
 import MainNav from "./Main-Nav";
 import MobileNav from "./Mobile-Nav";
 
@@ -11,35 +11,35 @@ const Navbar = () => {
   const routes = [
     {
       href: "/",
-      label: "Home",
+      label: "HOME",
       active: pathname === "/",
     },
     {
       href: "/tutors",
-      label: "Browser Tutors",
+      label: "BROWSE TUTORS",
       active: pathname === "/tutors",
     },
     {
       href: "/blogs",
-      label: "blogs",
+      label: "BLOGS",
       active: pathname === "/blogs",
     },
     {
       href: "/about-us",
-      label: "About US",
+      label: "ABOUT US",
       active: pathname === "/about-us",
     },
   ];
+
   return (
-    <div className="container flex h-16 items-center justify-between w-full mx-auto px-4">
+    <div className="container flex h-16 items-center justify-between w-full mx-auto px-4 bg-transparent border-b border-orange-900/10">
+      <Logo />
       <MainNav routes={routes} pathname={pathname} />
-      <div className="flex items-center gap-2">
-        <MoonIcon />
-        <div className="hidden md:flex md:gap-2">
-          <Button variant="outline" asChild>
-            <Link href="/auth/login">Log in</Link>
-          </Button>
-        </div>
+      <div className="flex items-center gap-4">
+        <ThemeToggle />
+
+        <UserProfile />
+
         <MobileNav routes={routes} pathname={pathname} />
       </div>
     </div>

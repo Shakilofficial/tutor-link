@@ -37,12 +37,12 @@ const MobileNav = ({ routes }: MobileNavProps) => {
           size="icon"
           aria-label="Open mobile menu"
         >
-          <Menu className="h-5 w-5" />
+          <Menu className="h-10 w-10 text-orange-600" />
           <span className="sr-only">Toggle menu</span>
         </Button>
       </SheetTrigger>
 
-      <SheetContent side="right">
+      <SheetContent side="right" className="bg-orange-900/40">
         <div className="grid gap-6 py-10 px-8">
           {/* Header */}
           <SheetHeader className="sr-only">
@@ -58,7 +58,7 @@ const MobileNav = ({ routes }: MobileNavProps) => {
                 href={route.href}
                 className={cn(
                   "text-sm font-medium transition-colors hover:text-primary",
-                  route.active ? "text-primary" : "text-muted-foreground"
+                  route.active ? "text-orange-600" : "text-muted-foreground"
                 )}
                 onClick={() => setOpen(false)}
               >
@@ -69,14 +69,14 @@ const MobileNav = ({ routes }: MobileNavProps) => {
 
           {/* Auth Buttons */}
           <div className="grid gap-2">
-            <Button variant="outline" asChild>
-              <Link href="/auth/login" onClick={() => setOpen(false)}>
-                Log in
+            <Button asChild>
+              <Link href="/register-student" onClick={() => setOpen(false)}>
+                Sign up as Student
               </Link>
             </Button>
             <Button asChild>
-              <Link href="/auth/register" onClick={() => setOpen(false)}>
-                Sign up
+              <Link href="/register-tutor" onClick={() => setOpen(false)}>
+                Sign up as Tutor
               </Link>
             </Button>
           </div>

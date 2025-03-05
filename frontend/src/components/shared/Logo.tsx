@@ -1,14 +1,14 @@
-import { Lightbulb } from "lucide-react";
+import { CircleDashed } from "lucide-react";
 import Link from "next/link";
 
 const Logo = () => {
   return (
     <Link href="/">
-      <p className="flex items-center text-3xl font-extrabold text-orange-500">
+      <h4 className="flex items-center justify-center text-2xl font-extrabold text-orange-500">
         <span>TUT</span>
-        <Lightbulb className="h-6 w-6" />
+        <CircleDashed className="h-5 w-5 mt-0.5" />
         <span>RLINK</span>
-      </p>
+      </h4>
     </Link>
   );
 };
