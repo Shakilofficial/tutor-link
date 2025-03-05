@@ -1,0 +1,89 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
+import { Menu } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+
+interface Route {
+  href: string;
+  label: string;
+  active: boolean;
+}
+
+interface MobileNavProps {
+  routes: Route[];
+  pathname: string;
+}
+
+const MobileNav = ({ routes }: MobileNavProps) => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
+        <Button
+          variant="ghost"
+          className="md:hidden"
+          size="icon"
+          aria-label="Open mobile menu"
+        >
+          <Menu className="h-5 w-5" />
+          <span className="sr-only">Toggle menu</span>
+        </Button>
+      </SheetTrigger>
+
+      <SheetContent side="right">
+        <div className="grid gap-6 py-10 px-8">
+          {/* Header */}
+          <SheetHeader className="sr-only">
+            <SheetTitle>Are you absolutely sure?</SheetTitle>
+            <SheetDescription>Mobile-Nav</SheetDescription>
+          </SheetHeader>
+
+          {/* Navigation Links */}
+          <div className="grid gap-3 justify-center items-center">
+            {routes.map((route) => (
+              <Link
+                key={route.href}
+                href={route.href}
+                className={cn(
+                  "text-sm font-medium transition-colors hover:text-primary",
+                  route.active ? "text-primary" : "text-muted-foreground"
+                )}
+                onClick={() => setOpen(false)}
+              >
+                {route.label}
+              </Link>
+            ))}
+          </div>
+
+          {/* Auth Buttons */}
+          <div className="grid gap-2">
+            <Button variant="outline" asChild>
+              <Link href="/auth/login" onClick={() => setOpen(false)}>
+                Log in
+              </Link>
+            </Button>
+            <Button asChild>
+              <Link href="/auth/register" onClick={() => setOpen(false)}>
+                Sign up
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </SheetContent>
+    </Sheet>
+  );
+};
+
+export default MobileNav;
