@@ -1,3 +1,4 @@
+import RegisterTutorForm from "@/components/modules/user/register-tutor/RegisterTutorForm";
 import Link from "next/link";
 
 const RegisterTutorPage = () => {
@@ -11,7 +12,9 @@ const RegisterTutorPage = () => {
           Create your account to start your journey with us.
         </p>
       </div>
-      <div className="bg-transparent">{/* <RegisterForm /> */}</div>
+      <div className="bg-transparent">
+        <RegisterTutorForm />
+      </div>
       <div className="flex flex-col space-y-2 text-center">
         <p className="text-sm text-muted-foreground">
           Already have an account?
