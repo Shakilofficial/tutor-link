@@ -5,10 +5,12 @@ import { ImageUploader } from "@/components/form/ImageUploader";
 import { MultiSelect } from "@/components/form/MultiSelect";
 import { Textarea } from "@/components/form/Textarea";
 import { TextInput } from "@/components/form/TextInput";
+import { Button } from "@/components/ui/button";
 import { useUser } from "@/context/UserContext";
 import { getAllSubjects } from "@/services/subjectService";
 import { createTutor } from "@/services/userService";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
@@ -111,19 +113,50 @@ const RegisterTutorForm = () => {
         isValid={isValid}
         recaptchaStatus
       >
-        <TextInput name="name" label="Full Name" />
-        <TextInput name="email" label="Email" />
-        <TextInput name="password" label="Password" type="password" />
-        <TextInput name="phone" label="Phone Number" />
-        <TextInput name="location" label="Location" />
-        <TextInput name="education" label="Education" />
-        <TextInput name="hourlyRate" label="Hourly Rate (BDT)" type="number" />
-        <TextInput
-          name="teachingExperience"
-          label="Teaching Experience (years)"
-          type="number"
-        />
+        <div className="grid grid-cols-2 gap-2 w-full">
+          <TextInput name="name" label="Full Name" />
+          <TextInput name="email" label="Email" />
+          <TextInput name="password" label="Password" type="password" />
+          <TextInput name="phone" label="Phone Number" />
+          <TextInput name="location" label="Location" />
+          <TextInput name="education" label="Education" />
+          <TextInput
+            name="hourlyRate"
+            label="Hourly Rate (BDT)"
+            type="number"
+          />
+          <TextInput
+            name="teachingExperience"
+            label="Years of Experience"
+            type="number"
+          />
 
+          {/* Bio Section */}
+          <Textarea
+            name="bio"
+            label="Bio"
+            placeholder="Describe your teaching experience and qualifications..."
+          />
+
+          {/* Image Upload */}
+          <div className="flex flex-col">
+            {imagePreview.length > 0 ? (
+              <ImagePreviewer
+                setImageFiles={setImageFiles}
+                imagePreview={imagePreview}
+                setImagePreview={setImagePreview}
+                className="mt-4"
+              />
+            ) : (
+              <ImageUploader
+                name="profileImage"
+                label="Upload your profile image"
+                setImageFiles={setImageFiles}
+                setImagePreview={setImagePreview}
+              />
+            )}
+          </div>
+        </div>
         <MultiSelect
           name="subjects"
           label="Teaching Subjects"
@@ -156,50 +189,23 @@ const RegisterTutorForm = () => {
                     </select>
                   )}
                 />
-                <button
-                  type="button"
+                <Button
                   onClick={() => removeAvailability(index)}
                   className="text-red-600"
+                  size="icon"
                 >
-                  Remove Day
-                </button>
+                  <Trash className="w-4 h-4" />
+                </Button>
               </div>
               <SlotFields nestIndex={index} />
             </div>
           ))}
-          <button
-            type="button"
+          <Button
+            className="bg-orange-500/70 text-white"
             onClick={() => appendAvailability({ day: "Monday", slots: [] })}
-            className="btn-secondary"
           >
             Add Availability Day
-          </button>
-        </div>
-
-        {/* Bio Section */}
-        <Textarea
-          name="bio"
-          label="Bio"
-          placeholder="Describe your teaching experience and qualifications..."
-        />
-
-        {/* Image Upload */}
-        <div className="flex flex-col">
-          {imagePreview.length > 0 ? (
-            <ImagePreviewer
-              setImageFiles={setImageFiles}
-              imagePreview={imagePreview}
-              setImagePreview={setImagePreview}
-              className="mt-4"
-            />
-          ) : (
-            <ImageUploader
-              name="profileImage"
-              label="Upload your profile image"
-              setImageFiles={setImageFiles}
-              setImagePreview={setImagePreview}
-            />
-          )}
+          </Button>
         </div>
       </Form>
     </div>

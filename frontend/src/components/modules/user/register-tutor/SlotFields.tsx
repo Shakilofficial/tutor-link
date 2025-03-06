@@ -1,5 +1,7 @@
-'use client';
+"use client";
 import { TimeInput } from "@/components/form/TimeInput";
+import { Button } from "@/components/ui/button";
+import { Trash } from "lucide-react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 interface SlotFieldsProps {
@@ -30,17 +32,16 @@ const SlotFields = ({ nestIndex }: SlotFieldsProps) => {
             onClick={() => remove(slotIndex)}
             className="text-red-500"
           >
-            Remove
+            <Trash className="w-4 h-4" />
           </button>
         </div>
       ))}
-      <button
-        type="button"
+      <Button
         onClick={() => append({ start: "09:00", end: "10:00" })}
-        className="btn-secondary"
+        variant="destructive"
       >
         Add Time Slot
-      </button>
+      </Button>
     </div>
   );
 };

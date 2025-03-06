@@ -12,7 +12,7 @@ const RegisterTutorPage = () => {
           Create your account to start your journey with us.
         </p>
       </div>
-      <div className="bg-transparent">
+      <div className="bg-transparent w-full">
         <RegisterTutorForm />
       </div>
       <div className="flex flex-col space-y-2 text-center">
