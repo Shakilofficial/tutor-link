@@ -1,3 +1,4 @@
+import RegisterStudentForm from "@/components/modules/user/register-student/RegisterStudentForm";
 import Link from "next/link";
 
 const RegisterStudentPage = () => {
@@ -11,7 +12,9 @@ const RegisterStudentPage = () => {
           Create your account to start your journey with us.
         </p>
       </div>
-      <div className="bg-transparent">{/* <RegisterForm /> */}</div>
+      <div className="bg-transparent">
+        <RegisterStudentForm />
+      </div>
       <div className="flex flex-col space-y-2 text-center">
         <p className="text-sm text-muted-foreground">
           Already have an account?

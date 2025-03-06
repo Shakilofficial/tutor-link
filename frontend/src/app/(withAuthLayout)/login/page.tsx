@@ -21,7 +21,7 @@ const LoginPage = () => {
           Don &apos;t have an account?
           <div className="flex gap-2 justify-between mt-4">
             <Link
-              href="/register-tutor"
+              href="/register-student"
               className="text-orange-500 pl-1 font-semibold"
             >
               <Button variant="outline">Register as Student</Button>
