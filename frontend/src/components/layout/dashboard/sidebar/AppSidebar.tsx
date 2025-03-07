@@ -35,24 +35,14 @@ const navData = [
     url: "/tutor",
     icon: SquareTerminal,
     roles: ["tutor"],
-    items: [
-      { title: "My Students", url: "/tutor/students" },
-      { title: "Manage Courses", url: "/tutor/courses" },
-      { title: "Booking Requests", url: "/tutor/bookings" },
-      { title: "Earnings", url: "/tutor/earnings" },
-    ],
+    items: [{ title: "Booking Requests", url: "/tutor/bookings" }],
   },
   {
     title: "Student Dashboard",
     url: "/student",
     icon: SquareTerminal,
     roles: ["student"],
-    items: [
-      { title: "My Courses", url: "/student/courses" },
-      { title: "Enrollments", url: "/student/enrollments" },
-      { title: "Tutors", url: "/student/tutors" },
-      { title: "Bookings", url: "/student/bookings" },
-    ],
+    items: [{ title: "My Bookings", url: "/student/bookings" }],
   },
 ];
 

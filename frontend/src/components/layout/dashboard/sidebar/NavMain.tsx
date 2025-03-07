@@ -53,7 +53,7 @@ const NavMain = ({ items, user }: NavMainProps) => {
       <SidebarGroupLabel>Menu</SidebarGroupLabel>
       <SidebarMenu>
         {navData.map((item) => (
-          <SidebarMenuItem key={item.title}>
+          <SidebarMenuItem key={item.title} className="text-lg font-semibold text-orange-700">
             <SidebarMenuButton asChild tooltip={item.title}>
               {item.url ? (
                 <Link href={item.url}>
