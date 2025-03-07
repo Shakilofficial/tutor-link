@@ -25,11 +25,11 @@ const moduleRoutes = [
     route: subjectRoutes,
   },
   {
-    path: '/tutor',
+    path: '/tutors',
     route: tutorRoutes,
   },
   {
-    path: '/student',
+    path: '/students',
     route: studentRoutes,
   },
   {

@@ -137,11 +137,11 @@ const getSingleTutor = async (id: string) => {
   const tutor = await Tutor.findById(id)
     .populate({
       path: 'user',
-      select: 'name email profileImage -_id',
+      select: 'name email profileImage',
     })
     .populate({
       path: 'subjects',
-      select: 'name gradeLevel -_id',
+      select: 'name gradeLevel',
     })
     .lean();
 

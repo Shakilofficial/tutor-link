@@ -49,35 +49,50 @@ const cancelBooking = async (user: JwtPayload, bookingId: string) => {
 };
 
 const getMyBookings = async (user: JwtPayload) => {
-  let bookings;
+  let filter: Record<string, unknown> = {};
 
-  // Check if the user is a student
+ 
   const student = await Student.findOne({ user: user.userId });
   if (student) {
-    bookings = await Booking.find({ student: student._id });
-    return bookings;
+    filter = { student: student._id };
+  } else {
+
+    const tutor = await Tutor.findOne({ user: user.userId });
+    if (tutor) {
+      filter = { tutor: tutor._id };
+    } else {
+      throw new AppError(
+        StatusCodes.NOT_FOUND,
+        'User not found as Student or Tutor',
+      );
+    }
   }
 
-  // Check if the user is a tutor
-  const tutor = await Tutor.findOne({ user: user.userId });
-  if (tutor) {
-    bookings = await Booking.find({ tutor: tutor._id });
-    return bookings;
-  }
+  const bookings = await Booking.find(filter)
+    .populate([
+      { path: 'student', populate: { path: 'user', select: 'name email' } },
+      { path: 'tutor', populate: { path: 'user', select: 'name email' } },
+      { path: 'subject', select: 'name' },
+    ])
+    .lean();
 
-  throw new AppError(
-    StatusCodes.NOT_FOUND,
-    'User not found as Student or Tutor',
-  );
+  return bookings;
 };
 
 const getAllBookings = async (query: Record<string, unknown>) => {
-  const bookingQuery = new QueryBuilder(Booking.find(), query)
+  const bookingQuery = new QueryBuilder(
+    Booking.find()
+      .populate({ path: 'student', populate: { path: 'user' } })
+      .populate({ path: 'tutor', populate: { path: 'user' } })
+      .populate({ path: 'subject', select: 'name' }),
+    query,
+  )
     .search(['tran_id'])
     .filter()
     .sort()
     .paginate()
     .fields();
+
   const bookings = await bookingQuery.modelQuery;
   const meta = await bookingQuery.countTotal();
   return { bookings, meta };

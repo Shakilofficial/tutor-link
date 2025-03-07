@@ -15,7 +15,7 @@ export const generateBookingInvoicePDF = async (
   return new Promise<Buffer>(async (resolve, reject) => {
     try {
       const logoUrl =
-        'https://res.cloudinary.com/dbgrq28js/image/upload/v1736763971/logoipsum-282_ilqjfb_paw4if.png';
+        'https://res.cloudinary.com/dcyupktj6/image/upload/v1741338958/pacyhmxfwotyi6qx80kj.jpg';
       // Download the logo image as a buffer
       const response = await axios.get(logoUrl, {
         responseType: 'arraybuffer',
@@ -40,7 +40,7 @@ export const generateBookingInvoicePDF = async (
         .font('Helvetica-Bold')
         .fillColor('#000000')
         .text('Tutor Link', { align: 'center' });
-      doc.fontSize(10).text('Tanagil, Dahaka, Bangladesh', { align: 'center' });
+      doc.fontSize(10).text('Tangail, Dhaka, Bangladesh', { align: 'center' });
       doc
         .fontSize(10)
         .text('Email: support@tutor-link.com', { align: 'center' });
