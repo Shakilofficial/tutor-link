@@ -11,111 +11,6 @@ import { UserRole } from '../user/user.interface';
 import { BookingStatus, IBooking, PaymentStatus } from './booking.interface';
 import { Booking } from './booking.model';
 
-const createBooking = async (
-  bookingData: Partial<IBooking>,
-  user: JwtPayload,
-  tutorId: string,
-) => {
-  const session = await mongoose.startSession();
-  session.startTransaction();
-
-  try {
-    // Find student profile
-    const student = await Student.findOne({ user: user.userId }).session(
-      session,
-    );
-    if (!student) {
-      throw new AppError(StatusCodes.NOT_FOUND, 'Student profile not found');
-    }
-
-    // Find tutor
-    const tutor = await Tutor.findById(tutorId)
-      .session(session)
-      .select('hourlyRate availability subjects')
-      .populate('subjects');
-
-    if (!tutor) {
-      throw new AppError(StatusCodes.NOT_FOUND, 'Tutor not found');
-    }
-
-    // Validate subject
-    const validSubject = tutor.subjects.some(
-      (subject) => subject._id.toString() === bookingData.subject?.toString(),
-    );
-    if (!validSubject) {
-      throw new AppError(
-        StatusCodes.BAD_REQUEST,
-        'Tutor does not offer this subject',
-      );
-    }
-
-    // Validate tutor availability
-    const bookingDay = new Date(bookingData.startTime!).toLocaleDateString(
-      'en-US',
-      {
-        weekday: 'long',
-      },
-    );
-
-    const availableDay = tutor.availability.find((d) => d.day === bookingDay);
-    if (!availableDay) {
-      throw new AppError(
-        StatusCodes.CONFLICT,
-        'Tutor not available on this day',
-      );
-    }
-
-    // Check for conflicting bookings
-    const conflictingBooking = await Booking.findOne({
-      tutor: tutorId,
-      startTime: { $lt: bookingData.endTime },
-      endTime: { $gt: bookingData.startTime },
-      status: { $nin: ['cancelled', 'failed'] },
-    }).session(session);
-
-    if (conflictingBooking) {
-      throw new AppError(StatusCodes.CONFLICT, 'Time slot already booked');
-    }
-
-    // Calculate booking details
-    const durationHours =
-      (new Date(bookingData.endTime!).getTime() -
-        new Date(bookingData.startTime!).getTime()) /
-      (1000 * 60 * 60);
-
-    const amount = tutor.hourlyRate * durationHours;
-
-    // Create booking
-    const booking = await Booking.create(
-      [
-        {
-          student: student._id,
-          tutor: tutorId,
-          subject: bookingData.subject,
-          startTime: bookingData.startTime,
-          endTime: bookingData.endTime,
-          durationHours,
-          hourlyRate: tutor.hourlyRate,
-          amount,
-          paymentMethod: bookingData.paymentMethod,
-          status: 'pending',
-          paymentStatus: 'pending',
-        },
-      ],
-      { session },
-    );
-
-    await session.commitTransaction();
-
-    return { booking: booking[0], paymentUrl: null };
-  } catch (error) {
-    await session.abortTransaction();
-    throw error;
-  } finally {
-    session.endSession();
-  }
-};
-
 const acceptBooking = async (
   user: JwtPayload,
   bookingId: string,
@@ -218,6 +113,7 @@ const makePayment = async (bookingId: string, user: JwtPayload) => {
     const tran_id = generateTransactionId();
     // Update the Booking document with tran_id
     booking.tran_id = tran_id;
+
     await booking.save({ session });
 
     const paymentData: PaymentInitData = {
@@ -248,7 +144,6 @@ const makePayment = async (bookingId: string, user: JwtPayload) => {
 };
 
 export const bookingServices = {
-  createBooking,
   acceptBooking,
   cancelBooking,
   getMyBookings,

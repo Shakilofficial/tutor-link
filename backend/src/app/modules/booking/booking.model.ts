@@ -54,7 +54,11 @@ const bookingSchema = new Schema<IBooking>(
       required: [true, 'Total amount is required'],
       min: [0, 'Amount cannot be negative'],
     },
-    paymentMethod: { type: String, enum: Object.values(PaymentMethod) },
+    paymentMethod: {
+      type: String,
+      enum: Object.values(PaymentMethod),
+      default: PaymentMethod.ONLINE,
+    },
     status: {
       type: String,
       enum: Object.values(BookingStatus),

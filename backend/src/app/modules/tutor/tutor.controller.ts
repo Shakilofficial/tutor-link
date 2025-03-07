@@ -4,6 +4,21 @@ import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { tutorServices } from './tutor.service';
 
+
+const createBooking = catchAsync(async (req, res) => {
+  const booking = await tutorServices.createBooking(
+    req.body,
+    req.user,
+    req.params.id,
+  );
+  sendResponse(res, {
+    statusCode: StatusCodes.CREATED,
+    success: true,
+    message: 'Booking request created successfully',
+    data: booking,
+  });
+});
+
 const getAllTutors = catchAsync(async (req, res) => {
   const result = await tutorServices.getAllTutors(req.query);
   sendResponse(res, {
@@ -53,6 +68,7 @@ const deleteTutor = catchAsync(async (req, res) => {
 });
 
 export const tutorControllers = {
+  createBooking,
   getAllTutors,
   getSingleTutor,
   updateTutor,
