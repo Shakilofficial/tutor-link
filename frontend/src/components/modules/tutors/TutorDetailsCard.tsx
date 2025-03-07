@@ -1,7 +1,7 @@
+"use client";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import TButton from "@/components/ui/core/TButton";
 import type { ISubject, ITutor } from "@/types";
 import {
   Book,
@@ -11,10 +11,9 @@ import {
   MapPin,
   Star,
 } from "lucide-react";
-import Link from "next/link";
+import CreateBookingDialog from "../booking/CreateBookingDialog";
 
 const TutorDetailsCard = ({ tutor }: { tutor: ITutor }) => {
-  console.log(tutor);
   return (
     <div className="space-y-6 max-w-screen-md mx-auto">
       <Card className="border-2 border-orange-900/20">
@@ -34,11 +33,11 @@ const TutorDetailsCard = ({ tutor }: { tutor: ITutor }) => {
               </Avatar>
 
               <div className="mt-2 flex items-center">
-                {[...Array(5)].map((_, i) => (
+                {[...Array(5)].map((_, index) => (
                   <Star
-                    key={i}
+                    key={`star-${index}`}
                     className={`h-5 w-5 ${
-                      i < Math.round(tutor.averageRating)
+                      index < Math.round(tutor.averageRating)
                         ? "text-yellow-400 fill-current"
                         : "text-gray-300"
                     }`}
@@ -66,8 +65,12 @@ const TutorDetailsCard = ({ tutor }: { tutor: ITutor }) => {
               <div>
                 <h3 className="text-lg font-semibold">Subjects</h3>
                 <div className="mt-2 flex flex-wrap gap-2">
-                  {tutor.subjects.map((subject: ISubject) => (
-                    <Badge key={subject._id} variant="outline" className="bg-amber-800/50">
+                  {tutor.subjects.map((subject: ISubject, index) => (
+                    <Badge
+                      key={subject._id || `subject-${index}`}
+                      variant="outline"
+                      className="bg-amber-800/50"
+                    >
                       {subject.name} ({subject.gradeLevel})
                     </Badge>
                   ))}
@@ -126,9 +129,7 @@ const TutorDetailsCard = ({ tutor }: { tutor: ITutor }) => {
           </div>
         </CardContent>
         <div className="flex justify-center">
-          <TButton>
-            <Link href={`/${tutor.id}/book`}>Book a Session</Link>
-          </TButton>
+          <CreateBookingDialog tutor={tutor} />
         </div>
       </Card>
     </div>

@@ -1,6 +1,30 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
+import { getValidToken } from "@/utils/verifyToken";
+
+export const createBooking = async (tutorId: string, booking: any) => {
+  const token = await getValidToken();
+
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API}/tutors/${tutorId}/book`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+        body: JSON.stringify(booking),
+      }
+    );
+
+    return res.json();
+  } catch (error: any) {
+    return { success: false, message: error.message };
+  }
+};
+
 export const getAllTutors = async (
   page?: string,
   limit?: string,
@@ -12,7 +36,7 @@ export const getAllTutors = async (
   }
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_API}/tutor?limit=${limit}&page=${page}&${params}`,
+      `${process.env.NEXT_PUBLIC_BASE_API}/tutors?limit=${limit}&page=${page}&${params}`,
       {
         next: {
           tags: ["TUTORS"],
@@ -27,7 +51,7 @@ export const getAllTutors = async (
 
 export const getSingleSingleTutor = async (id: string) => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/tutor/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/tutors/${id}`, {
       next: {
         tags: ["TUTORS"],
       },

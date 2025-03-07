@@ -9,7 +9,7 @@ const TutorDetailsPage = async ({
   const { id } = await params;
 
   const { data: tutor } = await getSingleSingleTutor(id);
-  console.log(tutor);
+
   return (
     <div>
       <div className="container mx-auto px-2 space-y-10 my-16">
