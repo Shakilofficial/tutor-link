@@ -172,6 +172,10 @@ const BookingRequestList = ({ bookings }: { bookings: any[] }) => {
         isOpen={isAcceptModalOpen}
         onOpenChange={setIsAcceptModalOpen}
         onConfirm={handleAcceptBooking}
+        title="Accept Booking"
+        description="Are you sure you want to accept this booking?"
+        confirmButtonText="Accept"
+        actionText="Booking"
       />
     </div>
   );

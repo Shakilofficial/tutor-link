@@ -13,12 +13,20 @@ interface ModalProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   onConfirm: () => Promise<void>;
+  title: string; // Title of the dialog (customizable)
+  description: string; // Description text (customizable)
+  actionText: string; // Customizable action text
+  confirmButtonText: string; // Text for the confirm button
 }
 
 const ConfirmDialog: React.FC<ModalProps> = ({
   isOpen,
   onOpenChange,
   onConfirm,
+  title,
+  description,
+  actionText,
+  confirmButtonText,
 }) => {
   const handleConfirm = async () => {
     await onConfirm();
@@ -27,13 +35,13 @@ const ConfirmDialog: React.FC<ModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[360px] md:max-w-md rounded-lg border-2 border-orange/50">
+      <DialogContent className="max-w-[360px] md:max-w-md rounded-lg border-2 border-orange-500/50 bg-gradient-to-bl from-orange-500/0.5 to-orange-700/0.5">
         <DialogHeader>
-          <DialogTitle className="text-orange">Confirm Action</DialogTitle>
+          <DialogTitle className="text-orange">{title}</DialogTitle>
           <DialogDescription>
-            Are you sure you want to
-            <span className="font-semibold text-orange mx-1"></span>? This
-            action cannot be undone.
+            {description}{" "}
+            <span className="font-semibold text-orange mx-1">{actionText}</span>
+            ? This action cannot be undone.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex justify-between gap-2">
@@ -51,7 +59,7 @@ const ConfirmDialog: React.FC<ModalProps> = ({
             variant="destructive"
             onClick={handleConfirm}
           >
-            Confirm
+            {confirmButtonText}
           </Button>
         </DialogFooter>
       </DialogContent>
