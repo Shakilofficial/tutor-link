@@ -48,10 +48,6 @@ export const tutorValidations = {
           }),
         )
         .min(1, 'Availability is required'),
-      teachingExperience: z
-        .number()
-        .min(0, 'Teaching experience must be a positive number'),
-      education: z.string().min(1, 'Education is required'),
     }),
   }),
 
@@ -90,8 +86,6 @@ export const tutorValidations = {
           }),
         )
         .optional(),
-      teachingExperience: z.number().min(0).optional(),
-      education: z.string().min(1).optional(),
     }),
   }),
 };

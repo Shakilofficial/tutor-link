@@ -20,8 +20,6 @@ export interface ITutor {
   averageRating: number;
   totalReviews: number;
   totalEarnings: number;
-  teachingExperience: number;
-  education: string;
   createdAt: Date;
   updatedAt: Date;
 }
