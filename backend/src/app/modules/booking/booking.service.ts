@@ -51,12 +51,10 @@ const cancelBooking = async (user: JwtPayload, bookingId: string) => {
 const getMyBookings = async (user: JwtPayload) => {
   let filter: Record<string, unknown> = {};
 
- 
   const student = await Student.findOne({ user: user.userId });
   if (student) {
     filter = { student: student._id };
   } else {
-
     const tutor = await Tutor.findOne({ user: user.userId });
     if (tutor) {
       filter = { tutor: tutor._id };
@@ -70,8 +68,14 @@ const getMyBookings = async (user: JwtPayload) => {
 
   const bookings = await Booking.find(filter)
     .populate([
-      { path: 'student', populate: { path: 'user', select: 'name email' } },
-      { path: 'tutor', populate: { path: 'user', select: 'name email' } },
+      {
+        path: 'student',
+        populate: { path: 'user', select: 'name email ptofileImage' },
+      },
+      {
+        path: 'tutor',
+        populate: { path: 'user', select: 'name email profileImage' },
+      },
       { path: 'subject', select: 'name' },
     ])
     .lean();
