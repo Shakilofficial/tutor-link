@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import ConfirmDialog from "@/components/core/ConfirmDialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -10,16 +11,46 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { makePayment } from "@/services/booking";
 import { ArrowLeftCircle, ArrowRightCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const MyBookingsList = ({ bookings }: { bookings: any[] }) => {
+  const router = useRouter();
+  const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false);
+  const [selectedBookingId, setSelectedBookingId] = useState<string | null>(
+    null
+  );
   const [page, setPage] = useState(1);
   const limit = 10;
 
   const totalPages = Math.ceil(bookings.length / limit);
 
   const paginatedBookings = bookings.slice((page - 1) * limit, page * limit);
+
+  const handlePaymentClick = (bookingId: string) => {
+    setSelectedBookingId(bookingId);
+    setIsAcceptModalOpen(true);
+  };
+
+  const handlemakePayment = async () => {
+    if (!selectedBookingId) return;
+    try {
+      const result = await makePayment(selectedBookingId);
+      if (result?.success) {
+        router.push(result.data.paymentUrl);
+        toast.success("Booking accepted successfully!");
+        setIsAcceptModalOpen(false);
+        setSelectedBookingId(null);
+      } else {
+        toast.error(result?.message || "Failed to accept booking");
+      }
+    } catch (error: any) {
+      toast.error(error?.message || "Error accepting booking");
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -50,8 +81,8 @@ const MyBookingsList = ({ bookings }: { bookings: any[] }) => {
               <TableBody>
                 {paginatedBookings.map((booking) => (
                   <TableRow
-                    key={booking.id}
-                    className="hover:bg-orange-50 dark:hover:bg-orange-900/10"
+                    key={booking._id}
+                    className="hover:bg-orange-50 dark:hover:bg-orange-900/10 h-16"
                   >
                     <TableCell>{booking.tutor.user.name}</TableCell>
                     <TableCell>{booking.subject.name}</TableCell>
@@ -83,10 +114,13 @@ const MyBookingsList = ({ bookings }: { bookings: any[] }) => {
                       {booking.paymentStatus}
                     </TableCell>
                     <TableCell>
-                      {booking.status === "confirmed" &&
+                      {booking.status === "accepted" &&
                         booking.paymentStatus === "pending" && (
-                          <button className="px-3 py-1 bg-orange-600 text-white rounded-md hover:bg-orange-700">
-                            Make Payment
+                          <button
+                            onClick={() => handlePaymentClick(booking._id)}
+                            className="px-3 py-1 bg-orange-600 text-white rounded-md hover:bg-orange-700"
+                          >
+                            Payment
                           </button>
                         )}
                       {booking.status === "pending" &&
@@ -137,6 +171,15 @@ const MyBookingsList = ({ bookings }: { bookings: any[] }) => {
           </div>
         </CardContent>
       </Card>
+      <ConfirmDialog
+        isOpen={isAcceptModalOpen}
+        onOpenChange={setIsAcceptModalOpen}
+        onConfirm={handlemakePayment}
+        title="Make Payment"
+        description="Are you sure you want to pay this booking?"
+        confirmButtonText="Accept"
+        actionText="Payment"
+      />
     </div>
   );
 };

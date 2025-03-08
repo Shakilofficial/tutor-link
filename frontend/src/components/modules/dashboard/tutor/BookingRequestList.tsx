@@ -26,7 +26,6 @@ const BookingRequestList = ({ bookings }: { bookings: any[] }) => {
   const totalPages = Math.ceil(bookings.length / limit);
   const paginatedBookings = bookings.slice((page - 1) * limit, page * limit);
 
-  // Modal state and selected booking data for accepting
   const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false);
   const [selectedBookingId, setSelectedBookingId] = useState<string | null>(
     null
@@ -83,7 +82,7 @@ const BookingRequestList = ({ bookings }: { bookings: any[] }) => {
                 {paginatedBookings.map((booking) => (
                   <TableRow
                     key={`${booking.id}-${booking.student.user.name}-${booking.startTime}`}
-                    className="hover:bg-orange-50 dark:hover:bg-orange-900/10"
+                    className="hover:bg-orange-50 dark:hover:bg-orange-900/10 h-16"
                   >
                     <TableCell>{booking.student.user.name}</TableCell>
                     <TableCell>{booking.subject.name}</TableCell>
@@ -119,7 +118,7 @@ const BookingRequestList = ({ bookings }: { bookings: any[] }) => {
                         booking.paymentStatus === "pending" && (
                           <button
                             className="px-3 py-1 bg-orange-600 text-white rounded-md hover:bg-orange-700"
-                            onClick={() => handleAcceptClick(booking.id)}
+                            onClick={() => handleAcceptClick(booking._id)}
                           >
                             Accept
                           </button>

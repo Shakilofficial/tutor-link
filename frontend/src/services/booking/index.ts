@@ -21,11 +21,6 @@ export const myBookings = async () => {
         },
       }
     );
-
-    if (!res.ok) {
-      throw new Error("Failed to fetch bookings");
-    }
-
     return res.json();
   } catch (error: any) {
     return { success: false, message: error.message };
@@ -49,12 +44,6 @@ export const acceptBooking = async (bookingId: string) => {
         },
       }
     );
-
-    if (!res.ok) {
-      throw new Error("Failed to accept booking");
-    }
-
-    // Revalidate after successful action
     revalidateTag("BOOKINGS");
 
     return res.json();
@@ -81,11 +70,6 @@ export const cancelBooking = async (bookingId: string) => {
       }
     );
 
-    if (!res.ok) {
-      throw new Error("Failed to cancel booking");
-    }
-
-    // Revalidate after successful action
     revalidateTag("BOOKINGS");
 
     return res.json();
@@ -112,11 +96,6 @@ export const makePayment = async (bookingId: string) => {
       }
     );
 
-    if (!res.ok) {
-      throw new Error("Payment initiation failed");
-    }
-
-    // Revalidate after successful action
     revalidateTag("BOOKINGS");
 
     return res.json();

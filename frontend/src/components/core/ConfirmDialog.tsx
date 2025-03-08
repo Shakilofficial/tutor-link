@@ -13,10 +13,10 @@ interface ModalProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   onConfirm: () => Promise<void>;
-  title: string; // Title of the dialog (customizable)
-  description: string; // Description text (customizable)
-  actionText: string; // Customizable action text
-  confirmButtonText: string; // Text for the confirm button
+  title: string; 
+  description: string;
+  actionText: string;
+  confirmButtonText: string; 
 }
 
 const ConfirmDialog: React.FC<ModalProps> = ({
