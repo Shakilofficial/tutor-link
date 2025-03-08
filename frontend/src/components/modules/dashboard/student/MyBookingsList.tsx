@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-
 import ConfirmDialog from "@/components/core/ConfirmDialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -11,8 +10,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { makePayment } from "@/services/booking";
+import { cancelBooking, makePayment } from "@/services/booking";
 import { ArrowLeftCircle, ArrowRightCircle } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -30,7 +30,7 @@ const MyBookingsList = ({ bookings }: { bookings: any[] }) => {
 
   const paginatedBookings = bookings.slice((page - 1) * limit, page * limit);
 
-  const handlePaymentClick = (bookingId: string) => {
+  const handleClick = (bookingId: string) => {
     setSelectedBookingId(bookingId);
     setIsAcceptModalOpen(true);
   };
@@ -41,6 +41,22 @@ const MyBookingsList = ({ bookings }: { bookings: any[] }) => {
       const result = await makePayment(selectedBookingId);
       if (result?.success) {
         router.push(result.data.paymentUrl);
+        toast.success("Booking payment successful!");
+        setIsAcceptModalOpen(false);
+        setSelectedBookingId(null);
+      } else {
+        toast.error(result?.message || "Failed to make payment");
+      }
+    } catch (error: any) {
+      toast.error(error?.message || "Error making payment");
+    }
+  };
+
+  const handleCancelBooking = async () => {
+    if (!selectedBookingId) return;
+    try {
+      const result = await cancelBooking(selectedBookingId);
+      if (result?.success) {
         toast.success("Booking accepted successfully!");
         setIsAcceptModalOpen(false);
         setSelectedBookingId(null);
@@ -48,7 +64,7 @@ const MyBookingsList = ({ bookings }: { bookings: any[] }) => {
         toast.error(result?.message || "Failed to accept booking");
       }
     } catch (error: any) {
-      toast.error(error?.message || "Error accepting booking");
+      toast.error(error?.message || "Error canceling booking");
     }
   };
 
@@ -66,8 +82,8 @@ const MyBookingsList = ({ bookings }: { bookings: any[] }) => {
             <Table>
               <TableHeader className="bg-orange-100 dark:bg-orange-900/40">
                 <TableRow>
-                  <TableHead>Tutor ID</TableHead>
-                  <TableHead>Subject ID</TableHead>
+                  <TableHead>Tutor</TableHead>
+                  <TableHead>Subject</TableHead>
                   <TableHead>Start Time</TableHead>
                   <TableHead>End Time</TableHead>
                   <TableHead>Duration</TableHead>
@@ -84,7 +100,15 @@ const MyBookingsList = ({ bookings }: { bookings: any[] }) => {
                     key={booking._id}
                     className="hover:bg-orange-50 dark:hover:bg-orange-900/10 h-16"
                   >
-                    <TableCell>{booking.tutor.user.name}</TableCell>
+                    <TableCell>
+                      <Image
+                        src={booking.tutor.user.profileImage}
+                        alt="Tutor name"
+                        width={40}
+                        height={40}
+                        className="rounded-sm"
+                      />
+                    </TableCell>
                     <TableCell>{booking.subject.name}</TableCell>
                     <TableCell>
                       {new Date(booking.startTime).toLocaleString()}
@@ -117,7 +141,7 @@ const MyBookingsList = ({ bookings }: { bookings: any[] }) => {
                       {booking.status === "accepted" &&
                         booking.paymentStatus === "pending" && (
                           <button
-                            onClick={() => handlePaymentClick(booking._id)}
+                            onClick={() => handleClick(booking._id)}
                             className="px-3 py-1 bg-orange-600 text-white rounded-md hover:bg-orange-700"
                           >
                             Payment
@@ -125,7 +149,10 @@ const MyBookingsList = ({ bookings }: { bookings: any[] }) => {
                         )}
                       {booking.status === "pending" &&
                         booking.paymentStatus === "pending" && (
-                          <button className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700">
+                          <button
+                            onClick={() => handleClick(booking._id)}
+                            className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700"
+                          >
                             Cancel
                           </button>
                         )}
@@ -176,9 +203,18 @@ const MyBookingsList = ({ bookings }: { bookings: any[] }) => {
         onOpenChange={setIsAcceptModalOpen}
         onConfirm={handlemakePayment}
         title="Make Payment"
-        description="Are you sure you want to pay this booking?"
+        description="Are you sure want to pay this booking?"
         confirmButtonText="Accept"
         actionText="Payment"
+      />
+      <ConfirmDialog
+        isOpen={isAcceptModalOpen}
+        onOpenChange={setIsAcceptModalOpen}
+        onConfirm={handleCancelBooking}
+        title="Cancel Booking"
+        description="Are you sure want to cancel this booking?"
+        confirmButtonText="Cancel"
+        actionText="Booking"
       />
     </div>
   );

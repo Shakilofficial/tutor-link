@@ -11,9 +11,17 @@ export interface ISubject {
 
 export interface IAvailability {
   day: string;
-  startTime: string;
-  endTime: string;
+  slots: ISlot[];
   _id: string;
+  id: string;
+}
+
+export interface ISlot {
+  day: string;
+  start: string;
+  end: string;
+  _id: string;
+  id: string;
 }
 
 export interface User {

@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-
 import ConfirmDialog from "@/components/core/ConfirmDialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
 import {
   Table,
   TableBody,
@@ -14,7 +12,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { acceptBooking } from "@/services/booking";
-
 import { ArrowLeftCircle, ArrowRightCircle } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
