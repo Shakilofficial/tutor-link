@@ -6,11 +6,19 @@ import { MultiSelect } from "@/components/form/MultiSelect";
 import { Textarea } from "@/components/form/Textarea";
 import { TextInput } from "@/components/form/TextInput";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useUser } from "@/context/UserContext";
 import { getAllSubjects } from "@/services/subjectService";
 import { createTutor } from "@/services/userService";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Trash } from "lucide-react";
+import { Plus, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
@@ -119,26 +127,17 @@ const RegisterTutorForm = () => {
           <TextInput name="password" label="Password" type="password" />
           <TextInput name="phone" label="Phone Number" />
           <TextInput name="location" label="Location" />
-          <TextInput name="education" label="Education" />
           <TextInput
             name="hourlyRate"
             label="Hourly Rate (BDT)"
             type="number"
           />
-          <TextInput
-            name="teachingExperience"
-            label="Years of Experience"
-            type="number"
-          />
-
-          {/* Bio Section */}
           <Textarea
             name="bio"
             label="Bio"
             placeholder="Describe your teaching experience and qualifications..."
           />
 
-          {/* Image Upload */}
           <div className="flex flex-col">
             {imagePreview.length > 0 ? (
               <ImagePreviewer
@@ -157,56 +156,87 @@ const RegisterTutorForm = () => {
             )}
           </div>
         </div>
-        <MultiSelect
-          name="subjects"
-          label="Teaching Subjects"
-          options={subjects.map((s) => ({ value: s._id, label: s.name }))}
-        />
+        <Card className="bg-transparent">
+          <CardHeader>
+            <CardTitle className="text-lg font-semibold">
+              Teaching Subjects
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <MultiSelect
+              name="subjects"
+              label="Select subjects you teach"
+              options={subjects.map((s) => ({ value: s._id, label: s.name }))}
+            />
+          </CardContent>
+        </Card>
 
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-2">Availability</h3>
-          {availabilityFields.map((field, index) => (
-            <div key={field.id} className="mb-4 p-4 border rounded">
-              <div className="flex gap-4 mb-4">
+        <Card className="bg-transparent">
+          <CardHeader>
+            <CardTitle className="text-lg font-semibold flex items-center justify-between">
+              Availability Schedule
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => appendAvailability({ day: "Monday", slots: [] })}
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Add Day
+              </Button>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {availabilityFields.map((field, index) => (
+              <div key={field.id} className="p-4 border rounded-lg bg-muted/10">
+                <div className="flex justify-between items-center mb-4">
+                  <h4 className="font-medium">Day {index + 1}</h4>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => removeAvailability(index)}
+                  >
+                    <Trash className="h-4 w-4 text-destructive" />
+                  </Button>
+                </div>
+
                 <Controller
                   name={`availability.${index}.day`}
                   control={control}
                   render={({ field }) => (
-                    <select {...field} className="p-2 border rounded">
-                      {[
-                        "Monday",
-                        "Tuesday",
-                        "Wednesday",
-                        "Thursday",
-                        "Friday",
-                        "Saturday",
-                        "Sunday",
-                      ].map((day) => (
-                        <option key={day} value={day}>
-                          {day}
-                        </option>
-                      ))}
-                    </select>
+                    <div className="mb-4">
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue placeholder="Select day" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {[
+                            "Monday",
+                            "Tuesday",
+                            "Wednesday",
+                            "Thursday",
+                            "Friday",
+                            "Saturday",
+                            "Sunday",
+                          ].map((day) => (
+                            <SelectItem key={day} value={day}>
+                              {day}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
                   )}
                 />
-                <Button
-                  onClick={() => removeAvailability(index)}
-                  className="text-red-600"
-                  size="icon"
-                >
-                  <Trash className="w-4 h-4" />
-                </Button>
+
+                <SlotFields nestIndex={index} />
               </div>
-              <SlotFields nestIndex={index} />
-            </div>
-          ))}
-          <Button
-            className="bg-orange-500/70 text-white"
-            onClick={() => appendAvailability({ day: "Monday", slots: [] })}
-          >
-            Add Availability Day
-          </Button>
-        </div>
+            ))}
+          </CardContent>
+        </Card>
       </Form>
     </div>
   );

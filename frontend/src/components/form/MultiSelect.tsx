@@ -12,7 +12,7 @@ export const MultiSelect = ({ name, label, options }: MultiSelectProps) => {
   const { control } = useFormContext();
 
   return (
-    <div className="mb-4 bg-transparent">
+    <div className="">
       <label className="block font-medium mb-1">{label}</label>
       <Controller
         name={name}
@@ -25,7 +25,7 @@ export const MultiSelect = ({ name, label, options }: MultiSelectProps) => {
             onChange={(selected) =>
               field.onChange(selected.map((opt) => opt.value))
             }
-            className="text-orange-600 bg-transparent react-select-container"
+            className="text-orange-600 react-select-container"
             classNamePrefix="react-select"
           />
         )}

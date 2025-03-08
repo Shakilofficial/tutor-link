@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { Controller, useFormContext } from "react-hook-form";
 
 interface TimeInputProps {
@@ -20,7 +20,7 @@ export const TimeInput = ({ name, label }: TimeInputProps) => {
             type="time"
             {...field}
             className="p-2 border rounded"
-            step="300"
+            step="1800"
           />
         )}
       />

@@ -1,7 +1,8 @@
+// SlotFields.tsx
 "use client";
 import { TimeInput } from "@/components/form/TimeInput";
 import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
+import { Plus, Trash } from "lucide-react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 interface SlotFieldsProps {
@@ -16,30 +17,38 @@ const SlotFields = ({ nestIndex }: SlotFieldsProps) => {
   });
 
   return (
-    <div>
-      {fields.map((field, slotIndex) => (
-        <div key={field.id} className="flex gap-4 mb-2">
-          <TimeInput
-            name={`availability.${nestIndex}.slots.${slotIndex}.start`}
-            label="Start Time"
-          />
-          <TimeInput
-            name={`availability.${nestIndex}.slots.${slotIndex}.end`}
-            label="End Time"
-          />
-          <button
-            type="button"
-            onClick={() => remove(slotIndex)}
-            className="text-red-500"
-          >
-            <Trash className="w-4 h-4" />
-          </button>
-        </div>
-      ))}
+    <div className="space-y-4">
+      <div className="grid gap-4">
+        {fields.map((field, slotIndex) => (
+          <div key={field.id} className="flex items-end gap-4">
+            <TimeInput
+              name={`availability.${nestIndex}.slots.${slotIndex}.start`}
+              label="Start Time"
+            />
+            <TimeInput
+              name={`availability.${nestIndex}.slots.${slotIndex}.end`}
+              label="End Time"
+            />
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={() => remove(slotIndex)}
+              className="text-destructive mb-1"
+            >
+              <Trash className="h-4 w-4" />
+            </Button>
+          </div>
+        ))}
+      </div>
+
       <Button
+        type="button"
+        variant="outline"
         onClick={() => append({ start: "09:00", end: "10:00" })}
-        variant="destructive"
+        className="w-full"
       >
+        <Plus className="mr-2 h-4 w-4" />
         Add Time Slot
       </Button>
     </div>

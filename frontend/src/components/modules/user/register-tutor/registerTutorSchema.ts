@@ -8,9 +8,6 @@ export const registerTutorSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
   phone: z.string().min(10, "Phone number is required"),
   location: z.string().min(1, "Location is required"),
-  teachingExperience: z.coerce
-    .number()
-    .min(0, "Teaching experience must be positive"),
   subjects: z
     .array(z.string().regex(/^[a-f\d]{24}$/i, "Invalid subject ID"))
     .min(1, "At least one subject required"),
@@ -19,7 +16,6 @@ export const registerTutorSchema = z.object({
     .min(50, "Bio must be at least 50 characters")
     .max(500, "Bio cannot exceed 500 characters"),
   hourlyRate: z.coerce.number().min(100, "Minimum hourly rate is 100 BDT"),
-  education: z.string().min(1, "Education is required"),
   availability: z
     .array(
       z.object({

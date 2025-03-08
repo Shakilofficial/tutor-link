@@ -3,14 +3,7 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { ISubject, ITutor } from "@/types";
-import {
-  Book,
-  Calendar,
-  Clock,
-  GraduationCap,
-  MapPin,
-  Star,
-} from "lucide-react";
+import { Calendar, Clock, MapPin, Star } from "lucide-react";
 import CreateBookingDialog from "../booking/CreateBookingDialog";
 
 const TutorDetailsCard = ({ tutor }: { tutor: ITutor }) => {
@@ -88,43 +81,6 @@ const TutorDetailsCard = ({ tutor }: { tutor: ITutor }) => {
                   <span>{tutor.availability.length} available time slots</span>
                 </div>
               </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Education & Experience</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div>
-              <h3 className="text-lg font-semibold flex items-center">
-                <GraduationCap className="mr-2 h-5 w-5" />
-                Education
-              </h3>
-              <ul className="mt-2 list-disc list-inside text-sm text-muted-foreground">
-                <li>
-                  Bachelor&apos;s Degree in Mathematics, University of Example,
-                  2018
-                </li>
-                <li>
-                  Masters&apos;s Degree in Education, Teaching College, 2020
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold flex items-center">
-                <Book className="mr-2 h-5 w-5" />
-                Teaching Experience
-              </h3>
-              <ul className="mt-2 list-disc list-inside text-sm text-muted-foreground">
-                <li>
-                  High School Math Teacher, Example High School, 2020-2022
-                </li>
-                <li>Private Tutor, 2018-Present</li>
-              </ul>
             </div>
           </div>
         </CardContent>

@@ -26,6 +26,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { PaymentMethod } from "@/constants/PaymentMethod";
+import { useUser } from "@/context/UserContext";
 import { createBooking } from "@/services/tutorService";
 import { ITutor } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -45,7 +46,7 @@ const formSchema = z.object({
 });
 
 const CreateBookingDialog = ({ tutor }: { tutor: ITutor }) => {
-  console.log(tutor.subjects);
+  const user = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -95,7 +96,12 @@ const CreateBookingDialog = ({ tutor }: { tutor: ITutor }) => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-orange-600 hover:bg-orange-700">Book Now</Button>
+        <Button
+          disabled={!user.user}
+          className="bg-orange-600 hover:bg-orange-700"
+        >
+          Book Now
+        </Button>
       </DialogTrigger>
 
       <DialogContent className="max-w-md">
