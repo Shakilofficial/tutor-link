@@ -41,7 +41,7 @@ const FilterSidebar = () => {
       <div className="space-y-4">
         {/* Search Term */}
         <div className="space-y-2">
-          <Label>Search Subject</Label>
+          <Label>Search By Subject</Label>
           <Input
             placeholder="Subject Name..."
             value={searchParams.get("searchTerm") || ""}
@@ -61,7 +61,7 @@ const FilterSidebar = () => {
 
         {/* Rating Filter */}
         <div className="space-y-2">
-          <Label>Minimum Rating</Label>
+          <Label>Filter By Rating</Label>
           <Select
             value={searchParams.get("rating") || ""}
             onValueChange={(value) => handleFilterChange("rating", value)}
@@ -100,7 +100,7 @@ const FilterSidebar = () => {
 
         {/* Price Range */}
         <div className="space-y-2">
-          <Label>Hourly Rate Range</Label>
+          <Label>Filter By Hourly Rate Range</Label>
           <div className="flex gap-2">
             <Input
               type="number"
