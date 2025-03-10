@@ -1,1 +1,1 @@
-export const tutorSearchableFields = ['bio', 'location'];
+export const tutorSearchableFields = ['bio', 'location', 'subjects.name'];

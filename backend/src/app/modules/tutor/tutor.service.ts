@@ -124,6 +124,7 @@ const getAllTutors = async (query: Record<string, unknown>) => {
   )
     .search(tutorSearchableFields)
     .filter()
+    .priceRange()
     .sort()
     .paginate()
     .fields();
