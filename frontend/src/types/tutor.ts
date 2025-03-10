@@ -56,11 +56,11 @@ export interface ITutor {
 export interface ITutorResponse {
   success: boolean;
   message: string;
-  data: ITutor[];
   meta: {
     page: number;
     limit: number;
     total: number;
     totalPage: number;
   };
+  data: ITutor[];
 }
