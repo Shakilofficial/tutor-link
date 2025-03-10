@@ -39,9 +39,6 @@ export const acceptBooking = async (bookingId: string) => {
         headers: {
           Authorization: token,
         },
-        next: {
-          tags: ["BOOKINGS"],
-        },
       }
     );
     revalidateTag("BOOKINGS");
@@ -63,9 +60,6 @@ export const cancelBooking = async (bookingId: string) => {
         method: "PATCH",
         headers: {
           Authorization: token,
-        },
-        next: {
-          tags: ["BOOKINGS"],
         },
       }
     );
