@@ -27,7 +27,6 @@ const BlogLists = ({ data }: { data: IBlogResponse }) => {
 
   return (
     <div className="container mx-auto px-4 py-12 space-y-8 animate-in fade-in duration-700">
-     
       {/* Search Section */}
       <SearchBlog />
 
@@ -86,7 +85,7 @@ const BlogLists = ({ data }: { data: IBlogResponse }) => {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 min-h-[400px]">
           {data?.data?.map((blog, index) => (
             <div
               key={blog._id}

@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={sora.variable}>
+      <body className={sora.className}>
         <MouseMoveEffect />
         <Providers>{children}</Providers>
       </body>

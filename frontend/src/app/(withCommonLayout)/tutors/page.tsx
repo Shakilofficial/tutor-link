@@ -15,7 +15,7 @@ const AllTutorsPage = async ({
   return (
     <div className="my-16">
       <PageHeader title="All Tutors" subtitle="Browse all tutors" />
-      {<TutorLists data={data} />}
+      <TutorLists data={data} />
     </div>
   );
 };

@@ -1,57 +1,83 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
+import { LampContainer } from "@/components/ui/core/Lamp";
 import { Input } from "@/components/ui/input";
+import { motion } from "framer-motion";
 import { BookOpen, GraduationCap, Search } from "lucide-react";
-import { useState } from "react";
+import Link from "next/link";
+import { AnimatedTooltipPreview } from "./Tooltip";
 
-export default function Hero() {
-  const [searchQuery, setSearchQuery] = useState("");
-
+const Hero = () => {
   return (
-    <section className="container flex min-h-[calc(100vh-4rem)] max-w-screen-2xl flex-col items-center justify-center space-y-10 text-center ">
-      <div className="space-y-6">
-        <h1 className="bg-gradient-to-br from-foreground from-30% via-foreground/90 to-foreground/70 bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-5xl md:text-6xl lg:text-7xl">
-          Find Your Perfect
-          <br />
-          <span className="text-primary">Tutor Today</span>
-        </h1>
-        <p className="mx-auto max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
-          Connect with qualified tutors for personalized learning experiences in
-          any subject. Boost your grades and confidence with one-on-one
-          tutoring.
-        </p>
-      </div>
-
-      <div className="w-full max-w-3xl">
-        <div className="relative">
-          <div className="absolute inset-0 -z-10 rounded-lg bg-gradient-to-r from-orange-500/20 via-amber-500/20 to-orange-500/20 blur-xl" />
-          <div className="flex items-center rounded-lg border bg-background/80 p-1.5 backdrop-blur">
-            <div className="flex w-full items-center gap-2 rounded-md bg-background px-3 py-2">
-              <Search className="h-5 w-5 text-muted-foreground" />
-              <Input
-                type="text"
-                placeholder="Search by subject, grade level, or tutor name..."
-                className="flex-1 border-0 bg-transparent p-0 shadow-none focus-visible:ring-0"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-            <Button className="ml-auto">Search</Button>
+    <LampContainer>
+      <div className="w-full flex flex-col items-center text-center space-y-12 md:space-y-16">
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+          className="text-3xl font-bold text-gray-700 dark:text-gray-200 md:text-5xl "
+        >
+          Find Your Tutor
+        </motion.h1>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7, duration: 0.8 }}
+          className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4"
+        >
+          <div className="relative w-full sm:w-80">
+            <Input
+              type="text"
+              placeholder="Search for a subject or tutor..."
+              className="w-full pl-10 pr-4 py-2 rounded-full"
+            />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
           </div>
-        </div>
+          <Link href="/tutors">
+            <Button size="lg" className="w-full sm:w-auto rounded-full">
+              Find a Tutor
+            </Button>
+          </Link>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.9, duration: 0.8 }}
+          className="mt-6 flex justify-center items-center space-x-8"
+        >
+          <div className="text-center">
+            <p className="text-4xl font-bold text-primary">100+</p>
+            <p className="text-sm text-muted-foreground">Expert Tutors</p>
+          </div>
+          <div className="text-center">
+            <p className="text-4xl font-bold text-primary">500+</p>
+            <p className="text-sm text-muted-foreground">Happy Students</p>
+          </div>
+          <div className="text-center">
+            <p className="text-4xl font-bold text-primary">50+</p>
+            <p className="text-sm text-muted-foreground">Subjects</p>
+          </div>
+        </motion.div>
       </div>
 
-      <div className="flex flex-col gap-6 sm:flex-row sm:gap-8">
-        <Button size="lg" className="gap-2">
-          <GraduationCap className="h-5 w-5" />
-          Sign Up as a Student
-        </Button>
-        <Button variant="outline" size="lg" className="gap-2">
-          <BookOpen className="h-5 w-5" />
-          Register as a Tutor
-        </Button>
+      <div className="flex flex-col gap-6 sm:flex-row sm:gap-8 my-16">
+        <Link href="/register-student" passHref>
+          <Button size="lg" className="gap-2">
+            <GraduationCap className="h-5 w-5" />
+            Sign Up as a Student
+          </Button>
+        </Link>
+        <Link href="/register-tutor" passHref>
+          <Button variant="outline" size="lg" className="gap-2">
+            <BookOpen className="h-5 w-5" />
+            Register as a Tutor
+          </Button>
+        </Link>
       </div>
-    </section>
+      <AnimatedTooltipPreview />
+    </LampContainer>
   );
-}
+};
+
+export default Hero;

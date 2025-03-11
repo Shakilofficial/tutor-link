@@ -107,28 +107,28 @@ export default function Footer() {
             <h3 className="text-sm font-medium">Connect</h3>
             <div className="flex space-x-4">
               <Link
-                href="https://facebook.com/tutormatch"
+                href="https://facebook.com/tutorlink"
                 className="text-muted-foreground transition-colors hover:text-primary"
               >
                 <Facebook className="h-5 w-5" />
                 <span className="sr-only">Facebook</span>
               </Link>
               <Link
-                href="https://twitter.com/tutormatch"
+                href="https://twitter.com/tutorlink"
                 className="text-muted-foreground transition-colors hover:text-primary"
               >
                 <Twitter className="h-5 w-5" />
                 <span className="sr-only">Twitter</span>
               </Link>
               <Link
-                href="https://instagram.com/tutormatch"
+                href="https://instagram.com/tutorlink"
                 className="text-muted-foreground transition-colors hover:text-primary"
               >
                 <Instagram className="h-5 w-5" />
                 <span className="sr-only">Instagram</span>
               </Link>
               <Link
-                href="https://youtube.com/tutormatch"
+                href="https://youtube.com/tutorlink"
                 className="text-muted-foreground transition-colors hover:text-primary"
               >
                 <Youtube className="h-5 w-5" />
@@ -140,7 +140,7 @@ export default function Footer() {
       </div>
       <div className="container border-t py-6">
         <p className="text-center text-sm text-muted-foreground">
-          © {new Date().getFullYear()} TutorMatch. All rights reserved.
+          © {new Date().getFullYear()} Tutorlink. All rights reserved.
         </p>
       </div>
     </footer>

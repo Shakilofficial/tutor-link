@@ -27,7 +27,7 @@ const SectionHeader = ({
       viewport={{ once: true }}
       className={`mb-12 ${alignmentClasses[align]}`}
     >
-      <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-orange-500 bg-clip-text text-transparent">
+      <h2 className="text-3xl md:text-4xl font-extrabold mb-4 bg-gradient-to-r from-primary to-orange-500 bg-clip-text text-transparent">
         {title}
       </h2>
       {subtitle && (
