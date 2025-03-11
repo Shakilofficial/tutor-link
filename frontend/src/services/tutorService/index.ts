@@ -2,6 +2,7 @@
 "use server";
 
 import { getValidToken } from "@/utils/verifyToken";
+import { revalidateTag } from "next/cache";
 
 export const createBooking = async (tutorId: string, booking: any) => {
   const token = await getValidToken();
@@ -18,7 +19,7 @@ export const createBooking = async (tutorId: string, booking: any) => {
         body: JSON.stringify(booking),
       }
     );
-
+    revalidateTag("TUTORS");
     return res.json();
   } catch (error: any) {
     return { success: false, message: error.message };

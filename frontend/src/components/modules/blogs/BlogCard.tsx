@@ -1,4 +1,3 @@
-import { ShineBorder } from "@/components/magicui/shine-border";
 import type { IBlog } from "@/types/blog";
 import { ArrowRight, Calendar } from "lucide-react";
 import Image from "next/image";
@@ -7,7 +6,6 @@ import Link from "next/link";
 const BlogCard = ({ blog }: { blog: IBlog }) => {
   return (
     <div className="group h-full rounded-xl shadow-sm border border-border overflow-hidden hover:shadow-md transition-all duration-300 bg-gradient-to-br from-background to-background/80 flex flex-col">
-      <ShineBorder />
       <Link
         href={`/blogs/${blog._id}`}
         className="block overflow-hidden relative"
