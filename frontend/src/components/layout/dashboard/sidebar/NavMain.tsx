@@ -15,7 +15,6 @@ import { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-// Define the type for menu items
 interface MenuItem {
   title: string;
   url?: string;
@@ -28,7 +27,7 @@ interface MenuItem {
   }[];
 }
 
-// Props definition
+
 interface NavMainProps {
   items: MenuItem[];
   user: IUser | null;
@@ -53,7 +52,10 @@ const NavMain = ({ items, user }: NavMainProps) => {
       <SidebarGroupLabel>Menu</SidebarGroupLabel>
       <SidebarMenu>
         {navData.map((item) => (
-          <SidebarMenuItem key={item.title} className="text-lg font-semibold text-orange-700">
+          <SidebarMenuItem
+            key={item.title}
+            className="text-lg font-semibold text-orange-700"
+          >
             <SidebarMenuButton asChild tooltip={item.title}>
               {item.url ? (
                 <Link href={item.url}>

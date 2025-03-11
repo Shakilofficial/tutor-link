@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
+
+import { getValidToken } from "@/utils/verifyToken";
+import { revalidateTag } from "next/cache";
+
 export const getAllReviews = async () => {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/review`, {
@@ -30,6 +34,7 @@ export const getTutorReviews = async (tutorId: string) => {
 };
 
 export const createReview = async (data: any, tutorId: string) => {
+  const token = await getValidToken();
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_API}/review/tutor/${tutorId}`,
@@ -37,11 +42,12 @@ export const createReview = async (data: any, tutorId: string) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: token,
         },
         body: JSON.stringify(data),
       }
     );
-
+    revalidateTag("REVIEWS");
     const result = await res.json();
     return result;
   } catch (error: any) {
@@ -50,6 +56,7 @@ export const createReview = async (data: any, tutorId: string) => {
 };
 
 export const updateReview = async (reviewId: string, data: any) => {
+  const token = await getValidToken();
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_API}/review/${reviewId}`,
@@ -57,11 +64,12 @@ export const updateReview = async (reviewId: string, data: any) => {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          Authorization: token,
         },
         body: JSON.stringify(data),
       }
     );
-
+    revalidateTag("REVIEWS");
     const result = await res.json();
     return result;
   } catch (error: any) {
@@ -70,14 +78,18 @@ export const updateReview = async (reviewId: string, data: any) => {
 };
 
 export const deleteReview = async (reviewId: string) => {
+  const token = await getValidToken();
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_API}/review/${reviewId}`,
       {
         method: "DELETE",
+        headers: {
+          Authorization: token,
+        },
       }
     );
-
+    revalidateTag("REVIEWS");
     const result = await res.json();
     return result;
   } catch (error: any) {
