@@ -16,6 +16,8 @@ router.post(
 
 router.get('/tutor/:tutorId', reviewControllers.getTutorReviews);
 
+router.get('/', reviewControllers.getAllReviews);
+
 router.patch(
   '/:reviewId',
   auth(UserRole.STUDENT),

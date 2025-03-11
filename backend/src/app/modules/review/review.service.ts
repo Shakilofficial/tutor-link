@@ -76,6 +76,18 @@ const getTutorReviews = async (tutorId: string) => {
   return reviews;
 };
 
+const getAllReviews = async () => {
+  const reviews = await Review.find().populate({
+    path: 'student',
+    select: 'user',
+    populate: {
+      path: 'user',
+      select: 'name profileImage',
+    },
+  });
+  return reviews;
+};
+
 const updateReview = async (
   reviewId: string,
   payload: Partial<IReview>,
@@ -172,6 +184,7 @@ const deleteReview = async (reviewId: string, user: JwtPayload) => {
 export const reviewServices = {
   createReview,
   getTutorReviews,
+  getAllReviews,
   updateReview,
   deleteReview,
 };
