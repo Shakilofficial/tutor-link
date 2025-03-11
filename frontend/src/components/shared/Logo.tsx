@@ -1,14 +1,14 @@
-import { CircleDashed } from "lucide-react";
+import logoImg from "@/assets/t-logo.png";
+import Image from "next/image";
 import Link from "next/link";
 
 const Logo = () => {
   return (
-    <Link href="/">
-      <h4 className="flex items-center justify-center text-2xl font-extrabold text-orange-500">
-        <span>TUT</span>
-        <CircleDashed className="h-5 w-5 mt-0.5" />
-        <span>RLINK</span>
-      </h4>
+    <Link href="/" className="inline-block">
+      <div className="flex items-center h-6 gap-1 justify-center">
+        <Image src={logoImg} alt="TutorMatch Logo" width={40} height={24} />
+        <span className="text-xl font-bold text-primary">TUTORLINK</span>
+      </div>
     </Link>
   );
 };

@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import Hero from "@/components/modules/home/Hero";
 import { getNewToken } from "@/services/authService";
 
 const HomePage = async () => {
@@ -6,7 +6,7 @@ const HomePage = async () => {
   console.log(result);
   return (
     <div>
-      <Button variant="destructive">Click Here</Button>
+      <Hero />
     </div>
   );
 };

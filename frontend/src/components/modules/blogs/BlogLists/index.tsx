@@ -27,17 +27,7 @@ const BlogLists = ({ data }: { data: IBlogResponse }) => {
 
   return (
     <div className="container mx-auto px-4 py-12 space-y-8 animate-in fade-in duration-700">
-      {/* Header Section */}
-      <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold tracking-tight mb-3">
-          TutorLink Blog
-        </h1>
-        <p className="text-muted-foreground max-w-2xl mx-auto">
-          Discover insights, tips, and success stories from our tutoring
-          community
-        </p>
-      </div>
-
+     
       {/* Search Section */}
       <SearchBlog />
 
@@ -57,7 +47,13 @@ const BlogLists = ({ data }: { data: IBlogResponse }) => {
         <ScrollArea className="w-full pb-2 relative">
           <Tabs
             value={searchParams.get("category") || "all"}
-            onValueChange={handleTabChange}
+            onValueChange={(value) => {
+              if (value === "All") {
+                router.push("/blogs"); // Redirect to blogs route without any filter
+              } else {
+                handleTabChange(value);
+              }
+            }}
             className="w-full"
           >
             <TabsList className="h-auto w-full p-1 flex justify-start gap-2 overflow-x-auto scrollbar-hide whitespace-nowrap">
@@ -90,7 +86,7 @@ const BlogLists = ({ data }: { data: IBlogResponse }) => {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {data?.data?.map((blog, index) => (
             <div
               key={blog._id}

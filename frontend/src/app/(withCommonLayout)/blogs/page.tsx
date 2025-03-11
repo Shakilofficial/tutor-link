@@ -1,6 +1,6 @@
+import PageHeader from "@/components/core/PageHeader";
 import BlogLists from "@/components/modules/blogs/BlogLists";
 import { getAllBlogs } from "@/services/blogService";
-
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
 const AllBlogsPage = async ({
@@ -11,7 +11,12 @@ const AllBlogsPage = async ({
   const query = await searchParams;
   const data = await getAllBlogs(undefined, undefined, query);
 
-  return <div className="my-16">{<BlogLists data={data} />}</div>;
+  return (
+    <div className="my-16">
+      <PageHeader title="All Blogs" subtitle="Browse all blogs" />
+      {<BlogLists data={data} />}
+    </div>
+  );
 };
 
 export default AllBlogsPage;

@@ -1,3 +1,4 @@
+import MouseMoveEffect from "@/components/core/MouseHoverEffect";
 import Providers from "@/providers";
 import type { Metadata } from "next";
 import { Sora } from "next/font/google";
@@ -22,6 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={sora.variable}>
+        <MouseMoveEffect />
         <Providers>{children}</Providers>
       </body>
     </html>
