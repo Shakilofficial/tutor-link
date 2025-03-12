@@ -25,8 +25,6 @@ const navData = [
     items: [
       { title: "Subject Management", url: "/admin/subjects" },
       { title: "User Management", url: "/admin/users" },
-      { title: "Student Management", url: "/admin/students" },
-      { title: "Tutor Management", url: "/admin/tutors" },
       { title: "Booking Management", url: "/admin/bookings" },
       { title: "Blogs Management", url: "/admin/blogs" },
       { title: "Review Management", url: "/admin/reviews" },

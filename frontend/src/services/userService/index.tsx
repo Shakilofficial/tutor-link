@@ -99,20 +99,19 @@ export const updateStatus = async (id: string) => {
   const token = await getValidToken();
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_API}/user/update-status/${id}`,
+      `${process.env.NEXT_PUBLIC_BASE_API}/user/${id}/update-status`,
       {
         method: "PATCH",
         headers: {
           Authorization: token,
+          "Content-Type": "application/json",
         },
       }
     );
-
     revalidateTag("USERS");
-    const result = await res.json();
-    return result;
+    return await res.json();
   } catch (error: any) {
-    return Error(error);
+    throw new Error(error.message || "Failed to update user status");
   }
 };
 
@@ -120,41 +119,37 @@ export const toggleUserVerify = async (id: string) => {
   const token = await getValidToken();
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_API}/user/verify-user/${id}`,
+      `${process.env.NEXT_PUBLIC_BASE_API}/user/${id}/verify-user`,
       {
         method: "PATCH",
         headers: {
           Authorization: token,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    revalidateTag("USERS");
+    return await res.json();
+  } catch (error: any) {
+    throw new Error(error.message || "Failed to verify user");
+  }
+};
+
+export const getAllUsers = async (page?: string, limit?: string) => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API}/user?limit=${limit}&page=${page}`,
+      {
+        next: {
+          tags: ["USERS"],
         },
       }
     );
 
-    revalidateTag("USERS");
     const result = await res.json();
     return result;
   } catch (error: any) {
-    return Error(error);
-  }
-};
-
-export const getAllUsers = async (query: Record<string, unknown>) => {
-  const token = await getValidToken();
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/user`, {
-      method: "GET",
-      headers: {
-        Authorization: token,
-      },
-      body: JSON.stringify(query),
-      next: {
-        tags: ["USERS"],
-      },
-    });
-
-    const result = await res.json();
-    return result;
-  } catch (error: any) {
-    return Error(error);
+    return Error(error.message);
   }
 };
 

@@ -34,7 +34,7 @@ interface NavMainProps {
 
 const NavMain = ({ items, user }: NavMainProps) => {
   const [navData, setNavData] = useState<MenuItem[]>([]);
-  const pathname = usePathname(); // Get the current route
+  const pathname = usePathname();
 
   useEffect(() => {
     if (user) {

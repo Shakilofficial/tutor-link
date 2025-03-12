@@ -1,7 +1,17 @@
-const UsersDashboardPage = () => {
+import ManageUser from "@/components/modules/dashboard/admin/ManageUser";
+import { getAllUsers } from "@/services/userService";
+
+const UsersDashboardPage = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ page: string }>;
+}) => {
+  const { page } = await searchParams;
+  const { data, meta } = await getAllUsers(page);
+
   return (
     <div>
-      <h1>This is the page component</h1>
+      <ManageUser users={data} meta={meta} />
     </div>
   );
 };
