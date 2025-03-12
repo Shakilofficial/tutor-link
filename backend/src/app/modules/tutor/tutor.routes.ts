@@ -8,8 +8,9 @@ import { tutorValidations } from './tutor.validation';
 
 const router = Router();
 
-// Define routes
 router.get('/', tutorControllers.getAllTutors);
+
+router.get('/me', auth(UserRole.TUTOR), tutorControllers.myTutorProfile);
 
 router.get('/:id', tutorControllers.getSingleTutor);
 
@@ -21,10 +22,10 @@ router.post(
 );
 
 router.patch(
-  '/:id',
-  auth(UserRole.TUTOR, UserRole.ADMIN),
+  '/update-profile',
+  auth(UserRole.TUTOR),
   validateRequest(tutorValidations.update),
-  tutorControllers.updateTutor,
+  tutorControllers.updateMyTutorProfile,
 );
 
 router.delete(

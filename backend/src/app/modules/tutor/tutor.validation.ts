@@ -53,9 +53,6 @@ export const tutorValidations = {
 
   update: z.object({
     body: z.object({
-      name: z.string().min(1).optional(),
-      email: z.string().email().optional(),
-      password: z.string().min(6).optional(),
       bio: z.string().min(50).max(500).optional(),
       location: z.string().min(1).optional(),
       subjects: z

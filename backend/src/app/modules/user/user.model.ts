@@ -44,7 +44,7 @@ const userSchema = new Schema<IUser, UserModel>(
     profileImage: {
       type: String,
       default:
-        'https://res.cloudinary.com/dcyupktj6/image/upload/v1728502154/avatars/xsivocyzizacduhmna88.webp',
+        'https://res.cloudinary.com/dcyupktj6/image/upload/v1741800856/w2aj93pjo5b6q8s6ke3z.jpg',
     },
     isVerified: {
       type: Boolean,

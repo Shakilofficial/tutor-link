@@ -15,7 +15,7 @@ export const generateBookingInvoicePDF = async (
   return new Promise<Buffer>(async (resolve, reject) => {
     try {
       const logoUrl =
-        'https://res.cloudinary.com/dcyupktj6/image/upload/v1741338958/pacyhmxfwotyi6qx80kj.jpg';
+        'https://res.cloudinary.com/dcyupktj6/image/upload/v1741800984/p7akthxoeytztqrruqaz.png';
       // Download the logo image as a buffer
       const response = await axios.get(logoUrl, {
         responseType: 'arraybuffer',

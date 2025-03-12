@@ -152,30 +152,50 @@ const getSingleTutor = async (id: string) => {
   return tutor;
 };
 
-const updateTutor = async (
-  id: string,
-  payload: Partial<ITutor>,
-  user: JwtPayload,
-) => {
-  const tutor = await Tutor.findById(id);
+const myTutorProfile = async (user: JwtPayload) => {
+  const isUserExist = await User.findById(user.userId);
 
-  if (!tutor) {
-    throw new AppError(StatusCodes.NOT_FOUND, 'Tutor not found');
+  if (!isUserExist) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'User not found');
   }
 
-  // Authorization check
-  if (user.role !== UserRole.ADMIN && tutor.user.toString() !== user.userId) {
+  const tutor = await Tutor.findOne({ user: user.userId })
+    .populate({
+      path: 'user',
+      select: 'name email profileImage',
+    })
+    .populate({
+      path: 'subjects',
+      select: 'name gradeLevel',
+    })
+    .lean();
+
+  if (!tutor) {
     throw new AppError(
       StatusCodes.FORBIDDEN,
-      'You are not authorized to update this tutor profile',
+      'Access denied. You are not registered as a tutor.',
     );
   }
 
-  const updatedTutor = await Tutor.findByIdAndUpdate(id, payload, {
-    new: true,
-    runValidators: true,
-    populate: ['user', 'subjects'],
-  }).lean();
+  return tutor;
+};
+
+const updateMyTutorProfile = async (
+  user: JwtPayload,
+  payload: Partial<ITutor>,
+) => {
+  const updatedTutor = await Tutor.findOneAndUpdate(
+    { user: user.userId },
+    payload,
+    { new: true, runValidators: true },
+  ).populate([
+    { path: 'user', select: 'name email profileImage' },
+    { path: 'subjects', select: 'name gradeLevel' },
+  ]);
+
+  if (!updatedTutor) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'Tutor not found');
+  }
 
   return updatedTutor;
 };
@@ -215,6 +235,7 @@ export const tutorServices = {
   createBooking,
   getAllTutors,
   getSingleTutor,
-  updateTutor,
+  myTutorProfile,
+  updateMyTutorProfile,
   deleteTutor,
 };

@@ -4,7 +4,6 @@ import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { tutorServices } from './tutor.service';
 
-
 const createBooking = catchAsync(async (req, res) => {
   const booking = await tutorServices.createBooking(
     req.body,
@@ -41,18 +40,26 @@ const getSingleTutor = catchAsync(async (req, res) => {
   });
 });
 
-const updateTutor = catchAsync(async (req, res) => {
-  const { id } = req.params;
-  const result = await tutorServices.updateTutor(
-    id,
-    req.body,
+const myTutorProfile = catchAsync(async (req, res) => {
+  const tutor = await tutorServices.myTutorProfile(req.user as JwtPayload);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'My profile fetched successfully',
+    data: tutor,
+  });
+});
+
+const updateMyTutorProfile = catchAsync(async (req, res) => {
+  const tutor = await tutorServices.updateMyTutorProfile(
     req.user as JwtPayload,
+    req.body,
   );
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
-    message: 'Tutor updated successfully',
-    data: result,
+    message: 'My profile updated successfully',
+    data: tutor,
   });
 });
 
@@ -71,6 +78,7 @@ export const tutorControllers = {
   createBooking,
   getAllTutors,
   getSingleTutor,
-  updateTutor,
+  myTutorProfile,
+  updateMyTutorProfile,
   deleteTutor,
 };
