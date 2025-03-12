@@ -13,6 +13,7 @@ export const userValidations = {
     body: z.object({
       name: z.string().min(1).optional(),
       profileImage: z.string().optional(),
+      phone: z.string().optional(),
     }),
   }),
 };

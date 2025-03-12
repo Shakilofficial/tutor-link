@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { authRoutes } from '../modules/auth/auth.routes';
 import { blogRoutes } from '../modules/blog/blog.routes';
 import { bookingRoutes } from '../modules/booking/booking.routes';
+import { metaRoutes } from '../modules/meta/meta.route';
 import { reviewRoutes } from '../modules/review/review.routes';
 import { sslRoutes } from '../modules/sslcommerz/sslcommerz.route';
 import { studentRoutes } from '../modules/student/student.routes';
@@ -47,6 +48,10 @@ const moduleRoutes = [
   {
     path: '/blog',
     route: blogRoutes,
+  },
+  {
+    path: '/meta',
+    route: metaRoutes,
   },
 ];
 
