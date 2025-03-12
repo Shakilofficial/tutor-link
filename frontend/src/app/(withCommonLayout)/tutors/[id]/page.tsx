@@ -16,7 +16,6 @@ const TutorDetailsPage = async ({
 
   const { data: tutor } = await getSingleSingleTutor(id);
   const { data: reviews } = await getTutorReviews(id);
-  console.log(reviews);
 
   return (
     <div className="container mx-auto px-2 space-y-10 my-16">

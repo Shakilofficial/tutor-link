@@ -1,34 +1,38 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-
 import { Form } from "@/components/form/Form";
 import { Textarea } from "@/components/form/Textarea";
 import { TextInput } from "@/components/form/TextInput";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { useUser } from "@/context/UserContext";
-import { createReview } from "@/services/reviewService";
-import { ITutor } from "@/types";
+
+import { updateReview } from "@/services/reviewService";
+import { IReview } from "@/types/review";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus } from "lucide-react";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { addReviewSchema } from "./addReviewSchema";
+import { editReviewSchema } from "./editReviewSchema";
 
-const AddReviewDialog = ({ tutor }: { tutor: ITutor }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const user = useUser();
-
+const EditReviewDialog = ({
+  review,
+  isOpen,
+  setIsOpen,
+}: {
+  review: IReview;
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+}) => {
   const form = useForm({
-    resolver: zodResolver(addReviewSchema),
+    resolver: zodResolver(editReviewSchema),
     mode: "onChange",
+    defaultValues: {
+      rating: review.rating,
+      comment: review.comment,
+    },
   });
 
   const {
@@ -38,16 +42,13 @@ const AddReviewDialog = ({ tutor }: { tutor: ITutor }) => {
 
   const onSubmit = async (data: any) => {
     try {
-      const response = await createReview(data, tutor._id);
-
+      const response = await updateReview(review._id, data);
       if (response.success) {
-        toast.success("Review Added Successfully 🎉");
+        toast.success("Review Updated Successfully ✨");
         reset();
         setIsOpen(false);
       } else {
-        toast.error(
-          response.message || "Failed to add review. Please try again."
-        );
+        toast.error(response.message || "Failed to update review. Try again.");
       }
     } catch (error: any) {
       toast.error(error.message || "An unexpected error occurred");
@@ -56,19 +57,10 @@ const AddReviewDialog = ({ tutor }: { tutor: ITutor }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button
-          disabled={!user.user}
-          className="bg-orange-600 hover:bg-orange-700"
-        >
-          <Plus className="mr-2 h-4 w-4" /> Add Review
-        </Button>
-      </DialogTrigger>
-
       <DialogContent className="w-[380px] md:max-w-md bg-primary/30 p-6 rounded-lg border-2 border-primary/20">
         <DialogHeader>
           <DialogTitle className="text-center text-primary">
-            Review to {tutor.user.name}
+            Edit Review
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
@@ -88,7 +80,7 @@ const AddReviewDialog = ({ tutor }: { tutor: ITutor }) => {
             <Textarea
               name="comment"
               label="Comment"
-              placeholder="Enter your comment"
+              placeholder="Update your comment"
             />
           </Form>
         </div>
@@ -97,4 +89,4 @@ const AddReviewDialog = ({ tutor }: { tutor: ITutor }) => {
   );
 };
 
-export default AddReviewDialog;
+export default EditReviewDialog;
