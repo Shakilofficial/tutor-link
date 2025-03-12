@@ -12,8 +12,9 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useUser } from "@/context/UserContext";
-import { SquareTerminal } from "lucide-react";
-import NavMain from "./NavMain";
+import { BookOpen, Bot, SquareTerminal } from "lucide-react";
+import NavMain from "./nav-main";
+import ThemeToggle from "./shared/ThemeToggle";
 
 const navData = [
   {
@@ -33,14 +34,14 @@ const navData = [
   {
     title: "Tutor Dashboard",
     url: "/tutor",
-    icon: SquareTerminal,
+    icon: Bot,
     roles: ["tutor"],
     items: [{ title: "Booking Requests", url: "/tutor/bookings" }],
   },
   {
     title: "Student Dashboard",
     url: "/student",
-    icon: SquareTerminal,
+    icon: BookOpen,
     roles: ["student"],
     items: [{ title: "My Bookings", url: "/student/bookings" }],
   },
@@ -66,8 +67,11 @@ const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
         {user && <NavMain items={navData} user={user} />}
       </SidebarContent>
       <SidebarFooter>
-        <div>
-          <UserProfile />
+        <div className="flex flex-col gap-4">
+          <ThemeToggle />
+          <div>
+            <UserProfile />
+          </div>
         </div>
       </SidebarFooter>
     </Sidebar>

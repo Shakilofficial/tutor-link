@@ -27,7 +27,6 @@ interface MenuItem {
   }[];
 }
 
-
 interface NavMainProps {
   items: MenuItem[];
   user: IUser | null;
@@ -58,7 +57,7 @@ const NavMain = ({ items, user }: NavMainProps) => {
           >
             <SidebarMenuButton asChild tooltip={item.title}>
               {item.url ? (
-                <Link href={item.url}>
+                <Link href={item.url} className="flex items-center space-x-2">
                   <item.icon className="w-5 h-5" />
                   <span>{item.title}</span>
                 </Link>
