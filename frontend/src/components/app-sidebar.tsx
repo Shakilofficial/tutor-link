@@ -23,6 +23,7 @@ const navData = [
     icon: SquareTerminal,
     roles: ["admin"],
     items: [
+      { title: "Subject Management", url: "/admin/subjects" },
       { title: "User Management", url: "/admin/users" },
       { title: "Student Management", url: "/admin/students" },
       { title: "Tutor Management", url: "/admin/tutors" },

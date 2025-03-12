@@ -38,3 +38,58 @@ export const createSubject = async (subject: any) => {
     return { success: false, message: error.message };
   }
 };
+
+export const getSingleSubject = async (id: string) => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API}/subject/${id}`,
+      {
+        next: {
+          tags: ["SUBJECTS"],
+        },
+      }
+    );
+    return res.json();
+  } catch (error: any) {
+    return Error(error.message);
+  }
+};
+
+export const updateSubject = async (id: string, payload: any) => {
+  const token = await getValidToken();
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API}/subject/${id}`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: token,
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+    revalidateTag("SUBJECTS");
+    return res.json();
+  } catch (error: any) {
+    return Error(error.message);
+  }
+};
+
+export const deleteSubject = async (id: string) => {
+  const token = await getValidToken();
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API}/subject/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+    revalidateTag("SUBJECTS");
+    return res.json();
+  } catch (error: any) {
+    return Error(error.message);
+  }
+};
