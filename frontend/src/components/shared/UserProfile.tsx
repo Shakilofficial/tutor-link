@@ -18,12 +18,13 @@ import {
 } from "../ui/dropdown-menu";
 
 const UserProfile = () => {
-  const { setIsLoading, user } = useUser();
+  const { setIsLoading, user, setUser } = useUser();
   const pathname = usePathname();
   const router = useRouter();
 
   const handleLogOut = () => {
     logoutUser();
+    setUser(null);
     setIsLoading(true);
     if (protectedRoutes.some((route) => pathname.match(route))) {
       router.push("/");

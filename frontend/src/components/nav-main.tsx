@@ -13,6 +13,7 @@ import {
 import { IUser } from "@/types";
 import { LucideIcon } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface MenuItem {
@@ -20,7 +21,6 @@ interface MenuItem {
   url?: string;
   icon: LucideIcon;
   roles: string[];
-  isActive?: boolean;
   items?: {
     title: string;
     url: string;
@@ -34,6 +34,7 @@ interface NavMainProps {
 
 const NavMain = ({ items, user }: NavMainProps) => {
   const [navData, setNavData] = useState<MenuItem[]>([]);
+  const pathname = usePathname(); // Get the current route
 
   useEffect(() => {
     if (user) {
@@ -50,39 +51,56 @@ const NavMain = ({ items, user }: NavMainProps) => {
     <SidebarGroup>
       <SidebarGroupLabel>Menu</SidebarGroupLabel>
       <SidebarMenu>
-        {navData.map((item) => (
-          <SidebarMenuItem
-            key={item.title}
-            className="text-lg font-semibold text-orange-700"
-          >
-            <SidebarMenuButton asChild tooltip={item.title}>
-              {item.url ? (
-                <Link href={item.url} className="flex items-center space-x-2">
-                  <item.icon className="w-5 h-5" />
-                  <span>{item.title}</span>
-                </Link>
-              ) : (
-                <div className="flex items-center space-x-2">
-                  <item.icon className="w-5 h-5" />
-                  <span>{item.title}</span>
-                </div>
+        {navData.map((item) => {
+          const isActive = item.url && pathname.startsWith(item.url);
+          return (
+            <SidebarMenuItem key={item.title}>
+              <SidebarMenuButton asChild tooltip={item.title}>
+                {item.url ? (
+                  <Link
+                    href={item.url}
+                    className={`flex items-center space-x-2 p-2 rounded-md transition-all ${
+                      isActive
+                        ? "bg-orange-700/10 text-black dark:text-white"
+                        : "text-gray-700 hover:bg-gray-100"
+                    }`}
+                  >
+                    <item.icon className="w-5 h-5" />
+                    <span>{item.title}</span>
+                  </Link>
+                ) : (
+                  <div className="flex items-center space-x-2">
+                    <item.icon className="w-5 h-5" />
+                    <span>{item.title}</span>
+                  </div>
+                )}
+              </SidebarMenuButton>
+              {item.items && item.items.length > 0 && (
+                <SidebarMenuSub>
+                  {item.items.map((subItem) => {
+                    const isSubActive = pathname === subItem.url;
+                    return (
+                      <SidebarMenuSubItem key={subItem.title}>
+                        <SidebarMenuSubButton asChild>
+                          <Link
+                            href={subItem.url}
+                            className={`block p-2 my-1 rounded-md ${
+                              isSubActive
+                                ? "bg-orange-700/50 text-white"
+                                : "text-gray-700 hover:bg-gray-100"
+                            }`}
+                          >
+                            {subItem.title}
+                          </Link>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                    );
+                  })}
+                </SidebarMenuSub>
               )}
-            </SidebarMenuButton>
-            {item.items && item.items.length > 0 && (
-              <SidebarMenuSub>
-                {item.items.map((subItem) => (
-                  <SidebarMenuSubItem key={subItem.title}>
-                    <SidebarMenuSubButton asChild>
-                      <Link href={subItem.url}>
-                        <span>{subItem.title}</span>
-                      </Link>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
-                ))}
-              </SidebarMenuSub>
-            )}
-          </SidebarMenuItem>
-        ))}
+            </SidebarMenuItem>
+          );
+        })}
       </SidebarMenu>
     </SidebarGroup>
   );
