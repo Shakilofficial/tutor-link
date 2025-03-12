@@ -1,5 +1,3 @@
-// src/constants/protectedRoutes.ts
-
 export const protectedRoutes = [
   "/admin",
   "/admin/:page",

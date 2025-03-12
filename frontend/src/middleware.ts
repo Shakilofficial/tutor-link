@@ -39,13 +39,12 @@ export const middleware = async (request: NextRequest) => {
   }
 
   // If the role is not authorized for the route, redirect to home
-  return NextResponse.redirect(new URL("/", request.url));
+  return NextResponse.redirect(new URL("/login", request.url));
 };
 
 export const config = {
   matcher: [
     "/login",
-    "/profile",
     "/register",
     "/admin",
     "/admin/:page",
@@ -53,6 +52,5 @@ export const config = {
     "/tutor/:page",
     "/student",
     "/student/:page",
-    "/create-blog",
   ],
 };

@@ -7,7 +7,7 @@ import { LogOut } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import TButton from "../ui/core/TButton";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -62,7 +62,7 @@ const UserProfile = () => {
     </DropdownMenu>
   ) : (
     <Link href="/login">
-      <TButton>LOG IN</TButton>
+      <Button>LOG IN</Button>
     </Link>
   );
 };

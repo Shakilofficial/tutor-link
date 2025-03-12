@@ -1,7 +1,12 @@
-const StudentDashboardPage = () => {
+import StudentDashboard from "@/components/modules/dashboard/student/StudentDashboard";
+import { getMetaData } from "@/services/metaService";
+
+const StudentDashboardPage = async () => {
+  const { data } = await getMetaData();
+
   return (
     <div>
-      <h1>This is the StudentDashboard Page</h1>
+      <StudentDashboard data={data} />
     </div>
   );
 };
