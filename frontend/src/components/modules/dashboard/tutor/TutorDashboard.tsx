@@ -18,13 +18,7 @@ import {
 
 import { AnimatedCounter } from "@/components/core/AnimatedCounter";
 import DashboardHeader from "@/components/core/DashboardHeader";
-import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import UpdateTutorDialog from "../../tutors/UpdateTutor/UpdateTutorDialog";
 
 const TutorDashboard = ({ data }: { data: any }) => {
   const stats = [
@@ -95,19 +89,7 @@ const TutorDashboard = ({ data }: { data: any }) => {
     >
       <motion.div className="flex items-center justify-between" variants={item}>
         <DashboardHeader title="Tutor Dashboard" />
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="outline" size="sm" className="gap-2">
-                <TrendingUp className="h-4 w-4" />
-                <span>View Analytics</span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>See detailed performance analytics</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <UpdateTutorDialog />
       </motion.div>
 
       <motion.div

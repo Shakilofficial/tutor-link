@@ -59,15 +59,59 @@ export const getAllTutors = async (
 };
 
 export const getSingleSingleTutor = async (id: string) => {
+  const token = await getValidToken();
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_API}/tutors/${id}`,
       {
+        headers: {
+          Authorization: token,
+        },
         next: {
           tags: ["TUTORS"],
         },
       }
     );
+    return res.json();
+  } catch (error: any) {
+    return Error(error.message);
+  }
+};
+
+export const getMyTutorProfile = async () => {
+  const token = await getValidToken();
+
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/tutors/me`, {
+      headers: {
+        Authorization: token,
+      },
+      next: {
+        tags: ["TUTORS"],
+      },
+    });
+    return res.json();
+  } catch (error: any) {
+    return Error(error.message);
+  }
+};
+
+export const updateMyTutorProfile = async (payload: any) => {
+  const token = await getValidToken();
+
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API}/tutors/update-profile`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+    revalidateTag("TUTORS");
     return res.json();
   } catch (error: any) {
     return Error(error.message);
