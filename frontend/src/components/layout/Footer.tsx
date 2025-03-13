@@ -37,7 +37,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/pricing"
+                  href="/#"
                   className="text-muted-foreground transition-colors hover:text-primary"
                 >
                   Pricing
@@ -50,7 +50,7 @@ export default function Footer() {
             <ul className="space-y-3 text-sm">
               <li>
                 <Link
-                  href="/become-tutor"
+                  href="/register-tutor"
                   className="text-muted-foreground transition-colors hover:text-primary"
                 >
                   Become a Tutor
@@ -58,7 +58,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/tutor-resources"
+                  href="faq"
                   className="text-muted-foreground transition-colors hover:text-primary"
                 >
                   Resources
@@ -66,7 +66,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/tutor-faq"
+                  href="/faq"
                   className="text-muted-foreground transition-colors hover:text-primary"
                 >
                   Tutor FAQ
@@ -79,7 +79,7 @@ export default function Footer() {
             <ul className="space-y-3 text-sm">
               <li>
                 <Link
-                  href="/about"
+                  href="/about-us"
                   className="text-muted-foreground transition-colors hover:text-primary"
                 >
                   About Us
@@ -87,7 +87,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/careers"
+                  href="/about-us"
                   className="text-muted-foreground transition-colors hover:text-primary"
                 >
                   Careers
@@ -95,10 +95,10 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/blog"
+                  href="/blogs"
                   className="text-muted-foreground transition-colors hover:text-primary"
                 >
-                  Blog
+                  Blogs
                 </Link>
               </li>
             </ul>

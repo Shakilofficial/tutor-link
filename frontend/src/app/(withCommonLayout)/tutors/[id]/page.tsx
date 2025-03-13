@@ -6,6 +6,13 @@ import { Card } from "@/components/ui/card";
 import { getTutorReviews } from "@/services/reviewService";
 import { getSingleSingleTutor } from "@/services/tutorService";
 import { IReview } from "@/types/review";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Tutor Details | TutorLink",
+  description:
+    "Learn more about a tutor and their experience with personalized tutoring.",
+};
 
 const TutorDetailsPage = async ({
   params,
@@ -13,12 +20,11 @@ const TutorDetailsPage = async ({
   params: Promise<{ id: string }>;
 }) => {
   const { id } = await params;
-
   const { data: tutor } = await getSingleSingleTutor(id);
   const { data: reviews } = await getTutorReviews(id);
 
   return (
-    <div className="container mx-auto px-2 space-y-10 my-16">
+    <main className="flex flex-col min-h-screen overflow-hidden my-12 space-y-10">
       <PageHeader
         title="Tutor Details"
         subtitle={`Created By ${tutor.user.name} | at ${new Date(
@@ -31,7 +37,7 @@ const TutorDetailsPage = async ({
       />
       <TutorDetailsCard tutor={tutor} />
 
-      <div className="space-y-6 max-w-screen-lg mx-auto">
+      <div className="space-y-6 w-full max-w-screen-md mx-auto">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-semibold">Student Reviews</h2>
           <AddReviewDialog tutor={tutor} />
@@ -51,7 +57,7 @@ const TutorDetailsPage = async ({
           )}
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

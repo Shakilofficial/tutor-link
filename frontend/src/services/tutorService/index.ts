@@ -59,14 +59,10 @@ export const getAllTutors = async (
 };
 
 export const getSingleSingleTutor = async (id: string) => {
-  const token = await getValidToken();
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_API}/tutors/${id}`,
       {
-        headers: {
-          Authorization: token,
-        },
         next: {
           tags: ["TUTORS"],
         },

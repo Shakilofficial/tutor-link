@@ -3,66 +3,62 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { BookOpen, GraduationCap } from "lucide-react";
+import Link from "next/link";
 
 const CTA = () => {
   return (
-    <section className="relative overflow-hidden my-16">
-      {/* Animated Background Gradient */}
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-primary/20 to-amber-500/20 -z-10"
-        animate={{ opacity: [0.8, 1, 0.8] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-      />
+    <section className="py-20 relative overflow-hidden">
+      <div className="absolute bg-gradient-to-r from-primary/0.5 to-orange-950/0.5" />
 
-      <div className="container flex flex-col items-center gap-8 py-16 text-center md:py-24">
-        {/* Animated Heading */}
-        <motion.h2
-          className="font-bold text-3xl leading-[1.1] md:text-4xl lg:text-4xl max-w-4xl"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          Ready to transform your learning experience?
-        </motion.h2>
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-3xl opacity-60 -z-10" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-orange-500/10 rounded-full blur-3xl opacity-60 -z-10" />
 
-        {/* Animated Paragraph */}
-        <motion.p
-          className="leading-normal text-muted-foreground md:text-xl md:leading-8"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-        >
-          Join thousands of students and tutors on TutorMatch today and start
-          your journey to academic success.
-        </motion.p>
+      <div className="container px-4 mx-auto">
+        <div className="max-w-4xl mx-auto bg-card border border-border/50 rounded-2xl p-10 shadow-xl relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-orange-500" />
+          <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/20 rounded-full blur-3xl opacity-70" />
+          <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-orange-500/20 rounded-full blur-3xl opacity-70" />
 
-        {/* Animated Buttons */}
-        <motion.div
-          className="flex flex-col sm:flex-row gap-4 mt-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-        >
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+            className="text-center relative z-10"
           >
-            <Button size="lg" className="gap-2">
-              <GraduationCap className="h-5 w-5" />
-              Sign Up as a Student
-            </Button>
-          </motion.button>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              Ready to transform your learning experience?
+            </h2>
+            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Join thousands of students and tutors on TutorLink today and start
+              your journey to academic success.
+            </p>
 
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Button variant="outline" size="lg" className="gap-2">
-              <BookOpen className="h-5 w-5" />
-              Register as a Tutor
-            </Button>
-          </motion.button>
-        </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="flex flex-col sm:flex-row gap-4 justify-center"
+            >
+              <Button
+                size="lg"
+                className="gap-2 bg-gradient-to-r from-primary to-orange-500 hover:opacity-90 transition-opacity"
+              >
+                <GraduationCap className="h-5 w-5" />
+                <Link href="/register-student">Sign Up as Student</Link>
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                className="gap-2 border-primary/50 text-primary hover:bg-primary/10"
+              >
+                <BookOpen className="h-5 w-5" />
+                <Link href="/register-tutor">Register as Tutor</Link>
+              </Button>
+            </motion.div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );

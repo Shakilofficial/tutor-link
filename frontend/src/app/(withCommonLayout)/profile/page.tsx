@@ -7,12 +7,12 @@ const ProfilePage = async () => {
   const { data: user } = await getMyProfile();
 
   return (
-    <div className="min-h-screen bg-background">
+    <main className="flex flex-col min-h-screen overflow-hidden my-12 space-y-10">
       <PageHeader title="Profile" subtitle={user?.name} />
       <div className="container mx-auto px-4 py-12">
         <ProfileCard user={user} />
       </div>
-    </div>
+    </main>
   );
 };
 

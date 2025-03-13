@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 
 interface SectionHeaderProps {
-  title: string;
+  title?: string;
   subtitle?: string;
   align?: "left" | "center" | "right";
 }
