@@ -65,3 +65,40 @@ export const getSingleBlog = async (id: string) => {
     return Error(error.message);
   }
 };
+
+
+
+export const updateBlogStatus = async (id: string) => {
+  const token = await getValidToken();
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API}/blog/${id}/publish`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+    revalidateTag("BLOGS");
+    return res.json();
+  } catch (error: any) {
+    return Error(error.message);
+  }
+};
+
+export const deleteBlog = async (id: string) => {
+  const token = await getValidToken();
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/blog/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: token,
+      },
+    });
+    revalidateTag("BLOGS");
+    return res.json();
+  } catch (error: any) {
+    return Error(error.message);
+  }
+};
