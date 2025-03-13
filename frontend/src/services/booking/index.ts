@@ -97,3 +97,22 @@ export const makePayment = async (bookingId: string) => {
     return { success: false, message: error.message };
   }
 };
+
+export const getAllBookings = async (page?: string, limit?: string) => {
+  const token = await getValidToken();
+
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/booking?limit=${limit}&page=${page}`, {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+      next: {
+        tags: ["BOOKINGS"],
+      },
+    });
+    return res.json();
+  } catch (error: any) {
+    return { success: false, message: error.message };
+  }
+};
