@@ -108,8 +108,10 @@ const updateProfile = catchAsync(async (req, res) => {
 });
 
 const updateStatus = catchAsync(async (req, res) => {
-  const userId = req.params.id;
-  const user = await userServices.updateStatus(userId, req.user as JwtPayload);
+  const user = await userServices.updateStatus(
+    req.params.id,
+    req.user as JwtPayload,
+  );
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,

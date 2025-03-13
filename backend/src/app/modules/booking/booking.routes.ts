@@ -23,7 +23,7 @@ router.get(
   bookingControllers.getMyBookings,
 );
 
-router.get('/', bookingControllers.getAllBookings);
+router.get('/', auth(UserRole.ADMIN), bookingControllers.getAllBookings);
 
 router.post(
   '/:bookingId/make-payment',

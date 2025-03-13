@@ -44,13 +44,13 @@ router.patch(
 );
 
 router.patch(
-  '/update-status',
+  '/:id/update-status',
   auth(UserRole.ADMIN),
   userControllers.updateStatus,
 );
 
 router.patch(
-  '/verify-user',
+  '/:id/verify-user',
   auth(UserRole.ADMIN),
   userControllers.toggleUserVerify,
 );

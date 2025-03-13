@@ -190,7 +190,7 @@ const updateStatus = async (userId: string, user: JwtPayload) => {
 };
 
 const toggleUserVerify = async (userId: string, user: JwtPayload) => {
-  const existingUser = await User.checkUserExist(userId);
+  const existingUser = await User.findById(userId);
   if (!existingUser) {
     throw new AppError(StatusCodes.NOT_FOUND, 'User not found');
   }
