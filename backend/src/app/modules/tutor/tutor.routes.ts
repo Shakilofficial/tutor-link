@@ -10,9 +10,8 @@ const router = Router();
 
 router.get('/', tutorControllers.getAllTutors);
 
-router.get('/me', auth(UserRole.TUTOR), tutorControllers.myTutorProfile);
-
 router.get('/:id', tutorControllers.getSingleTutor);
+router.get('/me', auth(UserRole.TUTOR), tutorControllers.myTutorProfile);
 
 router.post(
   '/:id/book',
