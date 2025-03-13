@@ -37,7 +37,7 @@ const loginUser = async (payload: IAuth) => {
       userId: user._id as string,
       name: user.name as string,
       email: user.email as string,
-      profileImage:user.profileImage as string,
+      profileImage: user.profileImage as string,
       isDeleted: user.isDeleted ?? false,
       role: user.role,
     };
