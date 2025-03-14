@@ -19,7 +19,8 @@ import { toast } from "sonner";
 
 const MyBookingsList = ({ bookings }: { bookings: any[] }) => {
   const router = useRouter();
-  const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [selectedBookingId, setSelectedBookingId] = useState<string | null>(
     null
   );
@@ -27,25 +28,29 @@ const MyBookingsList = ({ bookings }: { bookings: any[] }) => {
   const limit = 10;
 
   const totalPages = Math.ceil(bookings.length / limit);
-
   const paginatedBookings = bookings.slice((page - 1) * limit, page * limit);
 
-  const handleClick = (bookingId: string) => {
+  const handlePaymentClick = (bookingId: string) => {
     setSelectedBookingId(bookingId);
-    setIsAcceptModalOpen(true);
+    setIsPaymentModalOpen(true);
   };
 
-  const handlemakePayment = async () => {
+  const handleCancelClick = (bookingId: string) => {
+    setSelectedBookingId(bookingId);
+    setIsCancelModalOpen(true);
+  };
+
+  const handleMakePayment = async () => {
     if (!selectedBookingId) return;
     try {
       const result = await makePayment(selectedBookingId);
       if (result?.success) {
         router.push(result.data.paymentUrl);
-        toast.success("Booking payment successful!");
-        setIsAcceptModalOpen(false);
+        toast.success("Redirecting to payment page...");
+        setIsPaymentModalOpen(false);
         setSelectedBookingId(null);
       } else {
-        toast.error(result?.message || "Failed to make payment");
+        toast.error(result?.message || "Failed to process payment");
       }
     } catch (error: any) {
       toast.error(error?.message || "Error making payment");
@@ -57,14 +62,16 @@ const MyBookingsList = ({ bookings }: { bookings: any[] }) => {
     try {
       const result = await cancelBooking(selectedBookingId);
       if (result?.success) {
-        toast.success("Booking accepted successfully!");
-        setIsAcceptModalOpen(false);
+        toast.success("Booking cancelled successfully!");
+        setIsCancelModalOpen(false);
         setSelectedBookingId(null);
+        // Refresh the page or update the bookings list
+        router.refresh();
       } else {
-        toast.error(result?.message || "Failed to accept booking");
+        toast.error(result?.message || "Failed to cancel booking");
       }
     } catch (error: any) {
-      toast.error(error?.message || "Error canceling booking");
+      toast.error(error?.message || "Error cancelling booking");
     }
   };
 
@@ -141,7 +148,7 @@ const MyBookingsList = ({ bookings }: { bookings: any[] }) => {
                       {booking.status === "accepted" &&
                         booking.paymentStatus === "pending" && (
                           <button
-                            onClick={() => handleClick(booking._id)}
+                            onClick={() => handlePaymentClick(booking._id)}
                             className="px-3 py-1 bg-orange-600 text-white rounded-md hover:bg-orange-700"
                           >
                             Payment
@@ -150,7 +157,7 @@ const MyBookingsList = ({ bookings }: { bookings: any[] }) => {
                       {booking.status === "pending" &&
                         booking.paymentStatus === "pending" && (
                           <button
-                            onClick={() => handleClick(booking._id)}
+                            onClick={() => handleCancelClick(booking._id)}
                             className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700"
                           >
                             Cancel
@@ -168,9 +175,9 @@ const MyBookingsList = ({ bookings }: { bookings: any[] }) => {
             <button
               onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
               disabled={page === 1}
-              className="px-4 py-2 border rounded-md bg-orange-200 dark:bg-orange-700 disabled:opacity-50"
+              className="px-4 py-2 border rounded-md bg-orange-200 dark:bg-orange-700 disabled:opacity-50 flex items-center"
             >
-              <ArrowLeftCircle className="mr-2 h-4 w-4" />
+              <ArrowLeftCircle className="h-4 w-4" />
             </button>
 
             {/* Display Page Numbers */}
@@ -191,30 +198,32 @@ const MyBookingsList = ({ bookings }: { bookings: any[] }) => {
             <button
               onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
               disabled={page === totalPages}
-              className="px-4 py-2 border rounded-md bg-orange-200 dark:bg-orange-700 disabled:opacity-50"
+              className="px-4 py-2 border rounded-md bg-orange-200 dark:bg-orange-700 disabled:opacity-50 flex items-center"
             >
-              <ArrowRightCircle className="mr-2 h-4 w-4" />
+              <ArrowRightCircle className="h-4 w-4" />
             </button>
           </div>
         </CardContent>
       </Card>
+
       <ConfirmDialog
-        isOpen={isAcceptModalOpen}
-        onOpenChange={setIsAcceptModalOpen}
-        onConfirm={handlemakePayment}
+        isOpen={isPaymentModalOpen}
+        onOpenChange={setIsPaymentModalOpen}
+        onConfirm={handleMakePayment}
         title="Make Payment"
-        description="Are you sure want to pay this booking?"
-        confirmButtonText="Accept"
+        description="Are you sure you want to proceed with this payment? You will be redirected to the payment page."
+        confirmButtonText="Proceed"
         actionText="Payment"
       />
+
       <ConfirmDialog
-        isOpen={isAcceptModalOpen}
-        onOpenChange={setIsAcceptModalOpen}
+        isOpen={isCancelModalOpen}
+        onOpenChange={setIsCancelModalOpen}
         onConfirm={handleCancelBooking}
         title="Cancel Booking"
-        description="Are you sure want to cancel this booking?"
-        confirmButtonText="Cancel"
-        actionText="Booking"
+        description="Are you sure you want to cancel this booking? This action cannot be undone."
+        confirmButtonText="Cancel Booking"
+        actionText="Cancellation"
       />
     </div>
   );

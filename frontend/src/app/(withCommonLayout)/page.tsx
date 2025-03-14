@@ -5,7 +5,6 @@ import PopularSubjectsSection from "@/components/modules/home/PopularSubjectsSec
 import StatsSection from "@/components/modules/home/StatsSection";
 import TestimonialsSection from "@/components/modules/home/TestimonialsSection";
 import TrustedBySection from "@/components/modules/home/TrustedBySection";
-import { getNewToken } from "@/services/authService";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -15,8 +14,6 @@ export const metadata: Metadata = {
 };
 
 const HomePage = async () => {
-  const result = await getNewToken();
-  console.log(result);
   return (
     <main className="flex flex-col min-h-screen overflow-hidden my-12 space-y-10">
       <HeroSection />

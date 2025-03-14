@@ -13,6 +13,7 @@ export const loginUser = async (userData: FieldValues) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(userData),
+      cache: "no-store",
     });
     revalidateTag("USERS");
     const result = await res.json();
@@ -27,7 +28,8 @@ export const loginUser = async (userData: FieldValues) => {
 };
 
 export const getCurrentUser = async () => {
-  const accessToken = (await cookies()).get("accessToken")?.value;
+  const cookieStore = cookies();
+  const accessToken = (await cookieStore).get("accessToken")?.value;
 
   let decodedData = null;
   if (accessToken) {
@@ -57,24 +59,40 @@ export const reCaptchaTokenVarification = async (token: string) => {
 };
 
 export const logoutUser = async () => {
-  (await cookies()).delete("accessToken");
+  const cookieStore = cookies();
+  (await cookieStore).delete("accessToken");
+  (await cookieStore).delete("refreshToken");
 };
 
 export const getNewToken = async () => {
   try {
+    const cookieStore = cookies();
+    const refreshToken = (await cookieStore).get("refreshToken")?.value;
+
+    if (!refreshToken) {
+      return { success: false, message: "No refresh token found" };
+    }
+
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_API}/auth/refresh-token`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: (await cookies()).get("refreshToken")!.value,
+          Authorization: refreshToken,
         },
+        cache: "no-store",
       }
     );
 
-    return res.json();
+    const result = await res.json();
+
+    if (result?.success) {
+      (await cookieStore).set("accessToken", result?.data?.accessToken);
+    }
+
+    return result;
   } catch (error: any) {
-    return Error(error);
+    return { success: false, message: error.message };
   }
 };
