@@ -1,11 +1,8 @@
 "use client";
 
-import { protectedRoutes } from "@/constants/protectedRoutes";
 import { useUser } from "@/context/UserContext";
-import { logoutUser } from "@/services/authService";
 import { LayoutDashboard, LogOut, User } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Badge } from "../ui/badge";
@@ -20,19 +17,9 @@ import {
 } from "../ui/dropdown-menu";
 
 const UserProfile = () => {
-  const { refetchUser, user, setUser } = useUser();
-  const pathname = usePathname();
-  const router = useRouter();
-  const [isOpen, setIsOpen] = useState(false);
+  const { user, logout } = useUser();
 
-  const handleLogOut = async () => {
-    logoutUser();
-    setUser(null);
-    await refetchUser();
-    if (protectedRoutes.some((route) => pathname.match(route))) {
-      router.push("/");
-    }
-  };
+  const [isOpen, setIsOpen] = useState(false);
 
   const getRoleBadgeColor = (role: string) => {
     const roles: Record<string, string> = {
@@ -102,16 +89,11 @@ const UserProfile = () => {
           </Link>
         </DropdownMenuItem>
 
-        <DropdownMenuItem
-          asChild
-          className="flex items-center gap-2 px-2 py-1.5 cursor-pointer"
-        ></DropdownMenuItem>
-
         <DropdownMenuSeparator className="my-1.5" />
 
         <DropdownMenuItem
           className="flex items-center gap-2 px-2 py-1.5 cursor-pointer text-destructive hover:text-destructive focus:text-destructive"
-          onClick={handleLogOut}
+          onClick={logout}
         >
           <LogOut className="h-4 w-4 mr-2" />
           <span>Log Out</span>

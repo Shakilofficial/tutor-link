@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { getCurrentUser } from "@/services/authService";
+import { getCurrentUser, logoutUser as logoutUserService } from "@/services/authService";
 import { IUser } from "@/types";
 import { createContext, useContext, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { protectedRoutes } from "@/constants/protectedRoutes";
 
 interface IUserProviderValues {
   user: IUser | null;
@@ -11,6 +13,7 @@ interface IUserProviderValues {
   setUser: (user: any | null) => void;
   refetchUser: () => Promise<void>;
   setIsLoading: (isLoading: boolean) => void;
+  logout: () => Promise<void>;
 }
 
 const UserContext = createContext<IUserProviderValues | undefined>(undefined);
@@ -18,6 +21,7 @@ const UserContext = createContext<IUserProviderValues | undefined>(undefined);
 const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const router = useRouter();
 
   const fetchUser = async () => {
     setIsLoading(true);
@@ -31,13 +35,33 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const logout = async () => {
+    try {
+      await logoutUserService();
+      setUser(null);
+      const currentPath = window.location.pathname;
+      if (protectedRoutes.some((route) => currentPath.match(route))) {
+        router.push("/");
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
+
   useEffect(() => {
     fetchUser();
   }, []);
 
   return (
     <UserContext.Provider
-      value={{ isLoading, user, setUser, refetchUser: fetchUser, setIsLoading }}
+      value={{ 
+        isLoading, 
+        user, 
+        setUser, 
+        refetchUser: fetchUser, 
+        setIsLoading,
+        logout 
+      }}
     >
       {children}
     </UserContext.Provider>

@@ -8,10 +8,10 @@ import Link from "next/link";
 
 const TutorProfileCard = ({ tutor }: { tutor: ITutor }) => {
   return (
-    <Card className="group relative overflow-hidden transition-all duration-300 hover:shadow-xl bg-gradient-to-br from-background to-background/80 border border-border rounded-xl p-4 hover:border-primary/50">
+    <Card className="group relative overflow-hidden transition-all duration-300 hover:shadow-xl bg-gradient-to-br from-background to-background/80 border border-border rounded-xl p-2 hover:border-primary/50 h-[420px]">
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
       <div className="relative z-10 flex flex-col space-y-3">
-        <div className="relative mx-auto w-full h-64 overflow-hidden rounded-lg border-2 border-primary/30 group-hover:border-primary transition-all duration-300 shadow-sm group-hover:shadow-md">
+        <div className="relative mx-auto w-full h-56 overflow-hidden rounded-lg border-2 border-primary/30 group-hover:border-primary transition-all duration-300 shadow-sm group-hover:shadow-md">
           <Image
             src={tutor.user.profileImage || "/placeholder.svg"}
             alt={tutor.user.name}

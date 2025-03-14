@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import { loginSchema } from "./loginSchema";
 
 const LoginForm = () => {
-  const { setUser, setIsLoading } = useUser();
+  const { setUser, refetchUser } = useUser();
   const form = useForm({
     resolver: zodResolver(loginSchema),
     mode: "onChange",
@@ -44,10 +44,9 @@ const LoginForm = () => {
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
       const res = await loginUser(data);
-
       if (res?.success) {
-        setUser(res.user);
-        setIsLoading(false);
+        setUser(res.data.user || res.user);
+        await refetchUser();
         toast.success(res?.message);
         if (redirect) {
           router.push(redirect);

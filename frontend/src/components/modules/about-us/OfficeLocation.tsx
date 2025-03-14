@@ -59,9 +59,9 @@ const OfficeLocation = () => {
                   <div>
                     <h4 className="font-medium mb-1">Address</h4>
                     <p className="text-muted-foreground">
-                      Mushuria Road No: 2
+                      Mushuria, Road No: 2
                       <br />
-                      Elashin 1720,
+                      Elasin 1913,
                       <br />
                       Delduar, Tangail
                       <br />
@@ -93,7 +93,7 @@ const OfficeLocation = () => {
                       mrshakilhossain@outlook.com
                     </p>
                     <p className="text-muted-foreground">
-                      mrshakilhossain@outlook.com
+                      creative.shakilofficial@gmail.com
                     </p>
                   </div>
                 </div>
