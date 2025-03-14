@@ -83,7 +83,7 @@ server/
 1. Clone the repository:
    ```sh
    git clone https://github.com/Shakilofficial/tutor-link.git
-   cd cd backend
+   cd backend
    ```
 2. Install dependencies:
    ```sh
@@ -140,9 +140,9 @@ server/
    ```
 3. Create a `.env.local` file and add the required environment variables:
    ```env
-   NEXT_PUBLIC_API_BASE_URL=backend_url
-   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_public_key
-   NEXT_PUBLIC_RECAPTCHA_SITE_KEY=your_recaptcha_site_key
+   NEXT_PUBLIC_BASE_API=backend_url
+   NEXT_PUBLIC_RECAPTCHA_SERVER_KEY=your_recaptcha_server_key
+   NEXT_PUBLIC_RECAPTCHA_CLIENT_KEY=your_recaptcha_site_key
    ```
 4. Start the frontend application:
    ```sh

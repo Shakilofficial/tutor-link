@@ -15,7 +15,7 @@ const app: Application = express();
 // 🌍 Global Middleware Setup
 app.use(
   cors({
-    origin: 'https://tutor-link-five.vercel.app',
+    origin: 'https://tutor-link-web.vercel.app',
     credentials: true,
   }),
 );
