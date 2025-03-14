@@ -65,7 +65,7 @@ const AddReviewDialog = ({ tutor }: { tutor: ITutor }) => {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="w-[380px] md:max-w-md bg-primary/30 p-6 rounded-lg border-2 border-primary/20">
+      <DialogContent className="max-w-[360px] md:max-w-md rounded-lg border-2 border-orange-500/50 bg-gradient-to-bl from-orange-500/0.5 to-orange-700/0.5">
         <DialogHeader>
           <DialogTitle className="text-center text-primary">
             Review to {tutor.user.name}

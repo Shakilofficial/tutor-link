@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const SuccessPage = () => {
   return (
-    <div className="container mx-auto px-4 py-16">
+    <main className="flex flex-col min-h-screen justify-center items-center">
       <div className="max-w-md mx-auto rounded-2xl overflow-hidden">
         <div className="p-8">
           <div className="flex flex-col items-center">
@@ -26,7 +26,7 @@ const SuccessPage = () => {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 
