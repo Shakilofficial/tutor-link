@@ -13,7 +13,12 @@ import router from './routes';
 const app: Application = express();
 
 // 🌍 Global Middleware Setup
-app.use(cors());
+app.use(
+  cors({
+    origin: 'https://tutor-link-five.vercel.app',
+    credentials: true,
+  }),
+);
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
