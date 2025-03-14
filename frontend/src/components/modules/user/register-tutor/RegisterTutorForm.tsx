@@ -119,7 +119,7 @@ const RegisterTutorForm = () => {
         onSubmit={onSubmit}
         isSubmitting={isSubmitting}
         isValid={isValid}
-        recaptchaStatus
+        recaptchaStatus={true}
       >
         <div className="grid grid-cols-2 gap-2 w-full">
           <TextInput name="name" label="Full Name" />
