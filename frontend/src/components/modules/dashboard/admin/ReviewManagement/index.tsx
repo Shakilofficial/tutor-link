@@ -8,12 +8,12 @@ import Image from "next/image";
 
 interface IReview {
   _id: string;
-  student: {
+  student?: {
     _id: string;
-    user: {
+    user?: {
       _id: string;
-      name: string;
-      profileImage: string;
+      name?: string;
+      profileImage?: string;
     };
   };
   tutor: string;
@@ -26,10 +26,10 @@ interface IReview {
 }
 
 interface ReviewDisplayProps {
-  reviews: IReview[];
+  reviews?: IReview[];
 }
 
-const ReviewDisplay = ({ reviews }: ReviewDisplayProps) => {
+const ReviewDisplay = ({ reviews = [] }: ReviewDisplayProps) => {
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
@@ -38,7 +38,6 @@ const ReviewDisplay = ({ reviews }: ReviewDisplayProps) => {
     });
   };
 
-  // Get star rating display
   const getRatingStars = (rating: number) => {
     return (
       <div className="flex items-center">
@@ -70,9 +69,7 @@ const ReviewDisplay = ({ reviews }: ReviewDisplayProps) => {
           <div className="relative h-8 w-8 overflow-hidden rounded-full border-2 border-primary/20">
             <Image
               src={
-                row.original.student?.user?.profileImage ||
-                "/placeholder.svg?height=32&width=32" ||
-                "/placeholder.svg"
+                row.original.student?.user?.profileImage || "/placeholder.svg"
               }
               alt={row.original.student?.user?.name || "User"}
               fill
@@ -109,6 +106,14 @@ const ReviewDisplay = ({ reviews }: ReviewDisplayProps) => {
       ),
     },
   ];
+
+  if (!reviews || reviews.length === 0) {
+    return (
+      <div className="text-center text-muted-foreground">
+        No reviews available.
+      </div>
+    );
+  }
 
   return (
     <motion.div
