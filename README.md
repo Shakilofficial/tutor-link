@@ -12,7 +12,7 @@ Tutor-Link is a comprehensive platform that connects students with qualified tut
 - **Student-Tutor Matching Algorithm**
 - **Booking System** (Schedule and manage sessions)
 - **Real-time Email Notifications**
-- **Secure Payment Integration**
+- **Secure Payment Integration (SSL Commerz)**
 - **Review & Rating System**
 - **Blog System**
 - **Admin Dashboard for Managing Users & Reports**
@@ -66,16 +66,29 @@ src/
 ### Backend Structure
 
 ```
-server/
-│── src/
-│   ├── controllers/
-│   ├── middlewares/
-│   ├── models/
-│   ├── routes/
-│   ├── services/
-│   ├── utils/
-│   ├── config/
-│   ├── index.ts
+├── backend/
+│   ├── .vercel/
+│   ├── dist/
+│   ├── src/
+│   │   ├── app/
+│   |   ├── builder/
+│   │   ├── config/
+│   │   ├── db/
+│   │   ├── helpers/
+│   │   ├── middlewares/
+│   │   ├── errors/
+│   │   ├── interface/
+│   │   ├── modules/
+│   │   ├── routes/
+│   │   ├── types/
+│   │   ├── utils/
+│   │   ├── app.ts
+│   ├── scripts/
+│   ├── templates/
+│   ├── server.ts
+│   ├── package.json
+│   ├── tsconfig.json
+│   ├── vercel.json
 ```
 
 ## 🛠️ Installation & Setup
