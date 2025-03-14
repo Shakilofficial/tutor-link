@@ -98,12 +98,9 @@ const BlogLists = ({ data }: { data: IBlogResponse }) => {
         </div>
       )}
 
-      {/* Pagination */}
-      {data?.meta?.totalPage > 1 && (
-        <div className="mt-12">
-          <Pagination totalPage={data?.meta?.totalPage} />
-        </div>
-      )}
+      <div className="mt-24">
+        <Pagination totalPage={data?.meta?.totalPage} />
+      </div>
     </div>
   );
 };

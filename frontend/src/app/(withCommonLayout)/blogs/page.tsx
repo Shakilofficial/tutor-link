@@ -21,7 +21,7 @@ const AllBlogsPage = async ({
   return (
     <main className="flex flex-col min-h-screen overflow-hidden my-12 space-y-10">
       <PageHeader title="All Blogs" subtitle="Explore all blogs" />
-      {<BlogLists data={data} />}
+      <BlogLists data={data} />
     </main>
   );
 };

@@ -15,7 +15,7 @@ const TutorLists = ({ data }: { data: ITutorResponse }) => {
             <TutorProfileCard key={tutor._id} tutor={tutor} />
           ))}
         </div>
-        <div className="mt-12">
+        <div className="mt-24">
           <Pagination totalPage={data?.meta?.totalPage} />
         </div>
       </div>
