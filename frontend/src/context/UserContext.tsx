@@ -1,40 +1,44 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { getCurrentUser } from "@/services/authService";
 import { IUser } from "@/types";
-
-import {
-  createContext,
-  Dispatch,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 interface IUserProviderValues {
-  isLoading: boolean;
   user: IUser | null;
-  setUser: (user: IUser | null) => void;
-  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  isLoading: boolean;
+  setUser: (user: any | null) => void;
+  refetchUser: () => Promise<void>;
+  setIsLoading: (isLoading: boolean) => void;
 }
+
 const UserContext = createContext<IUserProviderValues | undefined>(undefined);
 
 const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<IUser | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<any | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const handleUser = async () => {
-    const user = await getCurrentUser();
-    setUser(user);
-    setIsLoading(false);
+  const fetchUser = async () => {
+    setIsLoading(true);
+    try {
+      const userData = await getCurrentUser();
+      setUser(userData);
+    } catch (error) {
+      setUser(null);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
-    handleUser();
-  }, [isLoading, setUser]);
+    fetchUser();
+  }, []);
 
   return (
-    <UserContext.Provider value={{ isLoading, user, setUser, setIsLoading }}>
+    <UserContext.Provider
+      value={{ isLoading, user, setUser, refetchUser: fetchUser, setIsLoading }}
+    >
       {children}
     </UserContext.Provider>
   );
@@ -42,8 +46,8 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
 export const useUser = () => {
   const context = useContext(UserContext);
-  if (context === undefined) {
-    throw new Error("use User must be used within a UserProvider");
+  if (!context) {
+    throw new Error("useUser must be used within a UserProvider");
   }
   return context;
 };

@@ -1,3 +1,5 @@
+"use client";
+
 import Pagination from "@/components/core/Pagination";
 import { ITutor, ITutorResponse } from "@/types";
 import FilterSidebar from "../FilterSidebar";

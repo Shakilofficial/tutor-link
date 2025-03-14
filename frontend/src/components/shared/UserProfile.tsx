@@ -20,15 +20,15 @@ import {
 } from "../ui/dropdown-menu";
 
 const UserProfile = () => {
-  const { setIsLoading, user, setUser } = useUser();
+  const { refetchUser, user, setUser } = useUser();
   const pathname = usePathname();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleLogOut = () => {
+  const handleLogOut = async () => {
     logoutUser();
     setUser(null);
-    setIsLoading(true);
+    await refetchUser();
     if (protectedRoutes.some((route) => pathname.match(route))) {
       router.push("/");
     }
