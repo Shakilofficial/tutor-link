@@ -8,6 +8,9 @@ import { subjectValidations } from './subject.validation';
 const router = Router();
 
 // Define routes
+
+router.get('/category', subjectControllers.getAllSubjectsByCategory);
+
 router.get('/', subjectControllers.getAllSubjects);
 
 router.get('/:id', subjectControllers.getSingleSubject);

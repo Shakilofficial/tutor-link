@@ -4,6 +4,16 @@ import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { subjectServices } from './subject.service';
 
+const getAllSubjectsByCategory = catchAsync(async (req, res) => {
+  const result = await subjectServices.getAllSubjectsByCategory();
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'All subjects fetched successfully',
+    data: result,
+  });
+});
+
 const getAllSubjects = catchAsync(async (req, res) => {
   const result = await subjectServices.getAllSubjects(req.query);
   sendResponse(res, {
@@ -70,6 +80,7 @@ const deleteSubject = catchAsync(async (req, res) => {
 
 export const subjectControllers = {
   getAllSubjects,
+  getAllSubjectsByCategory,
   getSingleSubject,
   createSubject,
   updateSubject,

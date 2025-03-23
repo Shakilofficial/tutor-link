@@ -12,13 +12,24 @@ import router from './routes';
 
 const app: Application = express();
 
-// 🌍 Global Middleware Setup
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://tutor-link-web.vercel.app',
+];
+
 app.use(
   cors({
-    origin: 'https://tutor-link-web.vercel.app',
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
-  }),
+  })
 );
+
 app.use(cookieParser());
 app.use(express.json());
 

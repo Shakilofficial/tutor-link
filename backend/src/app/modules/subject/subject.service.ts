@@ -20,6 +20,26 @@ const createSubject = async (payload: ISubject, user: JwtPayload) => {
   return await subject.save();
 };
 
+export const getAllSubjectsByCategory = async () => {
+  const subjectsByCategory = await Subject.aggregate([
+    {
+      $group: {
+        _id: '$category',
+        subjects: { $push: '$$ROOT' },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        category: '$_id',
+        subjects: 1,
+      },
+    },
+  ]);
+
+  return subjectsByCategory;
+};
+
 const getAllSubjects = async (query: Record<string, unknown>) => {
   const subjectQuery = new QueryBuilder(Subject.find(), query)
     .search(subjectSearchableFields)
@@ -39,8 +59,6 @@ const getSingleSubject = async (id: string) => {
   }
   return subject;
 };
-
-// In subject.service.ts
 
 const updateSubject = async (
   id: string,
@@ -91,6 +109,7 @@ const deleteSubject = async (id: string, user: JwtPayload) => {
 export const subjectServices = {
   createSubject,
   getAllSubjects,
+  getAllSubjectsByCategory,
   getSingleSubject,
   updateSubject,
   deleteSubject,
