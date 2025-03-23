@@ -1,66 +1,46 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { getCurrentUser, logoutUser as logoutUserService } from "@/services/authService";
+import { getCurrentUser } from "@/services/authService";
 import { IUser } from "@/types";
-import { createContext, useContext, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { protectedRoutes } from "@/constants/protectedRoutes";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 interface IUserProviderValues {
   user: IUser | null;
   isLoading: boolean;
   setUser: (user: any | null) => void;
-  refetchUser: () => Promise<void>;
-  setIsLoading: (isLoading: boolean) => void;
-  logout: () => Promise<void>;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
 }
 
 const UserContext = createContext<IUserProviderValues | undefined>(undefined);
 
 const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<any | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const router = useRouter();
+  const [user, setUser] = useState<IUser | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const fetchUser = async () => {
-    setIsLoading(true);
-    try {
-      const userData = await getCurrentUser();
-      setUser(userData);
-    } catch (error) {
-      setUser(null);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const logout = async () => {
-    try {
-      await logoutUserService();
-      setUser(null);
-      const currentPath = window.location.pathname;
-      if (protectedRoutes.some((route) => currentPath.match(route))) {
-        router.push("/");
-      }
-    } catch (error) {
-      console.error("Logout error:", error);
-    }
+  const handleUser = async () => {
+    const user = await getCurrentUser();
+    setUser(user);
+    setIsLoading(false);
   };
 
   useEffect(() => {
-    fetchUser();
-  }, []);
+    handleUser();
+  }, [isLoading]);
 
   return (
     <UserContext.Provider
-      value={{ 
-        isLoading, 
-        user, 
-        setUser, 
-        refetchUser: fetchUser, 
+      value={{
+        isLoading,
+        user,
+        setUser,
         setIsLoading,
-        logout 
       }}
     >
       {children}
@@ -70,7 +50,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
 export const useUser = () => {
   const context = useContext(UserContext);
-  if (!context) {
+  if (context === undefined) {
     throw new Error("useUser must be used within a UserProvider");
   }
   return context;

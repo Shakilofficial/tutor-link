@@ -1,8 +1,10 @@
 "use client";
 
 import { useUser } from "@/context/UserContext";
+import { logoutUser } from "@/services/authService";
 import { LayoutDashboard, LogOut, User } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Badge } from "../ui/badge";
@@ -17,9 +19,14 @@ import {
 } from "../ui/dropdown-menu";
 
 const UserProfile = () => {
-  const { user, logout } = useUser();
-
+  const { setIsLoading, user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+  const handleLogOut = async () => {
+    await logoutUser();
+    setIsLoading(true);
+    router.push("/login");
+  };
 
   const getRoleBadgeColor = (role: string) => {
     const roles: Record<string, string> = {
@@ -93,7 +100,7 @@ const UserProfile = () => {
 
         <DropdownMenuItem
           className="flex items-center gap-2 px-2 py-1.5 cursor-pointer text-destructive hover:text-destructive focus:text-destructive"
-          onClick={logout}
+          onClick={handleLogOut}
         >
           <LogOut className="h-4 w-4 mr-2" />
           <span>Log Out</span>

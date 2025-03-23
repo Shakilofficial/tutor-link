@@ -1,36 +1,44 @@
 import LoginForm from "@/components/modules/auth/login/LoginForm";
 import { Button } from "@/components/ui/button";
+import { BookOpen, GraduationCap } from "lucide-react";
 import Link from "next/link";
 
 const LoginPage = () => {
   return (
-    <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px] ">
+    <div className="mx-auto flex w-full flex-col justify-center space-y-8 sm:w-[400px]">
       <div className="flex flex-col space-y-4 text-center">
-        <h1 className="text-2xl font-bold tracking-tight text-gray-700 dark:text-white">
-          Login
+        <h1 className="text-2xl font-bold tracking-tight text-gray-800 dark:text-white md:text-3xl">
+          Welcome Back
         </h1>
-        <p className="text-sm text-muted-foreground">
-          Enter your credentials to access your account.
+        <p className="text-sm text-muted-foreground md:text-base">
+          Enter your credentials to access your account
         </p>
       </div>
-      <div className="bg-transparent">
-        <LoginForm />
-      </div>
-      <div className="flex flex-col space-y-2 text-center">
-        <div className="text-sm text-muted-foreground">
-          Don &apos;t have an account?
-          <div className="flex gap-2 justify-between mt-4">
-            <Link
-              href="/register-student"
-              className="text-orange-500 pl-1 font-semibold"
-            >
-              <Button variant="outline">Register as Student</Button>
+
+      <LoginForm />
+
+      <div className="flex flex-col space-y-4 text-center">
+        <div className="text-sm text-muted-foreground md:text-base">
+          Don&apos;t have an account?
+          <div className="flex flex-col gap-3 mt-4">
+            <Link href="/register-student" passHref>
+              <Button
+                size="lg"
+                className="w-full gap-2 bg-gradient-to-r from-primary to-orange-500 hover:opacity-90 transition-opacity"
+              >
+                <GraduationCap className="h-5 w-5" />
+                Sign Up as Student
+              </Button>
             </Link>
-            <Link
-              href="/register-tutor"
-              className="text-orange-500 pl-1 font-semibold"
-            >
-              <Button variant="outline">Register as Tutor</Button>
+            <Link href="/register-tutor" passHref>
+              <Button
+                variant="outline"
+                size="lg"
+                className="w-full gap-2 border-primary/50 text-primary hover:bg-primary/10"
+              >
+                <BookOpen className="h-5 w-5" />
+                Register as Tutor
+              </Button>
             </Link>
           </div>
         </div>

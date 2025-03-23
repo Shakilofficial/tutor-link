@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 import { jwtDecode } from "jwt-decode";
-import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { FieldValues } from "react-hook-form";
 
@@ -13,9 +12,7 @@ export const loginUser = async (userData: FieldValues) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(userData),
-      cache: "no-store",
     });
-    revalidateTag("USERS");
     const result = await res.json();
     if (result?.success) {
       (await cookies()).set("accessToken", result?.data?.accessToken);
@@ -23,13 +20,12 @@ export const loginUser = async (userData: FieldValues) => {
     }
     return result;
   } catch (error: any) {
-    return Error(error);
+    return Error(error.message);
   }
 };
 
 export const getCurrentUser = async () => {
-  const cookieStore = cookies();
-  const accessToken = (await cookieStore).get("accessToken")?.value;
+  const accessToken = (await cookies()).get("accessToken")?.value;
 
   let decodedData = null;
   if (accessToken) {
@@ -38,6 +34,10 @@ export const getCurrentUser = async () => {
   } else {
     return null;
   }
+};
+
+export const logoutUser = async () => {
+  (await cookies()).delete("accessToken");
 };
 
 export const reCaptchaTokenVarification = async (token: string) => {
@@ -58,41 +58,21 @@ export const reCaptchaTokenVarification = async (token: string) => {
   }
 };
 
-export const logoutUser = async () => {
-  const cookieStore = cookies();
-  (await cookieStore).delete("accessToken");
-  (await cookieStore).delete("refreshToken");
-};
-
 export const getNewToken = async () => {
   try {
-    const cookieStore = cookies();
-    const refreshToken = (await cookieStore).get("refreshToken")?.value;
-
-    if (!refreshToken) {
-      return { success: false, message: "No refresh token found" };
-    }
-
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_API}/auth/refresh-token`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: refreshToken,
+          Authorization: (await cookies()).get("refreshToken")!.value,
         },
-        cache: "no-store",
       }
     );
 
-    const result = await res.json();
-
-    if (result?.success) {
-      (await cookieStore).set("accessToken", result?.data?.accessToken);
-    }
-
-    return result;
+    return res.json();
   } catch (error: any) {
-    return { success: false, message: error.message };
+    return Error(error.message);
   }
 };

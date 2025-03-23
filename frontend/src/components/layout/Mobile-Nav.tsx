@@ -11,10 +11,28 @@ import {
 import { useUser } from "@/context/UserContext";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { BookOpen, ChevronRight, GraduationCap, Menu } from "lucide-react";
+import {
+  BookOpen,
+  ChevronDown,
+  ChevronRight,
+  GraduationCap,
+  Menu,
+} from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Logo from "../shared/Logo";
+
+interface Subject {
+  _id: string;
+  name: string;
+  gradeLevel: string;
+  category: string;
+}
+
+interface CategoryWithSubjects {
+  subjects: Subject[];
+  category: string;
+}
 
 interface Route {
   href: string;
@@ -29,7 +47,27 @@ interface MobileNavProps {
 
 const MobileNav = ({ routes }: MobileNavProps) => {
   const [open, setOpen] = useState(false);
+  const [subjectsOpen, setSubjectsOpen] = useState(false);
+  const [subjects, setSubjects] = useState<CategoryWithSubjects[]>([]);
   const { user } = useUser();
+
+  useEffect(() => {
+    const fetchSubjects = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_API}/subject/category`
+        );
+        const data = await response.json();
+        setSubjects(data.data || []);
+      } catch (error) {
+        console.error("Error fetching subjects:", error);
+      }
+    };
+
+    if (open) {
+      fetchSubjects();
+    }
+  }, [open]);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -58,12 +96,89 @@ const MobileNav = ({ routes }: MobileNavProps) => {
 
           <div className="flex-1 overflow-auto py-6 px-6">
             <nav className="flex flex-col space-y-1">
-              {routes.map((route, index) => (
+              {routes.slice(0, 1).map((route, index) => (
                 <motion.div
                   key={route.href}
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05, duration: 0.3 }}
+                >
+                  <Link
+                    href={route.href}
+                    className={cn(
+                      "flex items-center justify-between py-3 px-4 rounded-md transition-colors",
+                      route.active
+                        ? "bg-primary/10 text-primary font-medium"
+                        : "text-foreground hover:bg-accent"
+                    )}
+                    onClick={() => setOpen(false)}
+                  >
+                    <span>{route.label}</span>
+                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                  </Link>
+                </motion.div>
+              ))}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.05, duration: 0.3 }}
+              >
+                <button
+                  className={cn(
+                    "flex items-center justify-between py-3 px-4 rounded-md transition-colors w-full text-left",
+                    subjectsOpen
+                      ? "bg-primary/10 text-primary font-medium"
+                      : "text-foreground hover:bg-accent"
+                  )}
+                  onClick={() => setSubjectsOpen(!subjectsOpen)}
+                >
+                  <div className="flex items-center">
+                    <BookOpen className="h-4 w-4 mr-2" />
+                    <span>SUBJECTS</span>
+                  </div>
+                  <ChevronDown
+                    className={cn(
+                      "h-4 w-4 text-muted-foreground transition-transform duration-200",
+                      subjectsOpen ? "rotate-180" : ""
+                    )}
+                  />
+                </button>
+
+                {subjectsOpen && (
+                  <div className="mt-1 ml-4 pl-4 border-l border-border/50">
+                    {subjects.map((category) => (
+                      <div key={category.category} className="py-2">
+                        <h3 className="text-sm font-medium text-foreground mb-1">
+                          {category.category}
+                        </h3>
+                        <ul className="space-y-1">
+                          {category.subjects.map((subject) => (
+                            <li key={subject._id} className="py-1.5">
+                              <Link
+                                href={`/tutors`}
+                                className="flex items-center text-xs text-muted-foreground hover:text-primary py-1.5 px-2 rounded transition-colors hover:bg-accent/50"
+                                onClick={() => setOpen(false)}
+                              >
+                                <GraduationCap className="h-3 w-3 mr-1.5" />
+                                {subject.name}
+                                <span className="ml-auto text-[10px] bg-accent/80 px-1.5 py-0.5 rounded-full">
+                                  {subject.gradeLevel}
+                                </span>
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </motion.div>
+              {routes.slice(1).map((route, index) => (
+                <motion.div
+                  key={route.href}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: (index + 2) * 0.05, duration: 0.3 }}
                 >
                   <Link
                     href={route.href}
@@ -115,8 +230,6 @@ const MobileNav = ({ routes }: MobileNavProps) => {
               </div>
             )}
           </div>
-
-          {/* Auth Buttons */}
           {!user && (
             <div className="border-t border-border/50 p-6 bg-accent/30">
               <div className="grid gap-4">

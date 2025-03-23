@@ -20,6 +20,22 @@ export const getAllSubjects = async (page?: string, limit?: string) => {
   }
 };
 
+export const getAllSubjectsByCategory = async () => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API}/subject/category`,
+      {
+        next: {
+          tags: ["SUBJECTS"],
+        },
+      }
+    );
+    return res.json();
+  } catch (error: any) {
+    return Error(error.message);
+  }
+};
+
 export const createSubject = async (subject: any) => {
   const token = await getValidToken();
 

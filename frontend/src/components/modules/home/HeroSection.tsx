@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
 import { BookOpen, GraduationCap, Search } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 
 const HeroSection = () => {
@@ -88,21 +89,25 @@ const HeroSection = () => {
               transition={{ delay: 0.6, duration: 0.8 }}
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
             >
-              <Button
-                size="lg"
-                className="gap-2 bg-gradient-to-r from-primary to-orange-500 hover:opacity-90 transition-opacity"
-              >
-                <GraduationCap className="h-5 w-5" />
-                Sign Up as Student
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="gap-2 border-primary/50 text-primary hover:bg-primary/10"
-              >
-                <BookOpen className="h-5 w-5" />
-                Register as Tutor
-              </Button>
+              <Link href="/register-student" passHref>
+                <Button
+                  size="lg"
+                  className="gap-2 bg-gradient-to-r from-primary to-orange-500 hover:opacity-90 transition-opacity"
+                >
+                  <GraduationCap className="h-5 w-5" />
+                  Sign Up as Student
+                </Button>
+              </Link>
+              <Link href="/register-tutor" passHref>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="gap-2 border-primary/50 text-primary hover:bg-primary/10"
+                >
+                  <BookOpen className="h-5 w-5" />
+                  Register as Tutor
+                </Button>
+              </Link>
             </motion.div>
           </motion.div>
 

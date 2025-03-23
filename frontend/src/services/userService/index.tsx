@@ -20,8 +20,6 @@ export const createStudent = async (data: FormData) => {
       (await cookies()).set("accessToken", result?.data?.accessToken);
       (await cookies()).set("refreshToken", result?.data?.refreshToken);
     }
-
-    revalidateTag("USERS");
     return result;
   } catch (error: any) {
     return Error(error);
@@ -43,8 +41,6 @@ export const createTutor = async (data: FormData) => {
       (await cookies()).set("accessToken", result?.data?.accessToken);
       (await cookies()).set("refreshToken", result?.data?.refreshToken);
     }
-
-    revalidateTag("USERS");
     return result;
   } catch (error: any) {
     return Error(error);
