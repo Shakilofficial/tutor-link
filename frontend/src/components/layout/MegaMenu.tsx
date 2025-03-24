@@ -147,13 +147,13 @@ export default function MegaMenu() {
 
             <div className="bg-accent/20 py-2 px-4 border-t border-border/20 flex items-center justify-between">
               <p className="text-xs text-muted-foreground">
-                Find tutors specialized in these subjects
+                Find tutors specialized subjects
               </p>
               <Link
-                href="/subjects"
+                href="/tutors"
                 className="text-xs font-medium text-primary hover:underline flex items-center"
               >
-                View all subjects
+                View all 
                 <ChevronDown className="h-3 w-3 rotate-[-90deg] ml-1" />
               </Link>
             </div>
