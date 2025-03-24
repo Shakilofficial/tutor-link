@@ -73,7 +73,7 @@ const Navbar = () => {
 
         <MainNav routes={routes} pathname={pathname} />
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1">
           <ThemeToggle />
           <UserProfile />
           <MobileNav routes={routes} pathname={pathname} />
