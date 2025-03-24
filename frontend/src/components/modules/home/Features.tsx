@@ -29,11 +29,11 @@ const features = [
     color: "from-primary/20 to-primary/5",
   },
   {
-    icon: <CreditCard className="h-8 w-8 text-orange-500" />,
+    icon: <CreditCard className="h-8 w-8 text-rose-500" />,
     title: "Secure Payments",
     description:
       "Pay safely through our platform with multiple payment options.",
-    color: "from-orange-500/20 to-orange-500/5",
+    color: "from-rose-500/20 to-rose-500/5",
   },
   {
     icon: <ShieldCheck className="h-8 w-8 text-green-500" />,
