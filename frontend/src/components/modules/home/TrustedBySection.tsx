@@ -31,8 +31,8 @@ const TrustedBySection = () => {
     },
   ];
   return (
-    <section className="py-12 border-y border-border/30 bg-accent/20">
-      <div className="container px-4 mx-auto">
+    <section className="mx-5 py-12 border-y border-border/30 bg-accent/20">
+      <div className="container">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -41,7 +41,6 @@ const TrustedBySection = () => {
         >
           <SectionHeader title="TRUSTED BY LEADING EDUCATIONAL INSTITUTIONS" />
         </motion.div>
-
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -60,8 +59,8 @@ const TrustedBySection = () => {
               <Image
                 src={logo.logo || "/placeholder.svg"}
                 alt={logo.name}
-                width={80}
-                height={80}
+                width={60}
+                height={60}
                 className="w-auto h-auto object-contain"
               />
             </motion.div>

@@ -41,9 +41,9 @@ const TutorDetailsCard = ({ tutor, children }: TutorDetailsCardProps) => {
   };
 
   return (
-    <div className="space-y-6 max-w-screen-lg mx-auto">
+    <div className="w-full max-w-[1400px] mx-auto">
       <Card className="overflow-hidden border-2 border-orange-800/20 shadow-lg">
-        <CardHeader className="">
+        <CardHeader className="px-4 sm:px-6">
           <div className="flex flex-col md:flex-row items-center gap-6">
             <div className="relative">
               <div className="rounded-full border-4 border-orange-800/30 p-1 shadow-lg">
@@ -90,7 +90,7 @@ const TutorDetailsCard = ({ tutor, children }: TutorDetailsCardProps) => {
         </CardHeader>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <div className="px-6">
+          <div className="px-4 sm:px-6">
             <TabsList className="grid w-full grid-cols-3 bg-orange-800/20">
               <TabsTrigger value="profile" className="flex items-center gap-2">
                 <User className="h-4 w-4" />
@@ -110,7 +110,7 @@ const TutorDetailsCard = ({ tutor, children }: TutorDetailsCardProps) => {
             </TabsList>
           </div>
 
-          <CardContent className="pt-6">
+          <CardContent className="pt-6 px-4 sm:px-6">
             <TabsContent value="profile" className="space-y-6">
               <div>
                 <h3 className="text-lg font-semibold flex items-center">
@@ -174,7 +174,9 @@ const TutorDetailsCard = ({ tutor, children }: TutorDetailsCardProps) => {
                 <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex items-center p-3 rounded-md border border-border">
                     <Mail className="mr-2 h-5 w-5 text-orange-800" />
-                    <span>{tutor.user.email}</span>
+                    <span className="text-sm sm:text-base truncate">
+                      {tutor.user.email}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -186,7 +188,7 @@ const TutorDetailsCard = ({ tutor, children }: TutorDetailsCardProps) => {
                   <BookOpen className="mr-2 h-5 w-5 text-orange-800" />
                   Subjects I Teach
                 </h3>
-                <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {tutor.subjects.map((subject: ISubject, index) => (
                     <div
                       key={subject._id || `subject-${index}`}
@@ -218,7 +220,7 @@ const TutorDetailsCard = ({ tutor, children }: TutorDetailsCardProps) => {
                     {totalSlots} slots
                   </Badge>
                 </h3>
-                <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {tutor.availability.map((day: IAvailability) => (
                     <div
                       key={day._id}
@@ -248,7 +250,7 @@ const TutorDetailsCard = ({ tutor, children }: TutorDetailsCardProps) => {
             </TabsContent>
           </CardContent>
         </Tabs>
-        <div className="flex justify-center">
+        <div className="flex justify-center p-4 sm:p-6">
           <CreateBookingDialog tutor={tutor} />
         </div>
       </Card>

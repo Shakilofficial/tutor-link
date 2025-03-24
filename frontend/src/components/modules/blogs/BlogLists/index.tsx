@@ -85,7 +85,7 @@ const BlogLists = ({ data }: { data: IBlogResponse }) => {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 min-h-[400px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 min-h-[400px]">
           {data?.data?.map((blog, index) => (
             <div
               key={blog._id}

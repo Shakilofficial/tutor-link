@@ -37,7 +37,7 @@ const TutorDetailsPage = async ({
       />
       <TutorDetailsCard tutor={tutor} />
 
-      <div className="space-y-6 w-full max-w-screen-md mx-auto">
+      <div className="space-y-6 w-full max-w-[1400px] mx-auto">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-semibold">Student Reviews</h2>
           <AddReviewDialog tutor={tutor} />

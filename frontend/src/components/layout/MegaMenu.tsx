@@ -127,15 +127,15 @@ export default function MegaMenu() {
                       </div>
                       <ul className="space-y-0.5">
                         {category.subjects.map((subject) => (
-                          <li key={subject._id}>
+                          <li key={subject?._id}>
                             <Link
-                              href={`/tutors`}
+                              href={`/tutors?searchTerm=${subject?.name}`}
                               className="flex items-center text-xs text-muted-foreground hover:text-primary transition-colors py-1 px-1.5 rounded hover:bg-accent/40 group"
                             >
                               <GraduationCap className="h-3 w-3 opacity-70 group-hover:opacity-100 mr-1.5" />
-                              <span className="truncate">{subject.name}</span>
+                              <span className="truncate">{subject?.name}</span>
                               <span className="ml-auto text-[10px] bg-accent/60 px-1 py-0.5 rounded-sm text-muted-foreground whitespace-nowrap">
-                                {subject.gradeLevel}
+                                {subject?.gradeLevel}
                               </span>
                             </Link>
                           </li>

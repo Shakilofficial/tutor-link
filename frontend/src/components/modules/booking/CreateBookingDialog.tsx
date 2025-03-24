@@ -6,7 +6,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Form,
@@ -28,8 +27,9 @@ import {
 import { PaymentMethod } from "@/constants/PaymentMethod";
 import { useUser } from "@/context/UserContext";
 import { createBooking } from "@/services/tutorService";
-import { ITutor } from "@/types";
+import type { ITutor } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -39,14 +39,15 @@ const formSchema = z.object({
   subject: z.string().min(1, "Subject is required"),
   startDateTime: z.string().min(1, "Start date and time are required"),
   duration: z.preprocess(
-    (val) => parseFloat(val as string) || 1,
+    (val) => Number.parseFloat(val as string) || 1,
     z.number().min(0.5).max(8)
   ),
   paymentMethod: z.enum([PaymentMethod.ONLINE, PaymentMethod.CASH]),
 });
 
 const CreateBookingDialog = ({ tutor }: { tutor: ITutor }) => {
-  const user = useUser();
+  const { user } = useUser();
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -80,7 +81,7 @@ const CreateBookingDialog = ({ tutor }: { tutor: ITutor }) => {
 
       const response = await createBooking(tutor._id, bookingData);
       if (response.success) {
-        toast.success("Booking Successful 🎉");
+        toast.success(response.message || "Booking Successful 🎉");
         form.reset();
         setIsOpen(false);
       } else {
@@ -93,16 +94,22 @@ const CreateBookingDialog = ({ tutor }: { tutor: ITutor }) => {
     }
   };
 
+  const handleButtonClick = () => {
+    if (!user) {
+      router.push(`/login?redirectPath=/tutors/${tutor._id}`);
+    } else {
+      setIsOpen(true);
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button
-          disabled={!user.user}
-          className="bg-orange-600 hover:bg-orange-700"
-        >
-          Book Now
-        </Button>
-      </DialogTrigger>
+      <Button
+        onClick={handleButtonClick}
+        className="bg-orange-600 hover:bg-orange-700"
+      >
+        Book Now
+      </Button>
 
       <DialogContent className="max-w-md">
         <DialogHeader>
@@ -174,7 +181,7 @@ const CreateBookingDialog = ({ tutor }: { tutor: ITutor }) => {
                       max="8"
                       {...field}
                       onChange={(e) =>
-                        field.onChange(parseFloat(e.target.value) || 1)
+                        field.onChange(Number.parseFloat(e.target.value) || 1)
                       }
                     />
                   </FormControl>

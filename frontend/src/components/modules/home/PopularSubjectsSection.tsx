@@ -72,7 +72,7 @@ const PopularSubjectsSection = () => {
     show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   };
   return (
-    <section className="py-20 relative overflow-hidden">
+    <section className="py-20 relative overflow-hidden lg:px-5">
       <div className="absolute inset-0 -z-10">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl opacity-60" />
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-orange-500/5 rounded-full blur-3xl opacity-60" />

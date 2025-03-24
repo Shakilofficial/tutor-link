@@ -1,16 +1,12 @@
 "use client";
 import heroImg from "@/assets/bc-tut.png";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
-import { BookOpen, GraduationCap, Search } from "lucide-react";
+import { BookOpen, GraduationCap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 
 const HeroSection = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-
   return (
     <section className="relative pt-24 pb-20 overflow-hidden">
       <div className="absolute ">
@@ -58,30 +54,6 @@ const HeroSection = () => {
               experiences. Boost your grades and confidence with one-on-one
               tutoring tailored to your needs.
             </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.8 }}
-              className="relative max-w-md mx-auto lg:mx-0 mb-8"
-            >
-              <div className="relative">
-                <div className="absolute inset-0 -z-10 rounded-lg bg-gradient-to-r from-primary/20 via-orange-500/20 to-primary/20 blur-md opacity-70" />
-                <div className="flex items-center rounded-lg border bg-background/80 p-1.5 backdrop-blur">
-                  <div className="flex w-full items-center gap-2 rounded-md bg-background px-3 py-2">
-                    <Search className="h-5 w-5 text-muted-foreground" />
-                    <Input
-                      type="text"
-                      placeholder="Search by subject, grade level, or tutor name..."
-                      className="flex-1 border-0 bg-transparent p-0 shadow-none focus-visible:ring-0"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                  </div>
-                  <Button className="ml-auto">Search</Button>
-                </div>
-              </div>
-            </motion.div>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}

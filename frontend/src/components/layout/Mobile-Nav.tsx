@@ -152,17 +152,17 @@ const MobileNav = ({ routes }: MobileNavProps) => {
                           {category.category}
                         </h3>
                         <ul className="space-y-1">
-                          {category.subjects.map((subject) => (
-                            <li key={subject._id} className="py-1.5">
+                          {category?.subjects.map((subject) => (
+                            <li key={subject?._id} className="py-1.5">
                               <Link
-                                href={`/tutors`}
+                                href={`/tutors?searchTerm=${subject?.name}`}
                                 className="flex items-center text-xs text-muted-foreground hover:text-primary py-1.5 px-2 rounded transition-colors hover:bg-accent/50"
                                 onClick={() => setOpen(false)}
                               >
                                 <GraduationCap className="h-3 w-3 mr-1.5" />
-                                {subject.name}
+                                {subject?.name}
                                 <span className="ml-auto text-[10px] bg-accent/80 px-1.5 py-0.5 rounded-full">
-                                  {subject.gradeLevel}
+                                  {subject?.gradeLevel}
                                 </span>
                               </Link>
                             </li>
